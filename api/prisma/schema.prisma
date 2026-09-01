@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum tipo_evento_interacao {
+  view
+  click
+  favorite
+  like
+  dislike
+  rating
+  visitado
+}
+
+enum status_modelo_recomendacao {
+  training
+  ready
+  archived
+  failed
+}
+
+model tb_usuario {
+  id_usuario      Int                                    @id @default(autoincrement())
+  url_imagem      String?
+  nome            String
+  email           String                                 @unique
+  telefone        String?
+  hash_senha      String
+  ativo           Boolean                                @default(true)
+  created_at      DateTime                               @default(now())
+  updated_at      DateTime                               @updatedAt
+  classificacoes  tb_classificacao[]
+  interacoes      tb_interacao_usuario_estabelecimento[]
+  features        tb_usuario_feature_snapshot[]
+  recomendacoes   tb_recomendacao_cache[]
+}
+
+model tb_classificacao {
+  id_classificacao  Int                             @id @default(autoincrement())
+  id_usuario        Int
+  usuario           tb_usuario                      @relation(fields: [id_usuario], references: [id_usuario])
+  created_at        DateTime                        @default(now())
+  estabelecimentos  tb_classificacao_estabelecimento[]
+
+  @@index([id_usuario])
+}
+
+model tb_classificacao_estabelecimento {
+  id_classificacao   Int
+  id_estabelecimento Int
+  nota               Int?
+  comentario         String?
+  created_at         DateTime           @default(now())
+  classificacao      tb_classificacao   @relation(fields: [id_classificacao], references: [id_classificacao])
+  estabelecimento    tb_estabelecimento @relation(fields: [id_estabelecimento], references: [id_estabelecimento])
+
+  @@id([id_classificacao, id_estabelecimento])
+  @@index([id_estabelecimento])
+}
+
+model tb_estabelecimento {
+  id_estabelecimento  Int                              @id @default(autoincrement())
+  nome                String
+  tipo                String
+  faixa_preco         String
+  ambiente            String
+  publico             String
+  avaliacao           Decimal
+  abre                String
+  fecha               String
+  latitude            Decimal?
+  longitude           Decimal?
+  cidade              String?
+  bairro              String?
+  tags                Json?
+  ativo               Boolean                          @default(true)
+  created_at          DateTime                         @default(now())
+  updated_at          DateTime                         @updatedAt
+  classificacoes      tb_classificacao_estabelecimento[]
+  interacoes          tb_interacao_usuario_estabelecimento[]
+
+  @@index([tipo, faixa_preco, ambiente])
+  @@index([cidade, bairro])
+}
+
+model tb_interacao_usuario_estabelecimento {
+  id_interacao        Int                     @id @default(autoincrement())
+  id_usuario          Int
+  id_estabelecimento  Int
+  tipo_evento         tipo_evento_interacao
+  valor               Decimal?
+  origem              String?
+  regiao              String?
+  created_at          DateTime                @default(now())
+  usuario             tb_usuario              @relation(fields: [id_usuario], references: [id_usuario])
+  estabelecimento     tb_estabelecimento      @relation(fields: [id_estabelecimento], references: [id_estabelecimento])
+
+  @@index([id_usuario, created_at])
+  @@index([id_estabelecimento, created_at])
+  @@index([tipo_evento, created_at])
+}
+
+model tb_usuario_feature_snapshot {
+  id_snapshot   Int        @id @default(autoincrement())
+  id_usuario    Int
+  model_version String
+  feature_json  Json
+  created_at    DateTime   @default(now())
+  usuario       tb_usuario @relation(fields: [id_usuario], references: [id_usuario])
+
+  @@index([id_usuario, created_at])
+  @@index([model_version])
+}
+
+model tb_modelo_recomendacao {
+  id_modelo     Int                        @id @default(autoincrement())
+  versao        String                     @unique
+  algoritmo     String
+  metricas_json Json?
+  storage_uri   String?
+  status        status_modelo_recomendacao @default(training)
+  trained_at    DateTime?
+  created_at    DateTime                   @default(now())
+  recomendacoes tb_recomendacao_cache[]
+}
+
+model tb_recomendacao_cache {
+  id_usuario    Int
+  model_version String
+  context_hash  String
+  ranking_json  Json
+  expires_at    DateTime
+  created_at    DateTime               @default(now())
+  usuario       tb_usuario             @relation(fields: [id_usuario], references: [id_usuario])
+  modelo        tb_modelo_recomendacao @relation(fields: [model_version], references: [versao])
+
+  @@id([id_usuario, model_version, context_hash])
+  @@index([expires_at])
+}
