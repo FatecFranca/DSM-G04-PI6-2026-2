@@ -49,6 +49,11 @@ class _SugestoesPageState extends State<SugestoesPage> {
         title: const Text('Sugestões da IA'),
         actions: [
           IconButton(
+            tooltip: 'Descobrir com o Floter',
+            onPressed: () => context.push(AppRouter.floter),
+            icon: const Icon(Icons.tune_rounded),
+          ),
+          IconButton(
             tooltip: 'Atualizar',
             onPressed: _loading ? null : _carregar,
             icon: const Icon(Icons.refresh_rounded),
@@ -356,9 +361,12 @@ class _SugestoesPageState extends State<SugestoesPage> {
             context.go(AppRouter.rating);
             break;
           case 2:
-            context.go(AppRouter.ratingHistory);
+            context.go(AppRouter.floter);
             break;
           case 3:
+            context.go(AppRouter.ratingHistory);
+            break;
+          case 4:
             context.go(AppRouter.user);
             break;
         }
@@ -373,6 +381,11 @@ class _SugestoesPageState extends State<SugestoesPage> {
           icon: Icon(Icons.star_outline_rounded),
           selectedIcon: Icon(Icons.star_rounded, color: AppTheme.accent),
           label: 'Avaliar',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.tune_rounded),
+          selectedIcon: Icon(Icons.tune_rounded, color: AppTheme.accent),
+          label: 'Floter',
         ),
         NavigationDestination(
           icon: Icon(Icons.history_outlined),

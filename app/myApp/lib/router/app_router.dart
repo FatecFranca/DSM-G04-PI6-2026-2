@@ -1,10 +1,13 @@
 import 'package:go_router/go_router.dart';
-import '../../pages/login_page.dart';
-import '../../pages/register_page.dart';
-import '../../pages/sugestoes_page.dart';
-import '../../pages/user_page.dart';
-import '../../pages/rating_page.dart';
-import '../../pages/rating_history_page.dart';
+import '../models/floter_models.dart';
+import '../pages/floter_page.dart';
+import '../pages/floter_resultados_page.dart';
+import '../pages/login_page.dart';
+import '../pages/rating_history_page.dart';
+import '../pages/rating_page.dart';
+import '../pages/register_page.dart';
+import '../pages/sugestoes_page.dart';
+import '../pages/user_page.dart';
 
 class AppRouter {
   static const String login = '/login';
@@ -13,6 +16,8 @@ class AppRouter {
   static const String user = '/user';
   static const String rating = '/rating';
   static const String ratingHistory = '/rating-history';
+  static const String floter = '/floter';
+  static const String floterResultados = '/floter/resultados';
 
   static final GoRouter router = GoRouter(
     initialLocation: login,
@@ -42,6 +47,17 @@ class AppRouter {
         path: rating,
         name: 'rating',
         builder: (context, state) => const RatingPage(),
+      ),
+      GoRoute(
+        path: floter,
+        name: 'floter',
+        builder: (context, state) => const FloterPage(),
+      ),
+      GoRoute(
+        path: floterResultados,
+        name: 'floter-resultados',
+        redirect: (context, state) => state.extra is PreferenciasFloter ? null : floter,
+        builder: (context, state) => FloterResultadosPage(preferencias: state.extra! as PreferenciasFloter),
       ),
       GoRoute(
         path: ratingHistory,

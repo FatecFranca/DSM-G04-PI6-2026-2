@@ -153,7 +153,7 @@ class _UserPageState extends State<UserPage> {
                 ),
               ),
       ),
-      bottomNavigationBar: _buildBottomNav(context, 3),
+      bottomNavigationBar: _buildBottomNav(context, 4),
     );
   }
 
@@ -344,9 +344,12 @@ class _UserPageState extends State<UserPage> {
             context.go(AppRouter.rating);
             break;
           case 2:
-            context.go(AppRouter.ratingHistory);
+            context.go(AppRouter.floter);
             break;
           case 3:
+            context.go(AppRouter.ratingHistory);
+            break;
+          case 4:
             context.go(AppRouter.user);
             break;
         }
@@ -361,6 +364,11 @@ class _UserPageState extends State<UserPage> {
           icon: Icon(Icons.star_outline_rounded),
           selectedIcon: Icon(Icons.star_rounded, color: AppTheme.accent),
           label: 'Avaliar',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.tune_rounded),
+          selectedIcon: Icon(Icons.tune_rounded, color: AppTheme.accent),
+          label: 'Floter',
         ),
         NavigationDestination(
           icon: Icon(Icons.history_outlined),
