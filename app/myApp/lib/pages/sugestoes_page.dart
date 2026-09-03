@@ -29,7 +29,7 @@ class _SugestoesPageState extends State<SugestoesPage> {
       _error = null;
     });
     try {
-      final lista = await _api.getIaSugestoes(limit: 20);
+      final lista = await _api.getRecomendacoes(limit: 20, forceRefresh: true);
       setState(() {
         _sugestoes = lista;
         _loading = false;

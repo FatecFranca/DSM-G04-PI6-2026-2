@@ -61,8 +61,12 @@ class _RegisterPageState extends State<RegisterPage>
         _emailController.text.trim(),
         _senhaController.text,
       );
+      await _apiService.login(
+        _emailController.text.trim(),
+        _senhaController.text,
+      );
       if (mounted) {
-        context.go(AppRouter.login);
+        context.go(AppRouter.floter);
       }
     } on Exception catch (e) {
       if (mounted) {

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import cors from "cors";
@@ -9,8 +10,6 @@ import classificacoesRoutes from "./src/routes/classificacoes";
 import classificacoesEstabelecimentosRoutes from "./src/routes/classificacoesEstabelecimentos";
 import recomendacoesRoutes from "./src/routes/recomendacoes";
 import interacoesRoutes from "./src/routes/interacoes";
-
-require("dotenv").config();
 
 const normalizeOrigin = (value: string) => value.trim().replace(/\/$/, "");
 const rawCorsOrigin = process.env.CORS_ORIGIN?.trim();

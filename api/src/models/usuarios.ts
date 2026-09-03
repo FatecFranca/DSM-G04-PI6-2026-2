@@ -2,7 +2,6 @@ import { Prisma } from "../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import bcrypt from "bcrypt";
 import * as type from "../types/usuario";
-import e from "express";
 
 function badRequest(message: string) {
   const error = new Error(message) as Error & { statusCode: number };
@@ -27,20 +26,25 @@ export async function createUsuario(data: type.UsuarioDTO) {
         nome: data.nome,
         email: data.email,
         hash_senha: senhaHash,
-      }
+      },
+      select: { id_usuario: true, nome: true, email: true, telefone: true, url_imagem: true, ativo: true, created_at: true, updated_at: true },
     });
   } catch (error) {
-    return error instanceof Error
+    if ((error as { code?: string }).code === "P2002") throw badRequest("E-mail ja cadastrado");
+    throw error;
   }
 }
 
 export function listUsuarios() {
-  return prisma.tb_usuario.findMany();
+  return prisma.tb_usuario.findMany({
+    select: { id_usuario: true, nome: true, email: true, telefone: true, url_imagem: true, ativo: true, created_at: true, updated_at: true },
+  });
 }
 
 export function getUsuarioById(id_usuario: number) {
   return prisma.tb_usuario.findUnique({
-    where: { id_usuario }
+    where: { id_usuario },
+    select: { id_usuario: true, nome: true, email: true, telefone: true, url_imagem: true, ativo: true, created_at: true, updated_at: true },
   });
 }
 
@@ -52,7 +56,23 @@ export async function updateUsuario(id_usuario: number, data: type.UsuarioUpdate
 
   return prisma.tb_usuario.update({
     where: { id_usuario },
-    data: updateData
+    data: updateData,
+    select: { id_usuario: true, nome: true, email: true, telefone: true, url_imagem: true, ativo: true, created_at: true, updated_at: true },
+  });
+}
+
+export function getPreferencias(idUsuario: number) {
+  return prisma.tb_usuario_feature_snapshot.findFirst({
+    where: { id_usuario: idUsuario, model_version: "preferencias-v1" },
+    orderBy: { created_at: "desc" },
+    select: { feature_json: true, created_at: true },
+  });
+}
+
+export function savePreferencias(idUsuario: number, preferencias: Prisma.InputJsonValue) {
+  return prisma.tb_usuario_feature_snapshot.create({
+    data: { id_usuario: idUsuario, model_version: "preferencias-v1", feature_json: preferencias },
+    select: { feature_json: true, created_at: true },
   });
 }
 

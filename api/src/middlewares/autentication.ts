@@ -2,14 +2,21 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 import { prisma } from "../../lib/prisma";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const signOptions: SignOptions = { expiresIn: "30m" };
 
+function getJwtSecret() {
+  const secret = process.env.JWT_SECRET?.trim();
+  if (!secret || secret === "your-secret-key" || secret.length < 32) {
+    throw new Error("JWT_SECRET deve ser configurada com pelo menos 32 caracteres");
+  }
+  return secret;
+}
+
 export const generateToken = (payload: object): string =>
-  jwt.sign(payload, JWT_SECRET, signOptions);
+  jwt.sign(payload, getJwtSecret(), signOptions);
 
 export const verifyToken = (token: string): JwtPayload =>
-  jwt.verify(token, JWT_SECRET) as JwtPayload;
+  jwt.verify(token, getJwtSecret()) as JwtPayload;
 
 export const authMiddleware = async (
   req: Request & { user?: any },

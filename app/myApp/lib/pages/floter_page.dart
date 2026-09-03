@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../components/floter_option_card.dart';
 import '../models/floter_models.dart';
 import '../router/app_router.dart';
+import '../services/api.dart';
 import '../theme/app_theme.dart';
 
 class FloterPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class FloterPage extends StatefulWidget {
 }
 
 class _FloterPageState extends State<FloterPage> {
+  final ApiService _api = ApiService();
   final PageController _controladorPaginas = PageController();
   final TextEditingController _controladorObservacao = TextEditingController();
   int _etapaAtual = 0;
@@ -45,7 +47,7 @@ class _FloterPageState extends State<FloterPage> {
     }
   }
 
-  void _avancar() {
+  Future<void> _avancar() async {
     if (!_etapaObrigatoriaRespondida) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Selecione uma opção para continuar.'), backgroundColor: AppTheme.accent));
       return;
@@ -54,7 +56,25 @@ class _FloterPageState extends State<FloterPage> {
       final preferencias = PreferenciasFloter(
         categoria: _categoriaSelecionada!, sabor: _saborSelecionado!, faixaPreco: _faixaPrecoSelecionada!, quantidadePessoas: _quantidadePessoasSelecionada!, restricaoAlimentar: _restricaoSelecionada!, modalidadeConsumo: _modalidadeSelecionada!, observacao: _controladorObservacao.text.trim().isEmpty ? null : _controladorObservacao.text.trim(),
       );
-      context.push(AppRouter.floterResultados, extra: preferencias);
+      try {
+        await _api.savePreferencias({
+          'categoria': preferencias.categoria.descricao,
+          'sabor': preferencias.sabor.descricao,
+          'faixa_preco': preferencias.faixaPreco.descricao,
+          'quantidade_pessoas': preferencias.quantidadePessoas.descricao,
+          'restricao_alimentar': preferencias.restricaoAlimentar.descricao,
+          'modalidade_consumo': preferencias.modalidadeConsumo.descricao,
+          if (preferencias.observacao != null) 'observacao': preferencias.observacao,
+        });
+      } catch (error) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Não foi possível salvar suas preferências: $error')),
+        );
+        return;
+      }
+      if (!mounted) return;
+      context.go(AppRouter.sugestoes);
       return;
     }
     setState(() => _etapaAtual++);
@@ -63,7 +83,7 @@ class _FloterPageState extends State<FloterPage> {
 
   void _voltar() {
     if (_etapaAtual == 0) {
-      context.pop();
+      context.go(AppRouter.sugestoes);
       return;
     }
     setState(() => _etapaAtual--);

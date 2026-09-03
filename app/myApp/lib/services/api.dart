@@ -5,7 +5,10 @@ import 'package:http/http.dart' as http;
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
-  static const String _baseUrl = 'http://localhost:8080';
+  static const String _baseUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'http://localhost:8080',
+  );
 
   static String? token;
   static int? userId;
@@ -161,6 +164,30 @@ class ApiService {
     } else {
       throw Exception('Erro ao listar estabelecimentos (${response.statusCode}).');
     }
+  }
+
+  Future<void> savePreferencias(Map<String, dynamic> preferencias) async {
+    final response = await http.put(
+      Uri.parse('$_baseUrl/usuarios/me/preferencias'),
+      headers: _authHeaders(),
+      body: jsonEncode(preferencias),
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Erro ao salvar preferências (${response.statusCode}): ${response.body}');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> listMinhasAvaliacoes({int limit = 100}) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/interacoes/me/avaliacoes?limit=$limit'),
+      headers: _authHeaders(),
+    );
+    if (response.statusCode == 200) {
+      final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+      final data = decoded['data'] as List<dynamic>? ?? const [];
+      return data.map((item) => Map<String, dynamic>.from(item as Map)).toList();
+    }
+    throw Exception('Erro ao carregar avaliações (${response.statusCode}).');
   }
 
   Future<Map<String, dynamic>> createInteracao({

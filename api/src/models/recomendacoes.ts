@@ -120,24 +120,35 @@ export async function rankFallbackForUser(
   candidates: CandidateEstabelecimento[],
   limit: number
 ) {
-  const userInteractions = await prisma.tb_interacao_usuario_estabelecimento.findMany({
-    where: { id_usuario: idUsuario },
-    orderBy: { created_at: "desc" },
-    take: 300,
-    include: {
-      estabelecimento: {
-        select: {
-          tipo: true,
-          faixa_preco: true,
-          ambiente: true,
+  const [userInteractions, preferenceSnapshot] = await Promise.all([
+    prisma.tb_interacao_usuario_estabelecimento.findMany({
+      where: { id_usuario: idUsuario },
+      orderBy: { created_at: "desc" },
+      take: 300,
+      include: {
+        estabelecimento: {
+          select: {
+            tipo: true,
+            faixa_preco: true,
+            ambiente: true,
+          },
         },
       },
-    },
-  });
+    }),
+    prisma.tb_usuario_feature_snapshot.findFirst({
+      where: { id_usuario: idUsuario, model_version: "preferencias-v1" },
+      orderBy: { created_at: "desc" },
+      select: { feature_json: true },
+    }),
+  ]);
 
   const typeWeights = new Map<string, number>();
   const priceWeights = new Map<string, number>();
   const environmentWeights = new Map<string, number>();
+
+  const savedPreferences = preferenceSnapshot?.feature_json as Record<string, unknown> | undefined;
+  const savedCategory = normalizeText(String(savedPreferences?.categoria ?? ""));
+  const savedPrice = normalizeText(String(savedPreferences?.faixa_preco ?? ""));
 
   for (const interaction of userInteractions) {
     // Regra de negocio: aprendizado baseado apenas em like/dislike.
@@ -168,6 +179,15 @@ export async function rankFallbackForUser(
 
       let score = Math.max(0, Math.min(avaliacao, 5)) * 0.4;
       const motivos: string[] = ["avaliacao_publica"];
+
+      if (savedCategory && (tipo.includes(savedCategory) || savedCategory.includes(tipo))) {
+        score += 2;
+        motivos.push("preferencia_informada_por_tipo");
+      }
+      if (savedPrice && (faixaPreco.includes(savedPrice) || savedPrice.includes(faixaPreco))) {
+        score += 1;
+        motivos.push("preferencia_informada_por_preco");
+      }
 
       const typeScore = typeWeights.get(tipo) ?? 0;
       if (typeScore > 0) {

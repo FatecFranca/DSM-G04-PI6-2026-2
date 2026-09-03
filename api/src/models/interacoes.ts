@@ -32,3 +32,24 @@ export function listInteracoesUsuario(idUsuario: number, take = 100) {
     },
   });
 }
+
+export function listAvaliacoesUsuario(idUsuario: number, take = 100) {
+  return prisma.tb_interacao_usuario_estabelecimento.findMany({
+    where: { id_usuario: idUsuario, tipo_evento: "rating" },
+    orderBy: { created_at: "desc" },
+    take,
+    include: {
+      estabelecimento: {
+        select: {
+          id_estabelecimento: true,
+          nome: true,
+          tipo: true,
+          faixa_preco: true,
+          ambiente: true,
+          cidade: true,
+          bairro: true,
+        },
+      },
+    },
+  });
+}

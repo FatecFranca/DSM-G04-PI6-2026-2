@@ -52,3 +52,21 @@ export async function listMyInteracoesController(req: AuthenticatedRequest, res:
     });
   }
 }
+
+export async function listMyAvaliacoesController(req: AuthenticatedRequest, res: Response) {
+  if (!req.user?.id_usuario) {
+    return res.status(401).json({ success: false, message: "Usuario nao autenticado" });
+  }
+
+  const take = Math.min(Number(req.query.limit ?? 100) || 100, 300);
+  try {
+    const data = await interacoesModel.listAvaliacoesUsuario(req.user.id_usuario, take);
+    return res.json({ success: true, data });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Erro ao listar avaliacoes do usuario",
+      error: error instanceof Error ? error.message : "Erro desconhecido",
+    });
+  }
+}

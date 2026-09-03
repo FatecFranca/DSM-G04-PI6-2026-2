@@ -1,6 +1,20 @@
 import { Request, Response } from "express";
 import * as usuariosModel from "../models/usuarios";
-import { UsuarioSchema, UsuarioUpdateSchema } from "../types/usuario";
+import { PreferenciasUsuarioSchema, UsuarioSchema, UsuarioUpdateSchema } from "../types/usuario";
+
+type AuthenticatedRequest = Request & { user?: { id_usuario: number } };
+
+export async function getMyPreferenciasController(req: AuthenticatedRequest, res: Response) {
+  const data = await usuariosModel.getPreferencias(req.user!.id_usuario);
+  return res.json({ success: true, data });
+}
+
+export async function saveMyPreferenciasController(req: AuthenticatedRequest, res: Response) {
+  const parsed = PreferenciasUsuarioSchema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ success: false, errors: parsed.error.flatten() });
+  const data = await usuariosModel.savePreferencias(req.user!.id_usuario, parsed.data);
+  return res.status(201).json({ success: true, data });
+}
 
 export async function createUsuarioController(req: Request, res: Response) {
   try {
@@ -49,9 +63,10 @@ export async function listUsuariosController(_req: Request, res: Response) {
   }
 }
 
-export async function getUsuarioByIdController(req: Request, res: Response) {
+export async function getUsuarioByIdController(req: AuthenticatedRequest, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
+  if (req.user?.id_usuario !== id) return res.status(403).json({ success: false, message: "Acesso negado" });
 
   try {
     const usuario = await usuariosModel.getUsuarioById(id);
@@ -66,9 +81,10 @@ export async function getUsuarioByIdController(req: Request, res: Response) {
   }
 }
 
-export async function updateUsuarioController(req: Request, res: Response) {
+export async function updateUsuarioController(req: AuthenticatedRequest, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
+  if (req.user?.id_usuario !== id) return res.status(403).json({ success: false, message: "Acesso negado" });
 
   try {
     const parsed = UsuarioUpdateSchema.safeParse(req.body);
@@ -91,9 +107,10 @@ export async function updateUsuarioController(req: Request, res: Response) {
   }
 }
 
-export async function deleteUsuarioController(req: Request, res: Response) {
+export async function deleteUsuarioController(req: AuthenticatedRequest, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
+  if (req.user?.id_usuario !== id) return res.status(403).json({ success: false, message: "Acesso negado" });
 
   try {
     const existing = await usuariosModel.getUsuarioById(id);
