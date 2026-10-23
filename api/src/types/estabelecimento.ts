@@ -15,3 +15,4 @@ export const EstabelecimentoUpdateSchema = EstabelecimentoSchema.partial();
 
 export type EstabelecimentoDTO = z.infer<typeof EstabelecimentoSchema>;
 export type EstabelecimentoUpdateDTO = z.infer<typeof EstabelecimentoUpdateSchema>;
+

@@ -8,6 +8,7 @@ class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
+  /// Cria o estado responsavel pelos campos e pelo carregamento do cadastro.
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
@@ -27,6 +28,7 @@ class _RegisterPageState extends State<RegisterPage>
   late Animation<Offset> _slideAnim;
 
   @override
+  /// Prepara as animacoes executadas quando a pagina aparece.
   void initState() {
     super.initState();
     _animController = AnimationController(
@@ -42,6 +44,7 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   @override
+  /// Descarta controllers usados pela tela quando ela deixa de existir.
   void dispose() {
     _animController.dispose();
     _nomeController.dispose();
@@ -51,6 +54,7 @@ class _RegisterPageState extends State<RegisterPage>
     super.dispose();
   }
 
+  /// Valida os campos, envia o cadastro para a API e trata sucesso ou erro.
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
@@ -77,6 +81,7 @@ class _RegisterPageState extends State<RegisterPage>
     }
   }
 
+  /// Mostra ao usuario uma mensagem de erro por meio de uma SnackBar.
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -97,27 +102,31 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   @override
+  /// Constroi a pagina de cadastro com rolagem para funcionar em telas pequenas.
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
-            child: FadeTransition(
-              opacity: _fadeAnim,
-              child: SlideTransition(
-                position: _slideAnim,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeader(),
-                    const SizedBox(height: 40),
-                    _buildForm(),
-                    const SizedBox(height: 24),
-                    _buildRegisterButton(),
-                    const SizedBox(height: 20),
-                    _buildLoginLink(),
-                  ],
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 520),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+              child: FadeTransition(
+                opacity: _fadeAnim,
+                child: SlideTransition(
+                  position: _slideAnim,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildHeader(),
+                      const SizedBox(height: 40),
+                      _buildForm(),
+                      const SizedBox(height: 24),
+                      _buildRegisterButton(),
+                      const SizedBox(height: 20),
+                      _buildLoginLink(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -127,6 +136,7 @@ class _RegisterPageState extends State<RegisterPage>
     );
   }
 
+  /// Constroi a parte superior com icone, titulo e explicacao.
   Widget _buildHeader() {
     return Column(
       children: [
@@ -134,11 +144,18 @@ class _RegisterPageState extends State<RegisterPage>
           width: 72,
           height: 72,
           decoration: BoxDecoration(
-            color: AppTheme.accent.withOpacity(0.15),
+            color: AppTheme.accent.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppTheme.accent.withOpacity(0.4), width: 1.5),
+            border: Border.all(
+              color: AppTheme.accent.withValues(alpha: 0.4),
+              width: 1.5,
+            ),
           ),
-          child: const Icon(Icons.person_add_rounded, color: AppTheme.accent, size: 36),
+          child: const Icon(
+            Icons.person_add_rounded,
+            color: AppTheme.accent,
+            size: 36,
+          ),
         ),
         const SizedBox(height: 24),
         const Text(
@@ -161,6 +178,7 @@ class _RegisterPageState extends State<RegisterPage>
     );
   }
 
+  /// Constroi os campos e validadores de nome, e-mail, senha e confirmacao.
   Widget _buildForm() {
     return Form(
       key: _formKey,
@@ -177,7 +195,9 @@ class _RegisterPageState extends State<RegisterPage>
             ),
             validator: (value) {
               if (value == null || value.isEmpty) return 'Informe seu nome';
-              if (value.trim().length < 3) return 'Nome deve ter pelo menos 3 caracteres';
+              if (value.trim().length < 3) {
+                return 'Nome deve ter pelo menos 3 caracteres';
+              }
               return null;
             },
           ),
@@ -192,7 +212,9 @@ class _RegisterPageState extends State<RegisterPage>
             ),
             validator: (value) {
               if (value == null || value.isEmpty) return 'Informe o e-mail';
-              if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(value)) return 'E-mail inválido';
+              if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(value)) {
+                return 'E-mail inválido';
+              }
               return null;
             },
           ),
@@ -206,7 +228,9 @@ class _RegisterPageState extends State<RegisterPage>
               prefixIcon: const Icon(Icons.lock_outline_rounded),
               suffixIcon: IconButton(
                 icon: Icon(
-                  _obscureSenha ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  _obscureSenha
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
                   color: AppTheme.textSecondary,
                 ),
                 onPressed: () => setState(() => _obscureSenha = !_obscureSenha),
@@ -214,7 +238,9 @@ class _RegisterPageState extends State<RegisterPage>
             ),
             validator: (value) {
               if (value == null || value.isEmpty) return 'Informe a senha';
-              if (value.length < 6) return 'Senha deve ter pelo menos 6 caracteres';
+              if (value.length < 6) {
+                return 'Senha deve ter pelo menos 6 caracteres';
+              }
               return null;
             },
           ),
@@ -228,15 +254,21 @@ class _RegisterPageState extends State<RegisterPage>
               prefixIcon: const Icon(Icons.lock_outline_rounded),
               suffixIcon: IconButton(
                 icon: Icon(
-                  _obscureConfirmaSenha ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  _obscureConfirmaSenha
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
                   color: AppTheme.textSecondary,
                 ),
-                onPressed: () => setState(() => _obscureConfirmaSenha = !_obscureConfirmaSenha),
+                onPressed: () => setState(
+                  () => _obscureConfirmaSenha = !_obscureConfirmaSenha,
+                ),
               ),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) return 'Confirme sua senha';
-              if (value != _senhaController.text) return 'As senhas não coincidem';
+              if (value != _senhaController.text) {
+                return 'As senhas não coincidem';
+              }
               return null;
             },
           ),
@@ -245,6 +277,7 @@ class _RegisterPageState extends State<RegisterPage>
     );
   }
 
+  /// Constroi o botao que dispara o cadastro e representa o estado de carregamento.
   Widget _buildRegisterButton() {
     return SizedBox(
       width: double.infinity,
@@ -265,9 +298,11 @@ class _RegisterPageState extends State<RegisterPage>
     );
   }
 
+  /// Constroi o link de retorno para quem ja possui uma conta.
   Widget _buildLoginLink() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         const Text(
           'Já tem uma conta? ',
@@ -281,3 +316,4 @@ class _RegisterPageState extends State<RegisterPage>
     );
   }
 }
+// Tela de cadastro. O State controla os campos, validacao e envio assincrono para a API.

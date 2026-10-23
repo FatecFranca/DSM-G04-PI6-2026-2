@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import * as classificacoesModel from "../models/classificacoes";
 import { ClassificacaoSchema, ClassificacaoUpdateSchema } from "../types/classificacao";
 
+/** Valida o corpo e cria uma nova classificacao no banco. */
 export async function createClassificacaoController(req: Request, res: Response) {
   try {
     const parsed = ClassificacaoSchema.safeParse(req.body);
@@ -36,6 +37,7 @@ export async function createClassificacaoController(req: Request, res: Response)
   }
 }
 
+/** Busca todas as classificacoes e as devolve como JSON. */
 export async function listClassificacoesController(_req: Request, res: Response) {
   try {
     const classificacoes = await classificacoesModel.listClassificacoes();
@@ -49,6 +51,7 @@ export async function listClassificacoesController(_req: Request, res: Response)
   }
 }
 
+/** Converte o id da URL para numero e busca uma classificacao especifica. */
 export async function getClassificacaoByIdController(req: Request, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
@@ -66,6 +69,7 @@ export async function getClassificacaoByIdController(req: Request, res: Response
   }
 }
 
+/** Valida os dados recebidos e atualiza a classificacao identificada na URL. */
 export async function updateClassificacaoController(req: Request, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
@@ -100,6 +104,7 @@ export async function updateClassificacaoController(req: Request, res: Response)
   }
 }
 
+/** Remove uma classificacao pelo id informado na URL. */
 export async function deleteClassificacaoController(req: Request, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
@@ -118,3 +123,4 @@ export async function deleteClassificacaoController(req: Request, res: Response)
     });
   }
 }
+// Controla as requisicoes relacionadas aos grupos de classificacoes dos usuarios.

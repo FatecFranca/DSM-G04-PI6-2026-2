@@ -11,10 +11,10 @@ import { getMyPreferenciasController, saveMyPreferenciasController } from "../co
 const router = Router();
 
 
-// Rota pública para criação de usuário
+
 router.post("/", createUsuarioController);
 
-// Todas as rotas abaixo exigem autenticação
+
 router.use(authMiddleware);
 router.get("/me/preferencias", getMyPreferenciasController);
 router.put("/me/preferencias", saveMyPreferenciasController);

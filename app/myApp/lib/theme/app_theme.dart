@@ -56,3 +56,4 @@ class AppTheme {
     ),
   );
 }
+// Paleta e estilos globais. Alteracoes feitas aqui aparecem em todo o aplicativo.

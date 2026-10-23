@@ -25,3 +25,4 @@ export const PreferenciasUsuarioSchema = z.object({
 
 export type UsuarioDTO = z.infer<typeof UsuarioSchema>;
 export type UsuarioUpdateDTO = z.infer<typeof UsuarioUpdateSchema>;
+

@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import { RecomendacoesQuerySchema } from "../types/recomendacao";
 import * as recomendacoesModel from "../models/recomendacoes";
 
+/**
+ * Monta a lista personalizada: le filtros, procura cache, calcula o ranking quando
+ * necessario e devolve ao aplicativo a quantidade solicitada de estabelecimentos.
+ */
 export async function listRecomendacoesController(
   req: Request & { user?: { id_usuario: number } },
   res: Response
@@ -62,6 +66,7 @@ export async function listRecomendacoesController(
   }
 }
 
+/** Busca sugestoes semelhantes aos locais que o usuario marcou com like. */
 export async function listAiSuggestionsController(
   req: Request & { user?: { id_usuario: number } },
   res: Response
@@ -90,3 +95,5 @@ export async function listAiSuggestionsController(
     });
   }
 }
+// Orquestra o fluxo de recomendacoes recebido pela rota HTTP.
+// As consultas e regras de pontuacao ficam no model para manter esta camada simples.

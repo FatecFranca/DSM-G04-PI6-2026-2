@@ -10,9 +10,12 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  /// Cria o objeto de estado mutavel que controlara esta tela de login.
   State<LoginPage> createState() => _LoginPageState();
 }
 
+// O State guarda tudo que pode mudar enquanto esta tela esta aberta:
+// textos digitados, carregamento, visibilidade da senha e animacoes.
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
@@ -26,8 +29,10 @@ class _LoginPageState extends State<LoginPage>
   late Animation<Offset> _slideAnim;
 
   @override
+  /// Configura e inicia as animacoes assim que a tela entra na arvore de widgets.
   void initState() {
     super.initState();
+    // O controller determina a duracao; fade e slide descrevem como a tela aparece.
     _animController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
@@ -41,7 +46,9 @@ class _LoginPageState extends State<LoginPage>
   }
 
   @override
+  /// Libera animacoes e campos de texto para evitar consumo de memoria apos sair da tela.
   void dispose() {
+    // Controllers ocupam recursos. A tela deve libera-los quando for removida.
     _animController.dispose();
     _emailController.dispose();
     _senhaController.dispose();
@@ -49,21 +56,21 @@ class _LoginPageState extends State<LoginPage>
   }
 
   // ─── Método de login integrado com ApiService ────────────────────────────
+  /// Valida o formulario, chama a API e abre sugestoes quando o login funciona.
   Future<void> _handleLogin() async {
+    // Se algum validador do formulario falhar, a requisicao nem e enviada.
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
 
     try {
-      final token = await _apiService.login(
+      // `await` pausa somente esta funcao ate a API responder; a interface continua ativa.
+      await _apiService.login(
         _emailController.text.trim(),
         _senhaController.text,
       );
 
-      // Persista o token conforme necessário, ex: SharedPreferences
-      // await prefs.setString('token', token);
-      debugPrint('Token recebido: $token');
-
+      // Depois de um await, mounted confirma que a tela ainda existe antes de usar context.
       if (mounted) {
         context.go(AppRouter.sugestoes);
       }
@@ -77,6 +84,7 @@ class _LoginPageState extends State<LoginPage>
   }
 
   // ─── Exibe erro em SnackBar estilizado ───────────────────────────────────
+  /// Exibe uma mensagem temporaria de erro na parte inferior da tela.
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -98,27 +106,31 @@ class _LoginPageState extends State<LoginPage>
 
   // ─── Build ────────────────────────────────────────────────────────────────
   @override
+  /// Monta a estrutura completa e combina cabecalho, formulario e botoes.
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
-            child: FadeTransition(
-              opacity: _fadeAnim,
-              child: SlideTransition(
-                position: _slideAnim,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeader(),
-                    const SizedBox(height: 48),
-                    _buildForm(),
-                    const SizedBox(height: 24),
-                    _buildLoginButton(),
-                    const SizedBox(height: 20),
-                    _buildRegisterLink(),
-                  ],
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 520),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+              child: FadeTransition(
+                opacity: _fadeAnim,
+                child: SlideTransition(
+                  position: _slideAnim,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildHeader(),
+                      const SizedBox(height: 48),
+                      _buildForm(),
+                      const SizedBox(height: 24),
+                      _buildLoginButton(),
+                      const SizedBox(height: 20),
+                      _buildRegisterLink(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -128,6 +140,7 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 
+  /// Monta o logotipo, titulo e texto introdutorio da pagina.
   Widget _buildHeader() {
     return Column(
       children: [
@@ -135,11 +148,18 @@ class _LoginPageState extends State<LoginPage>
           width: 72,
           height: 72,
           decoration: BoxDecoration(
-            color: AppTheme.accent.withOpacity(0.15),
+            color: AppTheme.accent.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppTheme.accent.withOpacity(0.4), width: 1.5),
+            border: Border.all(
+              color: AppTheme.accent.withValues(alpha: 0.4),
+              width: 1.5,
+            ),
           ),
-          child: const Icon(Icons.lock_rounded, color: AppTheme.accent, size: 36),
+          child: const Icon(
+            Icons.lock_rounded,
+            color: AppTheme.accent,
+            size: 36,
+          ),
         ),
         const SizedBox(height: 24),
         const Text(
@@ -162,6 +182,7 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 
+  /// Monta os campos de e-mail e senha e suas regras de validacao.
   Widget _buildForm() {
     return Form(
       key: _formKey,
@@ -177,7 +198,7 @@ class _LoginPageState extends State<LoginPage>
             ),
             validator: (value) {
               if (value == null || value.isEmpty) return 'Informe o e-mail';
-              
+
               return null;
             },
           ),
@@ -201,20 +222,20 @@ class _LoginPageState extends State<LoginPage>
             ),
             validator: (value) {
               if (value == null || value.isEmpty) return 'Informe a senha';
-              if (value.length < 6) return 'Senha deve ter pelo menos 6 caracteres';
+              if (value.length < 6) {
+                return 'Senha deve ter pelo menos 6 caracteres';
+              }
               return null;
             },
           ),
           const SizedBox(height: 12),
-          Align(
-            alignment: Alignment.centerRight,
-            
-          ),
+          Align(alignment: Alignment.centerRight),
         ],
       ),
     );
   }
 
+  /// Monta o botao de entrar, mostrando progresso e bloqueando cliques durante o envio.
   Widget _buildLoginButton() {
     return SizedBox(
       width: double.infinity,
@@ -235,9 +256,11 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 
+  /// Monta o atalho que leva quem ainda nao possui conta para o cadastro.
   Widget _buildRegisterLink() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         const Text(
           'Não tem uma conta? ',

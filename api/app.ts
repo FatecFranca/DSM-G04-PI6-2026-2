@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "./lib/ambiente";
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import cors from "cors";
@@ -10,7 +10,13 @@ import classificacoesRoutes from "./src/routes/classificacoes";
 import classificacoesEstabelecimentosRoutes from "./src/routes/classificacoesEstabelecimentos";
 import recomendacoesRoutes from "./src/routes/recomendacoes";
 import interacoesRoutes from "./src/routes/interacoes";
+import { lerConfiguracaoMensageria } from "./src/mensageria/configuracao";
+import { prisma } from "./lib/prisma";
 
+lerConfiguracaoMensageria();
+
+// Remove espacos e a barra final para comparar origens como
+// "http://localhost:3000" e "http://localhost:3000/" da mesma forma.
 const normalizeOrigin = (value: string) => value.trim().replace(/\/$/, "");
 const rawCorsOrigin = process.env.CORS_ORIGIN?.trim();
 const allowAllOrigins = !rawCorsOrigin || rawCorsOrigin === "*";
@@ -21,6 +27,7 @@ const allowedOrigins = (rawCorsOrigin ?? "")
 
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
+    // Requisicoes sem origin normalmente vem de apps mobile ou ferramentas como Postman.
     if (allowAllOrigins || !origin || origin === "null") {
       callback(null, true);
       return;
@@ -37,6 +44,7 @@ const corsOptions: cors.CorsOptions = {
 
 const app = express();
 
+// Middlewares executam antes das rotas: leem JSON, controlam o CORS e servem arquivos publicos.
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(express.static("public"));
@@ -47,6 +55,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// Cada prefixo encaminha a requisicao para o arquivo de rotas correspondente.
 app.use("/auth", authRoutes);
 app.use("/usuarios", usuariosRoutes);
 app.use("/estabelecimentos", estabelecimentosRoutes);
@@ -57,6 +66,7 @@ app.use("/interacoes", interacoesRoutes);
 
 
 
+// Interface visual da documentacao da API.
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 app.get("/", (req, res) => {
@@ -71,6 +81,20 @@ const parsedHost = hostFromEnv ? new URL(hostFromEnv) : null;
 const port = Number(process.env.PORT ?? parsedHost?.port ?? 3000);
 const host = hostFromEnv ?? `http://localhost:${port}`;
 
-app.listen(port, () => {
+// listen inicia o servidor e o mantem aguardando requisicoes HTTP.
+const servidor = app.listen(port, () => {
   console.log(`\nSERVIDOR INICIADO COM SUCESSO\nURL  -> ${host}\nDOCS -> ${host}/docs\n`);
 });
+
+let encerrando = false;
+function encerrarApi() {
+  if (encerrando) return;
+  encerrando = true;
+  const prazo = setTimeout(() => process.exit(1), 30000);
+  prazo.unref();
+  servidor.close(() => {
+    void prisma.$disconnect().then(() => clearTimeout(prazo)).catch(() => process.exit(1));
+  });
+}
+process.once("SIGINT", encerrarApi);
+process.once("SIGTERM", encerrarApi);

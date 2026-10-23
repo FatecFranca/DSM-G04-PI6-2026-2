@@ -1,18 +1,29 @@
 import { prisma } from "../../lib/prisma";
 import { InteracaoCreateDTO } from "../types/interacao";
+import { criarEventoInteracao } from "../mensageria/contrato";
+import { mensageriaAtiva } from "../mensageria/configuracao";
+
 
 export async function createInteracao(idUsuario: number, data: InteracaoCreateDTO) {
-  return prisma.tb_interacao_usuario_estabelecimento.create({
-    data: {
-      id_usuario: idUsuario,
-      id_estabelecimento: data.id_estabelecimento,
-      tipo_evento: data.tipo_evento,
-      valor: data.valor,
-      origem: data.origem,
-      regiao: data.regiao,
-    },
+  const dados = {
+    id_usuario: idUsuario,
+    id_estabelecimento: data.id_estabelecimento,
+    tipo_evento: data.tipo_evento,
+    valor: data.valor,
+    origem: data.origem,
+    regiao: data.regiao,
+  };
+  if (!mensageriaAtiva()) {
+    return prisma.tb_interacao_usuario_estabelecimento.create({ data: dados });
+  }
+  return prisma.$transaction(async (transacao) => {
+    const interacao = await transacao.tb_interacao_usuario_estabelecimento.create({ data: dados });
+    const evento = criarEventoInteracao(interacao);
+    await transacao.tb_evento_outbox.create({ data: { id_evento: evento.id_evento, conteudo: evento } });
+    return interacao;
   });
 }
+
 
 export function listInteracoesUsuario(idUsuario: number, take = 100) {
   return prisma.tb_interacao_usuario_estabelecimento.findMany({
@@ -33,6 +44,7 @@ export function listInteracoesUsuario(idUsuario: number, take = 100) {
   });
 }
 
+/** Filtra o historico para devolver apenas avaliacoes/notas feitas pelo usuario. */
 export function listAvaliacoesUsuario(idUsuario: number, take = 100) {
   return prisma.tb_interacao_usuario_estabelecimento.findMany({
     where: { id_usuario: idUsuario, tipo_evento: "rating" },
@@ -53,3 +65,4 @@ export function listAvaliacoesUsuario(idUsuario: number, take = 100) {
     },
   });
 }
+// Operacoes de banco para o historico de interacoes entre usuarios e locais.

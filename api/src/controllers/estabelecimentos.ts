@@ -2,6 +2,23 @@ import { Request, Response } from "express";
 import * as estabelecimentosModel from "../models/estabelecimentos";
 import { EstabelecimentoSchema, EstabelecimentoUpdateSchema } from "../types/estabelecimento";
 
+export async function listAvaliacoesEstabelecimentoController(req: Request, res: Response) {
+  const id = Number(req.params.id);
+  const pagina = Number(req.query.pagina ?? 1);
+  if (!Number.isSafeInteger(id) || id <= 0 || !Number.isSafeInteger(pagina) || pagina < 1 || pagina > 500) {
+    return res.status(400).json({ success: false, message: "ID ou pagina invalida" });
+  }
+  try {
+    if (!await estabelecimentosModel.getEstabelecimentoById(id)) {
+      return res.status(404).json({ success: false, message: "Estabelecimento nao encontrado" });
+    }
+    return res.json({ success: true, data: await estabelecimentosModel.listAvaliacoesEstabelecimento(id, pagina) });
+  } catch {
+    return res.status(500).json({ success: false, message: "Erro ao carregar avaliacoes" });
+  }
+}
+
+/** Valida o corpo da requisicao e cadastra um novo estabelecimento. */
 export async function createEstabelecimentoController(req: Request, res: Response) {
   try {
     const parsed = EstabelecimentoSchema.safeParse(req.body);
@@ -36,6 +53,7 @@ export async function createEstabelecimentoController(req: Request, res: Respons
   }
 }
 
+/** Devolve a lista de estabelecimentos cadastrados. */
 export async function listEstabelecimentosController(_req: Request, res: Response) {
   try {
     const estabelecimentos = await estabelecimentosModel.listEstabelecimentos();
@@ -49,6 +67,7 @@ export async function listEstabelecimentosController(_req: Request, res: Respons
   }
 }
 
+/** Busca um estabelecimento pelo id recebido como parametro da rota. */
 export async function getEstabelecimentoByIdController(req: Request, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
@@ -66,6 +85,7 @@ export async function getEstabelecimentoByIdController(req: Request, res: Respon
   }
 }
 
+/** Atualiza somente os campos enviados de um estabelecimento existente. */
 export async function updateEstabelecimentoController(req: Request, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
@@ -92,6 +112,7 @@ export async function updateEstabelecimentoController(req: Request, res: Respons
   }
 }
 
+/** Exclui o estabelecimento identificado pelo id da rota. */
 export async function deleteEstabelecimentoController(req: Request, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
@@ -110,3 +131,4 @@ export async function deleteEstabelecimentoController(req: Request, res: Respons
     });
   }
 }
+// Converte requisicoes HTTP de estabelecimentos em chamadas da camada de dados.

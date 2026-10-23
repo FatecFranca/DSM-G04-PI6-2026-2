@@ -6,3 +6,4 @@ export const ClassificacaoEstabelecimentoSchema = z.object({
 });
 
 export type ClassificacaoEstabelecimentoDTO = z.infer<typeof ClassificacaoEstabelecimentoSchema>;
+

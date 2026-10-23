@@ -8,3 +8,4 @@ export const ClassificacaoUpdateSchema = ClassificacaoSchema.partial();
 
 export type ClassificacaoDTO = z.infer<typeof ClassificacaoSchema>;
 export type ClassificacaoUpdateDTO = z.infer<typeof ClassificacaoUpdateSchema>;
+

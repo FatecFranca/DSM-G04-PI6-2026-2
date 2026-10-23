@@ -4,11 +4,13 @@ import { PreferenciasUsuarioSchema, UsuarioSchema, UsuarioUpdateSchema } from ".
 
 type AuthenticatedRequest = Request & { user?: { id_usuario: number } };
 
+/** Busca e devolve as preferencias do usuario identificado pelo token JWT. */
 export async function getMyPreferenciasController(req: AuthenticatedRequest, res: Response) {
   const data = await usuariosModel.getPreferencias(req.user!.id_usuario);
   return res.json({ success: true, data });
 }
 
+/** Valida e salva as preferencias enviadas pelo usuario autenticado. */
 export async function saveMyPreferenciasController(req: AuthenticatedRequest, res: Response) {
   const parsed = PreferenciasUsuarioSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ success: false, errors: parsed.error.flatten() });
@@ -16,6 +18,7 @@ export async function saveMyPreferenciasController(req: AuthenticatedRequest, re
   return res.status(201).json({ success: true, data });
 }
 
+/** Cria uma conta com os dados do corpo da requisicao e devolve o usuario criado. */
 export async function createUsuarioController(req: Request, res: Response) {
   try {
     const parsed = UsuarioSchema.safeParse(req.body);
@@ -50,6 +53,7 @@ export async function createUsuarioController(req: Request, res: Response) {
   }
 }
 
+/** Lista os usuarios cadastrados; o prefixo `_` indica que a requisicao nao e usada. */
 export async function listUsuariosController(_req: Request, res: Response) {
   try {
     const usuarios = await usuariosModel.listUsuarios();
@@ -63,6 +67,7 @@ export async function listUsuariosController(_req: Request, res: Response) {
   }
 }
 
+/** Busca um usuario pelo `id` da URL, impedindo acesso indevido quando aplicavel. */
 export async function getUsuarioByIdController(req: AuthenticatedRequest, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
@@ -81,6 +86,7 @@ export async function getUsuarioByIdController(req: AuthenticatedRequest, res: R
   }
 }
 
+/** Atualiza os campos enviados para o usuario indicado na URL. */
 export async function updateUsuarioController(req: AuthenticatedRequest, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
@@ -107,6 +113,7 @@ export async function updateUsuarioController(req: AuthenticatedRequest, res: Re
   }
 }
 
+/** Exclui o usuario indicado pelo parametro `id` e devolve o resultado da operacao. */
 export async function deleteUsuarioController(req: AuthenticatedRequest, res: Response) {
   const id: number = Number(req.params.id);
   if (!id) return res.status(400).json({ success: false, message: "ID invalido" });
@@ -126,3 +133,5 @@ export async function deleteUsuarioController(req: AuthenticatedRequest, res: Re
     });
   }
 }
+// Controller = camada HTTP. Ela le parametros da requisicao, chama o model
+// e transforma o resultado em uma resposta com status e JSON adequados.

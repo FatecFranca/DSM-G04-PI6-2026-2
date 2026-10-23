@@ -9,10 +9,15 @@
     "build": "tsc",
     "start": "node dist/app.js",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate deploy"
+    "prisma:migrate": "prisma migrate deploy",
+    "worker:dev": "ts-node-dev --respawn --transpile-only src/workers/mensageria.ts",
+    "worker:start": "node dist/src/workers/mensageria.js",
+    "test": "npm run build && node --test dist/src/mensageria/mensageria.test.js",
+    "test:integration": "npm run build && node --test dist/src/mensageria/persistencia.integration.test.js"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.4.3",
+    "@google-cloud/pubsub": "^6.3.1",
     "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "^7.4.1",
     "bcrypt": "^6.0.0",

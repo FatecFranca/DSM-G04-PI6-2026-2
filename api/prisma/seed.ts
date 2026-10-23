@@ -1,4 +1,6 @@
 import "dotenv/config";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { prisma } from "../lib/prisma";
 
 const rawData = `
@@ -148,20 +150,85 @@ type SeedEstabelecimento = {
   fecha: string;
 };
 
+/** Normaliza texto do CSV para permitir comparacoes consistentes. */
 function normalize(value: string) {
   return value.trim().toLowerCase();
 }
 
-function parseRows(): SeedEstabelecimento[] {
-  const rows = rawData
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
+/** Le as linhas do CSV, valida os campos e cria objetos de estabelecimentos. */
+function parseCsvLine(line: string): string[] {
+  const values: string[] = [];
+  let current = "";
+  let insideQuotes = false;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+
+    if (character === '"') {
+      // Duas aspas dentro de um campo representam uma aspa literal no CSV.
+      if (insideQuotes && line[index + 1] === '"') {
+        current += '"';
+        index += 1;
+      } else {
+        insideQuotes = !insideQuotes;
+      }
+    } else if (character === "," && !insideQuotes) {
+      values.push(current.trim());
+      current = "";
+    } else {
+      current += character;
+    }
+  }
+
+  values.push(current.trim());
+  return values;
+}
+
+/**
+ * Separa registros completos sem cortar uma quebra de linha que esteja dentro
+ * de aspas. Isso e necessario para nomes multilinha existentes na planilha.
+ */
+function splitCsvRecords(csvContent: string): string[] {
+  const records: string[] = [];
+  let current = "";
+  let insideQuotes = false;
+
+  for (let index = 0; index < csvContent.length; index += 1) {
+    const character = csvContent[index];
+
+    if (character === '"') {
+      if (insideQuotes && csvContent[index + 1] === '"') {
+        current += '""';
+        index += 1;
+        continue;
+      }
+      insideQuotes = !insideQuotes;
+    }
+
+    if ((character === "\n" || character === "\r") && !insideQuotes) {
+      if (current.trim()) records.push(current.trim());
+      current = "";
+      if (character === "\r" && csvContent[index + 1] === "\n") index += 1;
+    } else {
+      current += character;
+    }
+  }
+
+  if (current.trim()) records.push(current.trim());
+  return records;
+}
+
+/**
+ * Converte o conteudo CSV em estabelecimentos, ignora o cabecalho e elimina
+ * nomes repetidos. A funcao tambem corrige pequenas variacoes conhecidas da base.
+ */
+function parseRows(csvContent: string): SeedEstabelecimento[] {
+  const rows = splitCsvRecords(csvContent.replace(/^\uFEFF/, "")).slice(1);
 
   const uniqueByName = new Map<string, SeedEstabelecimento>();
 
   for (const row of rows) {
-    const parts = row.split("\t").map((item) => item.trim());
+    const parts = parseCsvLine(row);
     if (parts.length < 8) continue;
 
     const nome = parts[0];
@@ -189,6 +256,7 @@ function parseRows(): SeedEstabelecimento[] {
   return [...uniqueByName.values()];
 }
 
+/** Executa a carga inicial dos estabelecimentos no banco de dados. */
 async function main() {
   await prisma.tb_modelo_recomendacao.upsert({
     where: { versao: "fallback-v1" },
@@ -204,19 +272,42 @@ async function main() {
     },
   });
 
-  const total = await prisma.tb_estabelecimento.count();
-  if (total > 0) {
-    console.log(`Estabelecimentos ja existentes: ${total}. Seed de modelo fallback garantido.`);
-    return;
-  }
-
-  const data = parseRows();
+  // SEED_CSV_PATH permite importar qualquer CSV sem deixar um caminho pessoal
+  // gravado no codigo. Sem a variavel, usamos o arquivo versionado no projeto.
+  const csvPath = resolve(
+    process.env.SEED_CSV_PATH ??
+      "prisma/seed/Base de Dados PI 5º Semestre - 2026 - Página1.csv"
+  );
+  const data = parseRows(readFileSync(csvPath, "utf8"));
   if (data.length === 0) {
     throw new Error("Nenhum estabelecimento valido encontrado para seed.");
   }
 
-  await prisma.tb_estabelecimento.createMany({ data });
-  console.log(`Seed concluido: ${data.length} estabelecimentos inseridos e modelo fallback-v1 garantido.`);
+  // Comparamos nomes normalizados para que executar o seed novamente atualize
+  // os locais existentes, em vez de criar copias deles.
+  const existing = await prisma.tb_estabelecimento.findMany({
+    select: { id_estabelecimento: true, nome: true },
+  });
+  const existingByName = new Map(
+    existing.map((item) => [normalize(item.nome), item.id_estabelecimento])
+  );
+
+  const operations = data.map((item) => {
+    const existingId = existingByName.get(normalize(item.nome));
+    return existingId
+      ? prisma.tb_estabelecimento.update({
+          where: { id_estabelecimento: existingId },
+          data: item,
+        })
+      : prisma.tb_estabelecimento.create({ data: item });
+  });
+
+  await prisma.$transaction(operations);
+  const updated = data.filter((item) => existingByName.has(normalize(item.nome))).length;
+  const inserted = data.length - updated;
+  console.log(
+    `CSV importado: ${inserted} inseridos, ${updated} atualizados, ${data.length} processados. Arquivo: ${csvPath}`
+  );
 }
 
 main()
@@ -227,3 +318,5 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+// Seed preenche um banco vazio com dados iniciais para desenvolvimento e testes.
+// Ele pode ser executado novamente conforme a estrategia definida abaixo.

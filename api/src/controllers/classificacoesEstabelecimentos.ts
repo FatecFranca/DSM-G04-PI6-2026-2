@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import * as classificacoesEstabelecimentosModel from "../models/classificacoesEstabelecimentos";
 import { ClassificacaoEstabelecimentoSchema } from "../types/classificacaoEstabelecimento";
 
+/** Cria a ligacao que guarda a nota/comentario de um estabelecimento. */
 export async function createClassificacaoEstabelecimentoController(req: Request, res: Response) {
   try {
     const parsed = ClassificacaoEstabelecimentoSchema.safeParse(req.body);
@@ -36,6 +37,7 @@ export async function createClassificacaoEstabelecimentoController(req: Request,
   }
 }
 
+/** Lista todas as ligacoes entre classificacoes e estabelecimentos. */
 export async function listClassificacoesEstabelecimentosController(_req: Request, res: Response) {
   try {
     const classificacoesEstabelecimentos = await classificacoesEstabelecimentosModel.listClassificacoesEstabelecimentos();
@@ -49,6 +51,7 @@ export async function listClassificacoesEstabelecimentosController(_req: Request
   }
 }
 
+/** Busca uma ligacao usando os dois ids que formam sua chave composta. */
 export async function getClassificacaoEstabelecimentoByIdsController(req: Request, res: Response) {
   const idClassificacao: number = Number(req.params.id_classificacao);
   const idEstabelecimento: number = Number(req.params.id_estabelecimento);
@@ -70,6 +73,7 @@ export async function getClassificacaoEstabelecimentoByIdsController(req: Reques
   }
 }
 
+/** Exclui uma ligacao usando os ids da classificacao e do estabelecimento. */
 export async function deleteClassificacaoEstabelecimentoController(req: Request, res: Response) {
   const idClassificacao: number = Number(req.params.id_classificacao);
   const idEstabelecimento: number = Number(req.params.id_estabelecimento);
@@ -92,3 +96,4 @@ export async function deleteClassificacaoEstabelecimentoController(req: Request,
     });
   }
 }
+// Controla notas e comentarios que ligam uma classificacao a um estabelecimento.

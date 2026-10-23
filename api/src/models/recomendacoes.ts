@@ -14,11 +14,14 @@ type CandidateEstabelecimento = {
   bairro: string | null;
 };
 
+
 const CACHE_TTL_MINUTES = 10;
 
 const normalizeText = (value?: string | null) => (value ?? "").trim().toLowerCase();
 
+
 export function buildContextHash(idUsuario: number, query: RecomendacoesQueryDTO) {
+ 
   const payload = JSON.stringify({
     idUsuario,
     tipo: normalizeText(query.tipo),
@@ -32,6 +35,7 @@ export function buildContextHash(idUsuario: number, query: RecomendacoesQueryDTO
   return crypto.createHash("sha256").update(payload).digest("hex");
 }
 
+
 export async function getLatestReadyModelVersion() {
   const model = await prisma.tb_modelo_recomendacao.findFirst({
     where: { status: "ready" },
@@ -43,6 +47,7 @@ export async function getLatestReadyModelVersion() {
 }
 
 export async function getCachedRecommendations(idUsuario: number, modelVersion: string, contextHash: string) {
+
   const cache = await prisma.tb_recomendacao_cache.findUnique({
     where: {
       id_usuario_model_version_context_hash: {
@@ -60,6 +65,7 @@ export async function getCachedRecommendations(idUsuario: number, modelVersion: 
   const ranking = Array.isArray(cache.ranking_json) ? cache.ranking_json : [];
   return ranking;
 }
+
 
 export async function upsertRecommendationsCache(
   idUsuario: number,
@@ -115,11 +121,13 @@ export function listCandidateEstabelecimentos(query: RecomendacoesQueryDTO) {
   });
 }
 
+/** Pontua candidatos usando avaliacao, preferencias salvas, likes e dislikes. */
 export async function rankFallbackForUser(
   idUsuario: number,
   candidates: CandidateEstabelecimento[],
   limit: number
 ) {
+  // As duas consultas sao independentes; Promise.all permite executa-las ao mesmo tempo.
   const [userInteractions, preferenceSnapshot] = await Promise.all([
     prisma.tb_interacao_usuario_estabelecimento.findMany({
       where: { id_usuario: idUsuario },
@@ -142,6 +150,7 @@ export async function rankFallbackForUser(
     }),
   ]);
 
+  // Os mapas acumulam quanto o usuario gosta ou nao de cada caracteristica.
   const typeWeights = new Map<string, number>();
   const priceWeights = new Map<string, number>();
   const environmentWeights = new Map<string, number>();
@@ -253,6 +262,7 @@ type LikedPlace = {
   created_at: Date;
 };
 
+/** Divide tipos compostos em valores menores e normalizados para comparacao. */
 function splitTipoVariants(tipo: string) {
   return tipo
     .split(/[/,]/)
@@ -261,6 +271,7 @@ function splitTipoVariants(tipo: string) {
     .map((part) => normalizeText(part));
 }
 
+/** Mede a coincidencia entre os tipos do candidato e de um local curtido. */
 function tipoOverlapScore(candidateTipo: string, likedTipo: string) {
   const cParts = splitTipoVariants(candidateTipo);
   const lParts = splitTipoVariants(likedTipo);
@@ -282,6 +293,7 @@ function tipoOverlapScore(candidateTipo: string, likedTipo: string) {
 }
 
 /** Semelhança 0–1 entre um candidato e um estabelecimento que o usuário curtiu. */
+/** Soma semelhancas de tipo, faixa de preco e ambiente entre dois locais. */
 function similarityToLiked(candidate: { tipo: string; faixa_preco: string; ambiente: string }, liked: LikedPlace) {
   const faixaC = normalizeText(candidate.faixa_preco);
   const ambienteC = normalizeText(candidate.ambiente);
@@ -301,6 +313,7 @@ type ScoredSuggestion = SuggestionItem & {
 };
 
 /** Intercala sugestoes ligadas a likes diferentes para refletir gosto variado. */
+/** Alterna grupos de gosto para produzir resultados variados, sem duplicatas. */
 function diversifyByTasteRoundRobin(
   limit: number,
   likedOrderIds: number[],
@@ -363,6 +376,7 @@ function diversifyByTasteRoundRobin(
   return picked.map(({ primary_like_id: _omit, ...rest }) => rest);
 }
 
+/** Usa os likes como referencia para encontrar, pontuar e diversificar locais parecidos. */
 export async function listAiSuggestionsFromLikes(idUsuario: number, limit: number) {
   const interactions = await prisma.tb_interacao_usuario_estabelecimento.findMany({
     where: { id_usuario: idUsuario },

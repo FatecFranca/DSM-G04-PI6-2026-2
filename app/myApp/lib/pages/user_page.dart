@@ -1,3 +1,4 @@
+import '../components/app_bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../router/app_router.dart';
@@ -8,6 +9,7 @@ class UserPage extends StatefulWidget {
   const UserPage({super.key});
 
   @override
+  /// Cria o estado que carregara e permitira editar os dados do perfil.
   State<UserPage> createState() => _UserPageState();
 }
 
@@ -22,11 +24,13 @@ class _UserPageState extends State<UserPage> {
   bool _isLoadingData = true;
 
   @override
+  /// Inicia o carregamento do usuario assim que a tela e aberta.
   void initState() {
     super.initState();
     _loadUsuario();
   }
 
+  /// Consulta a API e preenche os campos do formulario com os dados atuais.
   Future<void> _loadUsuario() async {
     try {
       final data = await _apiService.getUsuario();
@@ -44,6 +48,7 @@ class _UserPageState extends State<UserPage> {
   }
 
   @override
+  /// Libera os controllers dos campos quando a pagina for removida.
   void dispose() {
     _nomeController.dispose();
     _emailController.dispose();
@@ -51,6 +56,7 @@ class _UserPageState extends State<UserPage> {
     super.dispose();
   }
 
+  /// Valida e envia somente os dados alterados do perfil para a API.
   Future<void> _handleSave() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -73,8 +79,6 @@ class _UserPageState extends State<UserPage> {
       );
       if (mounted) {
         _showSuccessSnackBar('Dados atualizados com sucesso!');
-        _nomeController.clear();
-        _emailController.clear();
         _senhaController.clear();
       }
     } on Exception catch (e) {
@@ -86,6 +90,7 @@ class _UserPageState extends State<UserPage> {
     }
   }
 
+  /// Exibe uma SnackBar vermelha com uma mensagem de falha.
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -105,6 +110,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
+  /// Exibe uma SnackBar verde confirmando uma operacao bem-sucedida.
   void _showSuccessSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -125,6 +131,7 @@ class _UserPageState extends State<UserPage> {
   }
 
   @override
+  /// Monta a tela e alterna entre carregamento e conteudo do perfil.
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -136,9 +143,14 @@ class _UserPageState extends State<UserPage> {
       ),
       body: SafeArea(
         child: _isLoadingData
-            ? const Center(child: CircularProgressIndicator(color: AppTheme.accent))
+            ? const Center(
+                child: CircularProgressIndicator(color: AppTheme.accent),
+              )
             : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28,
+                  vertical: 32,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -157,6 +169,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
+  /// Limpa a sessao local e navega de volta para o login.
   Future<void> _handleLogout() async {
     final confirmar = await showDialog<bool>(
       context: context,
@@ -186,11 +199,12 @@ class _UserPageState extends State<UserPage> {
 
     if (confirmar != true) return;
 
-    ApiService.logout();
+    await ApiService.logout();
     if (!mounted) return;
     context.go(AppRouter.login);
   }
 
+  /// Monta o botao visual que solicita a saida da conta.
   Widget _buildLogoutButton() {
     return SizedBox(
       width: double.infinity,
@@ -200,7 +214,9 @@ class _UserPageState extends State<UserPage> {
         style: OutlinedButton.styleFrom(
           foregroundColor: AppTheme.accent,
           side: const BorderSide(color: AppTheme.accent, width: 1.5),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         icon: const Icon(Icons.logout_rounded),
@@ -209,6 +225,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
+  /// Monta o cabecalho visual da area de perfil.
   Widget _buildHeader() {
     return Column(
       children: [
@@ -216,11 +233,18 @@ class _UserPageState extends State<UserPage> {
           width: 72,
           height: 72,
           decoration: BoxDecoration(
-            color: AppTheme.accent.withOpacity(0.15),
+            color: AppTheme.accent.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppTheme.accent.withOpacity(0.4), width: 1.5),
+            border: Border.all(
+              color: AppTheme.accent.withValues(alpha: 0.4),
+              width: 1.5,
+            ),
           ),
-          child: const Icon(Icons.person_rounded, color: AppTheme.accent, size: 36),
+          child: const Icon(
+            Icons.person_rounded,
+            color: AppTheme.accent,
+            size: 36,
+          ),
         ),
         const SizedBox(height: 24),
         const Text(
@@ -243,6 +267,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
+  /// Monta os campos editaveis e suas validacoes.
   Widget _buildForm() {
     return Form(
       key: _formKey,
@@ -258,7 +283,9 @@ class _UserPageState extends State<UserPage> {
               prefixIcon: Icon(Icons.person_outline_rounded),
             ),
             validator: (value) {
-              if (value != null && value.isNotEmpty && value.trim().length < 3) {
+              if (value != null &&
+                  value.isNotEmpty &&
+                  value.trim().length < 3) {
                 return 'Nome deve ter pelo menos 3 caracteres';
               }
               return null;
@@ -292,7 +319,9 @@ class _UserPageState extends State<UserPage> {
               prefixIcon: const Icon(Icons.lock_outline_rounded),
               suffixIcon: IconButton(
                 icon: Icon(
-                  _obscureSenha ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  _obscureSenha
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
                   color: AppTheme.textSecondary,
                 ),
                 onPressed: () => setState(() => _obscureSenha = !_obscureSenha),
@@ -310,6 +339,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
+  /// Monta o botao de salvar e mostra progresso durante a requisicao.
   Widget _buildSaveButton() {
     return SizedBox(
       width: double.infinity,
@@ -330,57 +360,8 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  Widget _buildBottomNav(BuildContext context, int currentIndex) {
-    return NavigationBar(
-      backgroundColor: AppTheme.secondary,
-      indicatorColor: AppTheme.accent.withOpacity(0.2),
-      selectedIndex: currentIndex,
-      onDestinationSelected: (index) {
-        switch (index) {
-          case 0:
-            context.go(AppRouter.sugestoes);
-            break;
-          case 1:
-            context.go(AppRouter.rating);
-            break;
-          case 2:
-            context.go(AppRouter.floter);
-            break;
-          case 3:
-            context.go(AppRouter.ratingHistory);
-            break;
-          case 4:
-            context.go(AppRouter.user);
-            break;
-        }
-      },
-      destinations: const [
-        NavigationDestination(
-          icon: Icon(Icons.lightbulb_outline),
-          selectedIcon: Icon(Icons.lightbulb_rounded, color: AppTheme.accent),
-          label: 'Sugestões',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.star_outline_rounded),
-          selectedIcon: Icon(Icons.star_rounded, color: AppTheme.accent),
-          label: 'Avaliar',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.tune_rounded),
-          selectedIcon: Icon(Icons.tune_rounded, color: AppTheme.accent),
-          label: 'Floter',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.history_outlined),
-          selectedIcon: Icon(Icons.history_rounded, color: AppTheme.accent),
-          label: 'Histórico',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.person_outline_rounded),
-          selectedIcon: Icon(Icons.person_rounded, color: AppTheme.accent),
-          label: 'Perfil',
-        ),
-      ],
-    );
-  }
+  /// Monta a barra inferior e navega conforme o item escolhido.
+  Widget _buildBottomNav(BuildContext context, int currentIndex) =>
+      AppBottomNav(indice: currentIndex);
 }
+// Tela de perfil: carrega os dados do usuario e permite alterar ou excluir a conta.

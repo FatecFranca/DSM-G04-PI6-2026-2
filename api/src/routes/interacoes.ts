@@ -11,3 +11,4 @@ router.get("/me", listMyInteracoesController);
 router.get("/me/avaliacoes", listMyAvaliacoesController);
 
 export default router;
+

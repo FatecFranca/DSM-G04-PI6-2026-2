@@ -752,3 +752,5 @@ export const openApiDocument = generator.generateDocument({
   },
   servers: [{ url: serverUrl }],
 });
+// Documento OpenAPI: descreve endpoints, parametros e respostas exibidos em /docs.
+// Este arquivo documenta a API; ele nao executa as regras de negocio.

@@ -4,12 +4,15 @@ import { findUserByEmail, updateUserPassword } from "../models/auth";
 import { loginSchema } from "../types/authSchema";
 import bcrypt from "bcrypt";
 
+// Um hash bcrypt possui formato conhecido. Esta verificacao tambem permite que
+// senhas antigas em texto puro sejam migradas no primeiro login bem-sucedido.
 function isBcryptHash(value: string) {
   return /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/.test(value);
 }
 
+/** Valida as credenciais, protege senha antiga e devolve o JWT da nova sessao. */
 export async function loginController(req: Request, res: Response) {
-
+  // safeParse valida o corpo sem lancar excecao quando os dados estao incorretos.
   const parsed = loginSchema.safeParse(req.body);
 
   if (!parsed.success) {
@@ -22,6 +25,7 @@ export async function loginController(req: Request, res: Response) {
   const { email, senha } = parsed.data;
 
   try {
+    // Por seguranca, tanto usuario inexistente quanto senha errada retornam a mesma mensagem.
     const user = await findUserByEmail(email);
 
     if (!user) {
@@ -61,6 +65,7 @@ export async function loginController(req: Request, res: Response) {
         message: "Credenciais inválidas"
       });
     }
+    // O token prova a identidade nas proximas chamadas feitas pelo aplicativo.
     const accessToken = generateToken({ id_usuario: user.id_usuario });
 
     return res.status(200).json({

@@ -2,12 +2,14 @@ import { Prisma } from "../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import * as type from "../types/classificacaoEstabelecimento";
 
+
 function badRequest(message: string) {
   const error = new Error(message) as Error & { statusCode: number };
   error.statusCode = 400;
   return error;
 }
 
+/** Confere as duas entidades e cria a avaliacao sem permitir relacionamento duplicado. */
 export async function createClassificacaoEstabelecimento(data: type.ClassificacaoEstabelecimentoDTO) {
   const classificacao = await prisma.tb_classificacao.findUnique({
     where: { id_classificacao: data.id_classificacao },
@@ -47,9 +49,11 @@ export async function createClassificacaoEstabelecimento(data: type.Classificaca
   }
 }
 
+
 export function listClassificacoesEstabelecimentos() {
   return prisma.tb_classificacao_estabelecimento.findMany();
 }
+
 
 export function getClassificacaoEstabelecimentoByIds(id_classificacao: number, id_estabelecimento: number) {
   return prisma.tb_classificacao_estabelecimento.findUnique({

@@ -1,12 +1,17 @@
+// Este arquivo descreve como os dados da aplicacao ficam organizados no banco.
+// O Prisma usa este schema para gerar o cliente TypeScript e as migrations.
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
+  // A URL de conexao e lida da configuracao do Prisma/variaveis de ambiente.
   provider = "postgresql"
 }
 
+// Tipos de acao que um usuario pode realizar em um estabelecimento.
+// Usar enum evita salvar valores diferentes para a mesma acao.
 enum tipo_evento_interacao {
   view
   click
@@ -17,6 +22,7 @@ enum tipo_evento_interacao {
   visitado
 }
 
+// Etapas possiveis do ciclo de vida de um modelo de recomendacao.
 enum status_modelo_recomendacao {
   training
   ready
@@ -24,6 +30,8 @@ enum status_modelo_recomendacao {
   failed
 }
 
+// Conta do usuario. Os campos terminados em [] representam listas relacionadas;
+// elas nao viram colunas nesta tabela, mas permitem navegar pelas relacoes no Prisma.
 model tb_usuario {
   id_usuario      Int                                    @id @default(autoincrement())
   url_imagem      String?
@@ -40,6 +48,7 @@ model tb_usuario {
   recomendacoes   tb_recomendacao_cache[]
 }
 
+// Agrupa uma sessao/conjunto de avaliacoes feitas por um usuario.
 model tb_classificacao {
   id_classificacao  Int                             @id @default(autoincrement())
   id_usuario        Int
@@ -47,9 +56,12 @@ model tb_classificacao {
   created_at        DateTime                        @default(now())
   estabelecimentos  tb_classificacao_estabelecimento[]
 
+  // Indice deixa mais rapida a busca das classificacoes de um usuario.
   @@index([id_usuario])
 }
 
+// Tabela de ligacao entre uma classificacao e um estabelecimento.
+// Ela tambem guarda a nota e o comentario dados naquele momento.
 model tb_classificacao_estabelecimento {
   id_classificacao   Int
   id_estabelecimento Int
@@ -59,10 +71,12 @@ model tb_classificacao_estabelecimento {
   classificacao      tb_classificacao   @relation(fields: [id_classificacao], references: [id_classificacao])
   estabelecimento    tb_estabelecimento @relation(fields: [id_estabelecimento], references: [id_estabelecimento])
 
+  // Chave composta: o mesmo estabelecimento aparece apenas uma vez em cada classificacao.
   @@id([id_classificacao, id_estabelecimento])
   @@index([id_estabelecimento])
 }
 
+// Local que pode ser mostrado e recomendado pelo aplicativo.
 model tb_estabelecimento {
   id_estabelecimento  Int                              @id @default(autoincrement())
   nome                String
@@ -77,6 +91,7 @@ model tb_estabelecimento {
   longitude           Decimal?
   cidade              String?
   bairro              String?
+  // Json permite armazenar uma lista/estrutura de tags sem criar outra tabela.
   tags                Json?
   ativo               Boolean                          @default(true)
   created_at          DateTime                         @default(now())
@@ -88,6 +103,7 @@ model tb_estabelecimento {
   @@index([cidade, bairro])
 }
 
+// Registra o comportamento do usuario. Esses eventos ajudam a aprender suas preferencias.
 model tb_interacao_usuario_estabelecimento {
   id_interacao        Int                     @id @default(autoincrement())
   id_usuario          Int
@@ -105,6 +121,8 @@ model tb_interacao_usuario_estabelecimento {
   @@index([tipo_evento, created_at])
 }
 
+// "Fotografia" das preferencias calculadas para um usuario em certo momento.
+// model_version identifica qual regra/modelo produziu os dados de feature_json.
 model tb_usuario_feature_snapshot {
   id_snapshot   Int        @id @default(autoincrement())
   id_usuario    Int
@@ -117,6 +135,7 @@ model tb_usuario_feature_snapshot {
   @@index([model_version])
 }
 
+// Metadados de cada versao do algoritmo de recomendacao treinado.
 model tb_modelo_recomendacao {
   id_modelo     Int                        @id @default(autoincrement())
   versao        String                     @unique
@@ -129,6 +148,7 @@ model tb_modelo_recomendacao {
   recomendacoes tb_recomendacao_cache[]
 }
 
+// Guarda temporariamente um ranking pronto para evitar recalcular a mesma recomendacao.
 model tb_recomendacao_cache {
   id_usuario    Int
   model_version String
@@ -139,6 +159,35 @@ model tb_recomendacao_cache {
   usuario       tb_usuario             @relation(fields: [id_usuario], references: [id_usuario])
   modelo        tb_modelo_recomendacao @relation(fields: [model_version], references: [versao])
 
+  // A combinacao abaixo identifica um cache para um usuario, modelo e filtros especificos.
   @@id([id_usuario, model_version, context_hash])
   @@index([expires_at])
+}
+
+
+// Eventos gravados na mesma transacao da interacao; o worker publica depois.
+model tb_evento_outbox {
+  id_evento             String    @id
+  conteudo              Json
+  criado_em             DateTime  @default(now())
+  publicado_em          DateTime?
+  id_mensagem           String?
+  tentativas            Int       @default(0)
+  proxima_tentativa_em   DateTime  @default(now())
+
+  @@index([publicado_em, proxima_tentativa_em])
+}
+
+model tb_evento_processado {
+  id_evento       String   @id
+  processado_em   DateTime @default(now())
+}
+
+// Mensagens invalidas ficam disponiveis para investigacao, sem loop de entrega.
+model tb_mensagem_quarentena {
+  chave         String   @id
+  id_mensagem   String
+  conteudo      Bytes
+  motivo        String
+  criado_em     DateTime @default(now())
 }

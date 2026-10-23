@@ -4,6 +4,7 @@ import { InteracaoCreateSchema } from "../types/interacao";
 
 type AuthenticatedRequest = Request & { user?: { id_usuario: number } };
 
+/** Registra uma nova interacao do usuario autenticado com um estabelecimento. */
 export async function createInteracaoController(req: AuthenticatedRequest, res: Response) {
   if (!req.user?.id_usuario) {
     return res.status(401).json({
@@ -32,6 +33,7 @@ export async function createInteracaoController(req: AuthenticatedRequest, res: 
   }
 }
 
+/** Lista as interacoes recentes pertencentes ao usuario autenticado. */
 export async function listMyInteracoesController(req: AuthenticatedRequest, res: Response) {
   if (!req.user?.id_usuario) {
     return res.status(401).json({
@@ -53,6 +55,7 @@ export async function listMyInteracoesController(req: AuthenticatedRequest, res:
   }
 }
 
+/** Lista somente interacoes do tipo avaliacao feitas pelo usuario atual. */
 export async function listMyAvaliacoesController(req: AuthenticatedRequest, res: Response) {
   if (!req.user?.id_usuario) {
     return res.status(401).json({ success: false, message: "Usuario nao autenticado" });
@@ -70,3 +73,4 @@ export async function listMyAvaliacoesController(req: AuthenticatedRequest, res:
     });
   }
 }
+// Recebe eventos como clique, like e dislike e delega sua gravacao ao model.

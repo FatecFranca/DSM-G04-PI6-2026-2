@@ -9,3 +9,4 @@ router.get("/", listRecomendacoesController);
 router.get("/ia-sugestoes", listAiSuggestionsController);
 
 export default router;
+

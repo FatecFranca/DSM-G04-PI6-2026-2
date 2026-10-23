@@ -1,3 +1,4 @@
+import '../components/app_bottom_nav.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class RatingPage extends StatefulWidget {
   const RatingPage({super.key});
 
   @override
+  /// Cria o estado que controla pesquisa, selecao, nota e comentario.
   State<RatingPage> createState() => _RatingPageState();
 }
 
@@ -30,6 +32,7 @@ class _RatingPageState extends State<RatingPage> {
   bool _isSubmitting = false;
 
   @override
+  /// Inicia a consulta de locais e registra o observador do campo de busca.
   void initState() {
     super.initState();
     _fetchEstabelecimentos();
@@ -37,6 +40,7 @@ class _RatingPageState extends State<RatingPage> {
   }
 
   @override
+  /// Libera os campos e remove o observador quando a pagina fecha.
   void dispose() {
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
@@ -44,6 +48,8 @@ class _RatingPageState extends State<RatingPage> {
     super.dispose();
   }
 
+  /// Busca os estabelecimentos na API e atualiza a lista ou a mensagem de erro.
+  /// Busca os estabelecimentos na API e atualiza a lista ou a mensagem de erro.
   Future<void> _fetchEstabelecimentos() async {
     setState(() {
       _loadingList = true;
@@ -51,13 +57,19 @@ class _RatingPageState extends State<RatingPage> {
     });
     try {
       final list = await _api.listEstabelecimentos();
-      list.sort((a, b) => (a['nome'] ?? '').toString().compareTo((b['nome'] ?? '').toString()));
+      if (!mounted) return;
+      list.sort(
+        (a, b) => (a['nome'] ?? '').toString().compareTo(
+          (b['nome'] ?? '').toString(),
+        ),
+      );
       setState(() {
         _estabelecimentos = list;
         _filtered = list;
         _loadingList = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _loadError = e.toString();
         _loadingList = false;
@@ -65,6 +77,8 @@ class _RatingPageState extends State<RatingPage> {
     }
   }
 
+  /// Filtra localmente os estabelecimentos quando o texto pesquisado muda.
+  /// Filtra localmente os estabelecimentos quando o texto pesquisado muda.
   void _onSearchChanged() {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 180), () {
@@ -88,6 +102,8 @@ class _RatingPageState extends State<RatingPage> {
     });
   }
 
+  /// Guarda o estabelecimento escolhido e esconde os demais resultados.
+  /// Guarda o estabelecimento escolhido e esconde os demais resultados.
   void _selectEstabelecimento(Map<String, dynamic> item) {
     setState(() {
       _selected = item;
@@ -96,6 +112,8 @@ class _RatingPageState extends State<RatingPage> {
     FocusScope.of(context).unfocus();
   }
 
+  /// Remove a selecao atual e reinicia os dados da avaliacao.
+  /// Remove a selecao atual e reinicia os dados da avaliacao.
   void _clearSelection() {
     setState(() {
       _selected = null;
@@ -105,7 +123,10 @@ class _RatingPageState extends State<RatingPage> {
     });
   }
 
+  /// Valida a escolha e a nota, envia a avaliacao e informa sucesso ou falha.
+  /// Valida a escolha e a nota, envia a avaliacao e informa sucesso ou falha.
   Future<void> _handleSubmit() async {
+    if (_isSubmitting) return;
     if (_selected == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -128,7 +149,8 @@ class _RatingPageState extends State<RatingPage> {
     setState(() => _isSubmitting = true);
 
     try {
-      final idEstabelecimento = (_selected!['id_estabelecimento'] as num).toInt();
+      final idEstabelecimento = (_selected!['id_estabelecimento'] as num)
+          .toInt();
 
       // Registra a nota como rating para histórico
       await _api.createInteracao(
@@ -138,25 +160,34 @@ class _RatingPageState extends State<RatingPage> {
         origem: 'app-flutter',
       );
 
-      // Para alimentar a IA, mapeia a nota em like/dislike (regra do motor é like/dislike).
-      if (_avaliacao >= 4) {
-        await _api.createInteracao(
-          idEstabelecimento: idEstabelecimento,
-          tipoEvento: 'like',
-          origem: 'app-flutter',
-        );
-      } else if (_avaliacao <= 2) {
-        await _api.createInteracao(
-          idEstabelecimento: idEstabelecimento,
-          tipoEvento: 'dislike',
-          origem: 'app-flutter',
-        );
+      bool feedbackSalvo = true;
+      try {
+        // Para alimentar a IA, mapeia a nota em like/dislike (regra do motor é like/dislike).
+        if (_avaliacao >= 4) {
+          await _api.createInteracao(
+            idEstabelecimento: idEstabelecimento,
+            tipoEvento: 'like',
+            origem: 'app-flutter',
+          );
+        } else if (_avaliacao <= 2) {
+          await _api.createInteracao(
+            idEstabelecimento: idEstabelecimento,
+            tipoEvento: 'dislike',
+            origem: 'app-flutter',
+          );
+        }
+      } catch (_) {
+        feedbackSalvo = false;
       }
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Avaliação enviada! A IA está aprendendo seus gostos.'),
+        SnackBar(
+          content: Text(
+            feedbackSalvo
+                ? 'Avaliação enviada! A IA está aprendendo seus gostos.'
+                : 'Avaliação salva. Seu feedback para as sugestões poderá ser enviado nos detalhes do local.',
+          ),
           backgroundColor: Colors.green,
         ),
       );
@@ -175,6 +206,7 @@ class _RatingPageState extends State<RatingPage> {
   }
 
   @override
+  /// Monta todas as secoes da avaliacao e a navegacao inferior.
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Nova Avaliação')),
@@ -218,7 +250,9 @@ class _RatingPageState extends State<RatingPage> {
                             ),
                           )
                         : const Icon(Icons.send_rounded),
-                    label: Text(_isSubmitting ? 'Enviando...' : 'Enviar Avaliação'),
+                    label: Text(
+                      _isSubmitting ? 'Enviando...' : 'Enviar Avaliação',
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -231,6 +265,8 @@ class _RatingPageState extends State<RatingPage> {
     );
   }
 
+  /// Monta o campo de texto usado para localizar estabelecimentos.
+  /// Monta o campo de texto usado para localizar estabelecimentos.
   Widget _buildSearchField() {
     return TextField(
       controller: _searchController,
@@ -248,6 +284,8 @@ class _RatingPageState extends State<RatingPage> {
     );
   }
 
+  /// Mostra progresso, erro, lista vazia ou os locais que combinam com a busca.
+  /// Mostra progresso, erro, lista vazia ou os locais que combinam com a busca.
   Widget _buildSearchResults() {
     if (_loadingList) {
       return _infoBox(
@@ -268,12 +306,18 @@ class _RatingPageState extends State<RatingPage> {
             children: [
               const Text(
                 'Não foi possível carregar a lista.',
-                style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: AppTheme.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(height: 6),
               Text(
                 _loadError!,
-                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                style: const TextStyle(
+                  color: AppTheme.textSecondary,
+                  fontSize: 12,
+                ),
               ),
               const SizedBox(height: 10),
               ElevatedButton.icon(
@@ -326,8 +370,8 @@ class _RatingPageState extends State<RatingPage> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: results.length,
-        separatorBuilder: (_, __) => Divider(
-          color: AppTheme.inputFill.withOpacity(0.4),
+        separatorBuilder: (_, _) => Divider(
+          color: AppTheme.inputFill.withValues(alpha: 0.4),
           height: 1,
         ),
         itemBuilder: (context, index) {
@@ -337,12 +381,21 @@ class _RatingPageState extends State<RatingPage> {
           final faixa = (item['faixa_preco'] ?? '').toString();
           final ambiente = (item['ambiente'] ?? '').toString();
           return ListTile(
-            title: Text(nome, style: const TextStyle(color: AppTheme.textPrimary)),
+            title: Text(
+              nome,
+              style: const TextStyle(color: AppTheme.textPrimary),
+            ),
             subtitle: Text(
               [tipo, faixa, ambiente].where((s) => s.isNotEmpty).join(' • '),
-              style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+              style: const TextStyle(
+                color: AppTheme.textSecondary,
+                fontSize: 12,
+              ),
             ),
-            trailing: const Icon(Icons.chevron_right_rounded, color: AppTheme.accent),
+            trailing: const Icon(
+              Icons.chevron_right_rounded,
+              color: AppTheme.accent,
+            ),
             onTap: () => _selectEstabelecimento(item),
           );
         },
@@ -350,6 +403,8 @@ class _RatingPageState extends State<RatingPage> {
     );
   }
 
+  /// Apresenta nome, categoria, preco e demais dados do local selecionado.
+  /// Apresenta nome, categoria, preco e demais dados do local selecionado.
   Widget _buildSelectedInfo() {
     if (_selected == null) {
       return _infoBox(
@@ -369,7 +424,7 @@ class _RatingPageState extends State<RatingPage> {
       decoration: BoxDecoration(
         color: AppTheme.secondary,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.accent.withOpacity(0.4)),
+        border: Border.all(color: AppTheme.accent.withValues(alpha: 0.4)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -397,29 +452,57 @@ class _RatingPageState extends State<RatingPage> {
           ),
           const SizedBox(height: 12),
           _infoRow(Icons.store_outlined, 'Tipo', (s['tipo'] ?? '-').toString()),
-          _infoRow(Icons.attach_money_rounded, 'Faixa de preço', (s['faixa_preco'] ?? '-').toString()),
-          _infoRow(Icons.chair_outlined, 'Ambiente', (s['ambiente'] ?? '-').toString()),
-          _infoRow(Icons.groups_outlined, 'Público', (s['publico'] ?? '-').toString()),
-          _infoRow(Icons.star_rounded, 'Avaliação pública', _formatNumber(s['avaliacao'])),
+          _infoRow(
+            Icons.attach_money_rounded,
+            'Faixa de preço',
+            (s['faixa_preco'] ?? '-').toString(),
+          ),
+          _infoRow(
+            Icons.chair_outlined,
+            'Ambiente',
+            (s['ambiente'] ?? '-').toString(),
+          ),
+          _infoRow(
+            Icons.groups_outlined,
+            'Público',
+            (s['publico'] ?? '-').toString(),
+          ),
+          _infoRow(
+            Icons.star_rounded,
+            'Avaliação pública',
+            _formatNumber(s['avaliacao']),
+          ),
           if ((s['cidade'] ?? '').toString().isNotEmpty)
-            _infoRow(Icons.location_city_rounded, 'Cidade', (s['cidade'] ?? '-').toString()),
+            _infoRow(
+              Icons.location_city_rounded,
+              'Cidade',
+              (s['cidade'] ?? '-').toString(),
+            ),
         ],
       ),
     );
   }
 
+  /// Monta a secao com horarios de abertura e fechamento.
+  /// Monta a secao com horarios de abertura e fechamento.
   Widget _buildFuncionamento() {
     final abre = (_selected?['abre'] ?? '-').toString();
     final fecha = (_selected?['fecha'] ?? '-').toString();
     return Row(
       children: [
-        Expanded(child: _funcionamentoCard(Icons.schedule_outlined, 'Abre às', abre)),
+        Expanded(
+          child: _funcionamentoCard(Icons.schedule_outlined, 'Abre às', abre),
+        ),
         const SizedBox(width: 12),
-        Expanded(child: _funcionamentoCard(Icons.schedule_rounded, 'Fecha às', fecha)),
+        Expanded(
+          child: _funcionamentoCard(Icons.schedule_rounded, 'Fecha às', fecha),
+        ),
       ],
     );
   }
 
+  /// Cria um cartao compacto contendo um dos horarios do estabelecimento.
+  /// Cria um cartao compacto contendo um dos horarios do estabelecimento.
   Widget _funcionamentoCard(IconData icon, String label, String value) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -438,7 +521,10 @@ class _RatingPageState extends State<RatingPage> {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11),
+                  style: const TextStyle(
+                    color: AppTheme.textSecondary,
+                    fontSize: 11,
+                  ),
                 ),
                 Text(
                   value,
@@ -457,6 +543,8 @@ class _RatingPageState extends State<RatingPage> {
     );
   }
 
+  /// Padroniza uma linha de informacao com icone, rotulo e valor.
+  /// Padroniza uma linha de informacao com icone, rotulo e valor.
   Widget _infoRow(IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -464,11 +552,17 @@ class _RatingPageState extends State<RatingPage> {
         children: [
           Icon(icon, color: AppTheme.textSecondary, size: 18),
           const SizedBox(width: 8),
-          Text('$label: ', style: const TextStyle(color: AppTheme.textSecondary)),
+          Text(
+            '$label: ',
+            style: const TextStyle(color: AppTheme.textSecondary),
+          ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                color: AppTheme.textPrimary,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
@@ -476,6 +570,8 @@ class _RatingPageState extends State<RatingPage> {
     );
   }
 
+  /// Aplica o recipiente visual padrao ao widget recebido.
+  /// Aplica o recipiente visual padrao ao widget recebido.
   Widget _infoBox(Widget child) {
     return Container(
       decoration: BoxDecoration(
@@ -486,6 +582,8 @@ class _RatingPageState extends State<RatingPage> {
     );
   }
 
+  /// Cria o titulo visual que separa uma secao do formulario.
+  /// Cria o titulo visual que separa uma secao do formulario.
   Widget _buildSectionTitle(String title) {
     return Row(
       children: [
@@ -511,6 +609,8 @@ class _RatingPageState extends State<RatingPage> {
     );
   }
 
+  /// Cria as estrelas interativas e a descricao correspondente a nota.
+  /// Cria as estrelas interativas e a descricao correspondente a nota.
   Widget _buildStarRating() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -519,7 +619,7 @@ class _RatingPageState extends State<RatingPage> {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: _avaliacao > 0
-              ? AppTheme.accent.withOpacity(0.4)
+              ? AppTheme.accent.withValues(alpha: 0.4)
               : Colors.transparent,
         ),
       ),
@@ -547,7 +647,9 @@ class _RatingPageState extends State<RatingPage> {
                     index < _avaliacao
                         ? Icons.star_rounded
                         : Icons.star_outline_rounded,
-                    color: index < _avaliacao ? Colors.amber : AppTheme.textSecondary,
+                    color: index < _avaliacao
+                        ? Colors.amber
+                        : AppTheme.textSecondary,
                     size: 40,
                   ),
                 ),
@@ -569,6 +671,8 @@ class _RatingPageState extends State<RatingPage> {
     );
   }
 
+  /// Traduz uma nota numerica em uma descricao facil de entender.
+  /// Traduz uma nota numerica em uma descricao facil de entender.
   String _getAvaliacaoLabel(double avaliacao) {
     switch (avaliacao.toInt()) {
       case 1:
@@ -586,6 +690,8 @@ class _RatingPageState extends State<RatingPage> {
     }
   }
 
+  /// Converte valores numericos de tipos variados em texto para exibicao.
+  /// Converte valores numericos de tipos variados em texto para exibicao.
   String _formatNumber(dynamic value) {
     if (value == null) return '-';
     if (value is num) return value.toStringAsFixed(1);
@@ -593,57 +699,9 @@ class _RatingPageState extends State<RatingPage> {
     return asDouble == null ? value.toString() : asDouble.toStringAsFixed(1);
   }
 
-  Widget _buildBottomNav(BuildContext context, int currentIndex) {
-    return NavigationBar(
-      backgroundColor: AppTheme.secondary,
-      indicatorColor: AppTheme.accent.withOpacity(0.2),
-      selectedIndex: currentIndex,
-      onDestinationSelected: (index) {
-        switch (index) {
-          case 0:
-            context.go(AppRouter.sugestoes);
-            break;
-          case 1:
-            context.go(AppRouter.rating);
-            break;
-          case 2:
-            context.go(AppRouter.floter);
-            break;
-          case 3:
-            context.go(AppRouter.ratingHistory);
-            break;
-          case 4:
-            context.go(AppRouter.user);
-            break;
-        }
-      },
-      destinations: const [
-        NavigationDestination(
-          icon: Icon(Icons.lightbulb_outline),
-          selectedIcon: Icon(Icons.lightbulb_rounded, color: AppTheme.accent),
-          label: 'Sugestões',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.star_outline_rounded),
-          selectedIcon: Icon(Icons.star_rounded, color: AppTheme.accent),
-          label: 'Avaliar',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.tune_rounded),
-          selectedIcon: Icon(Icons.tune_rounded, color: AppTheme.accent),
-          label: 'Floter',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.history_outlined),
-          selectedIcon: Icon(Icons.history_rounded, color: AppTheme.accent),
-          label: 'Histórico',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.person_outline_rounded),
-          selectedIcon: Icon(Icons.person_rounded, color: AppTheme.accent),
-          label: 'Perfil',
-        ),
-      ],
-    );
-  }
+  /// Cria a barra inferior e navega quando o usuario escolhe outra area.
+  /// Cria a barra inferior e navega quando o usuario escolhe outra area.
+  Widget _buildBottomNav(BuildContext context, int currentIndex) =>
+      AppBottomNav(indice: currentIndex);
 }
+// Tela de avaliacao dos estabelecimentos. O estado acompanha notas e comentarios.

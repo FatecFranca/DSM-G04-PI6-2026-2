@@ -19,3 +19,4 @@ router.put("/:id", updateClassificacaoController);
 router.delete("/:id", deleteClassificacaoController);
 
 export default router;
+

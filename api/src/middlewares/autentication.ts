@@ -4,6 +4,7 @@ import { prisma } from "../../lib/prisma";
 
 const signOptions: SignOptions = { expiresIn: "30m" };
 
+/** Le e valida o segredo usado para assinar tokens; falha cedo se estiver inseguro. */
 function getJwtSecret() {
   const secret = process.env.JWT_SECRET?.trim();
   if (!secret || secret === "your-secret-key" || secret.length < 32) {
@@ -12,12 +13,15 @@ function getJwtSecret() {
   return secret;
 }
 
+/** Cria um JWT com o payload recebido e validade de 30 minutos. */
 export const generateToken = (payload: object): string =>
   jwt.sign(payload, getJwtSecret(), signOptions);
 
+/** Confere assinatura e expiracao do token e devolve os dados que estavam dentro dele. */
 export const verifyToken = (token: string): JwtPayload =>
   jwt.verify(token, getJwtSecret()) as JwtPayload;
 
+/** Valida o Bearer token, confirma que a conta esta ativa e libera a rota protegida. */
 export const authMiddleware = async (
   req: Request & { user?: any },
   res: Response,
@@ -45,3 +49,5 @@ export const authMiddleware = async (
     return res.status(401).json({ success: false, message: "Token invalido ou expirado" });
   }
 };
+// Middleware de autenticacao: confere o token antes de liberar uma rota protegida.
+// Quando o token e valido, o identificador do usuario fica disponivel em req.user.
