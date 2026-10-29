@@ -1,6 +1,6 @@
 import { PubSub } from "@google-cloud/pubsub";
 import { lerConfiguracaoMensageria } from "./configuracao";
-import { EventoInteracao } from "./contrato";
+import { EventoMensageria } from "./contrato";
 
 export function criarConexaoMensageria() {
   const configuracao = lerConfiguracaoMensageria();
@@ -15,7 +15,7 @@ export function criarConexaoMensageria() {
   });
   return {
     assinatura,
-    async publicar(evento: EventoInteracao) {
+    async publicar(evento: EventoMensageria) {
       return topico.publishMessage({ json: evento, attributes: { tipo: evento.tipo, versao: "1" } });
     },
     async fechar() {

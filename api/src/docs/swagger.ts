@@ -97,6 +97,20 @@ registry.registerComponent("securitySchemes", "xAccessToken", {
   name: "x-access-token",
 });
 
+registerProtectedPath({
+  method: "put",
+  path: "/estabelecimentos/{id}/comentarios/{classificacao}/curtida",
+  tags: ["Estabelecimentos"],
+  description: "Curte um comentário de outro usuário. Idempotente: uma curtida por usuário. Gera evento na outbox na primeira curtida e a cada 50 curtidas; o worker notifica o autor.",
+  request: { params: z.object({ id: z.coerce.number().int().positive(), classificacao: z.coerce.number().int().positive() }) },
+  responses: {
+    200: { description: "Curtida registrada", content: { "application/json": { schema: z.object({ success: z.literal(true), data: z.object({ curtido: z.literal(true), total_curtidas: z.number().int() }) }) } } },
+    400: { description: "Identificador inválido ou comentário do próprio usuário" },
+    401: unauthorizedResponse,
+    404: { description: "Comentário não encontrado" },
+  },
+});
+
 registry.registerPath({
   method: "post",
   path: "/auth/login",
@@ -335,7 +349,7 @@ registerProtectedPath({
 registerProtectedPath({
   method: "put",
   path: "/estabelecimentos/{id}",
-  description: "Atualiza estabelecimento por ID.",
+  description: "Atualiza estabelecimento por ID. Requer conta listada em RESTAURANTES_ADMIN_IDS. Alteracoes reais geram avisos para quem favoritou via mensageria.",
   tags: ["Estabelecimentos"],
   request: {
     params: idParamSchema,
@@ -346,6 +360,7 @@ registerProtectedPath({
       description: "Estabelecimento atualizado com sucesso",
       content: { "application/json": { schema: singleItemResponse(estabelecimentoResponseSchema) } },
     },
+    403: { description: "Conta sem permissao de administrar restaurantes" },
     400: {
       description: "Erro de validacao ou ID invalido",
       content: { "application/json": { schema: errorResponseSchema } },
@@ -722,6 +737,47 @@ registerProtectedPath({
       description: "Erro interno",
       content: { "application/json": { schema: errorResponseSchema } },
     },
+  },
+});
+
+const notificacaoSchema = z.object({
+  id_notificacao: z.number().int(), id_estabelecimento: z.number().int(),
+  id_usuario: z.number().int(), id_evento: z.string(), titulo: z.string(),
+  mensagem: z.string(), criado_em: z.string(), lida_em: z.string().nullable(),
+});
+registerProtectedPath({
+  method: "get", path: "/notificacoes", tags: ["Notificacoes"],
+  description: "Lista apenas os avisos da conta autenticada, com contador de nao lidas.",
+  request: { query: z.object({ antes: z.coerce.number().int().positive().optional() }) },
+  responses: {
+    200: { description: "Caixa de avisos", content: { "application/json": { schema: singleItemResponse(z.object({
+      notificacoes: z.array(notificacaoSchema), naoLidas: z.number().int(), temMais: z.boolean(),
+    })) } } },
+    401: unauthorizedResponse,
+  },
+});
+registerProtectedPath({
+  method: "patch", path: "/notificacoes/{id}/lida", tags: ["Notificacoes"],
+  description: "Marca uma notificacao propria como lida. Avisos de outra conta retornam 404.",
+  request: { params: idParamSchema },
+  responses: {
+    200: { description: "Aviso marcado como lido" },
+    401: unauthorizedResponse,
+    404: { description: "Notificacao nao encontrada" },
+  },
+});
+
+registerProtectedPath({
+  method: "get", path: "/recomendacoes/automaticas", tags: ["Recomendacoes"],
+  description: "Retorna as sugestoes da conta autenticada, preparadas pelo consumidor Pub/Sub apos notas ou mudancas de opiniao. Lista vazia enquanto nao houver processamento.",
+  responses: {
+    200: { description: "Sugestoes preparadas pela mensageria", content: { "application/json": { schema: z.object({
+      success: z.boolean(), source: z.literal("mensageria"), atualizado_em: z.string().nullable(),
+      data: z.array(z.object({ id_estabelecimento: z.number().int(), nome: z.string(), tipo: z.string(),
+        faixa_preco: z.string(), ambiente: z.string(), avaliacao: z.number(), score: z.number(), motivos: z.array(z.string()) })),
+    }) } } },
+    401: unauthorizedResponse,
+    500: { description: "Erro ao carregar sugestoes" },
   },
 });
 

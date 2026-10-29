@@ -1,0 +1,37 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "BoraLa Web (Release)",
+      "cwd": "${workspaceFolder}/app/web",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "flutterMode": "release",
+      "args": [
+        "--web-port=5173",
+        "--dart-define=API_URL=http://localhost:8080"
+      ]
+    },
+    {
+      "name": "BoraLa Web",
+      "cwd": "${workspaceFolder}/app/web",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "args": [
+        "--web-port=5173",
+        "--dart-define=API_URL=http://localhost:8080"
+      ]
+    },
+    {
+      "name": "BoraLa Mobile",
+      "cwd": "${workspaceFolder}/app/mobile",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "type": "dart"
+    }
+  ]
+}

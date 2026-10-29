@@ -18,6 +18,7 @@ enum tipo_evento_interacao {
   favorite
   like
   dislike
+  neutral
   rating
   visitado
 }
@@ -46,6 +47,8 @@ model tb_usuario {
   interacoes      tb_interacao_usuario_estabelecimento[]
   features        tb_usuario_feature_snapshot[]
   recomendacoes   tb_recomendacao_cache[]
+  notificacoes    tb_notificacao[]
+  curtidas_comentarios tb_curtida_comentario[]
 }
 
 // Agrupa uma sessao/conjunto de avaliacoes feitas por um usuario.
@@ -65,8 +68,11 @@ model tb_classificacao {
 model tb_classificacao_estabelecimento {
   id_classificacao   Int
   id_estabelecimento Int
-  nota               Int?
+  nota               Decimal?
+  id_interacao       Int?               @unique
+  interacao          tb_interacao_usuario_estabelecimento? @relation(fields: [id_interacao], references: [id_interacao])
   comentario         String?
+  curtidas           tb_curtida_comentario[]
   created_at         DateTime           @default(now())
   classificacao      tb_classificacao   @relation(fields: [id_classificacao], references: [id_classificacao])
   estabelecimento    tb_estabelecimento @relation(fields: [id_estabelecimento], references: [id_estabelecimento])
@@ -85,6 +91,7 @@ model tb_estabelecimento {
   ambiente            String
   publico             String
   avaliacao           Decimal
+  total_avaliacoes    Int                              @default(0)
   abre                String
   fecha               String
   latitude            Decimal?
@@ -98,6 +105,7 @@ model tb_estabelecimento {
   updated_at          DateTime                         @updatedAt
   classificacoes      tb_classificacao_estabelecimento[]
   interacoes          tb_interacao_usuario_estabelecimento[]
+  notificacoes        tb_notificacao[]
 
   @@index([tipo, faixa_preco, ambiente])
   @@index([cidade, bairro])
@@ -115,6 +123,7 @@ model tb_interacao_usuario_estabelecimento {
   created_at          DateTime                @default(now())
   usuario             tb_usuario              @relation(fields: [id_usuario], references: [id_usuario])
   estabelecimento     tb_estabelecimento      @relation(fields: [id_estabelecimento], references: [id_estabelecimento])
+  classificacao       tb_classificacao_estabelecimento?
 
   @@index([id_usuario, created_at])
   @@index([id_estabelecimento, created_at])
@@ -166,6 +175,18 @@ model tb_recomendacao_cache {
 
 
 // Eventos gravados na mesma transacao da interacao; o worker publica depois.
+model tb_curtida_comentario {
+  id_classificacao Int
+  id_estabelecimento Int
+  id_usuario Int
+  criado_em DateTime @default(now())
+  comentario tb_classificacao_estabelecimento @relation(fields: [id_classificacao, id_estabelecimento], references: [id_classificacao, id_estabelecimento], onDelete: Cascade)
+  usuario tb_usuario @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+
+  @@id([id_classificacao, id_estabelecimento, id_usuario])
+  @@index([id_usuario])
+}
+
 model tb_evento_outbox {
   id_evento             String    @id
   conteudo              Json
@@ -190,4 +211,21 @@ model tb_mensagem_quarentena {
   conteudo      Bytes
   motivo        String
   criado_em     DateTime @default(now())
+}
+
+model tb_notificacao {
+  id_notificacao     Int                @id @default(autoincrement())
+  id_usuario         Int
+  id_estabelecimento Int
+  id_evento          String
+  titulo             String
+  mensagem           String
+  criado_em          DateTime           @default(now())
+  lida_em            DateTime?
+  usuario            tb_usuario         @relation(fields: [id_usuario], references: [id_usuario])
+  estabelecimento    tb_estabelecimento @relation(fields: [id_estabelecimento], references: [id_estabelecimento])
+
+  @@unique([id_usuario, id_evento])
+  @@index([id_usuario, lida_em, criado_em])
+  @@index([id_estabelecimento])
 }

@@ -2,6 +2,7 @@ import { prisma } from "../../lib/prisma";
 import { InteracaoCreateDTO } from "../types/interacao";
 import { criarEventoInteracao } from "../mensageria/contrato";
 import { mensageriaAtiva } from "../mensageria/configuracao";
+import { atualizarMediaAvaliacoes } from "./mediaAvaliacoes";
 
 
 export async function createInteracao(idUsuario: number, data: InteracaoCreateDTO) {
@@ -13,22 +14,39 @@ export async function createInteracao(idUsuario: number, data: InteracaoCreateDT
     origem: data.origem,
     regiao: data.regiao,
   };
-  if (!mensageriaAtiva()) {
+  const publicar = mensageriaAtiva();
+  if (!publicar && data.tipo_evento !== "rating") {
     return prisma.tb_interacao_usuario_estabelecimento.create({ data: dados });
   }
   return prisma.$transaction(async (transacao) => {
+    if (data.tipo_evento === "rating") {
+      await transacao.$queryRaw`SELECT id_estabelecimento FROM tb_estabelecimento WHERE id_estabelecimento = ${data.id_estabelecimento} FOR UPDATE`;
+    }
     const interacao = await transacao.tb_interacao_usuario_estabelecimento.create({ data: dados });
-    const evento = criarEventoInteracao(interacao);
-    await transacao.tb_evento_outbox.create({ data: { id_evento: evento.id_evento, conteudo: evento } });
+    if (data.tipo_evento === "rating") {
+      await transacao.tb_classificacao.create({ data: {
+        id_usuario: idUsuario, created_at: interacao.created_at,
+        estabelecimentos: { create: {
+          id_estabelecimento: data.id_estabelecimento, nota: interacao.valor,
+          id_interacao: interacao.id_interacao, created_at: interacao.created_at,
+        } },
+      } });
+      await atualizarMediaAvaliacoes(transacao, data.id_estabelecimento);
+    }
+    if (publicar) {
+      const evento = criarEventoInteracao(interacao);
+      await transacao.tb_evento_outbox.create({ data: { id_evento: evento.id_evento, conteudo: evento } });
+    }
     return interacao;
   });
 }
 
 
-export function listInteracoesUsuario(idUsuario: number, take = 100) {
+export function listInteracoesUsuario(idUsuario: number, take = 100, idEstabelecimento?: number) {
   return prisma.tb_interacao_usuario_estabelecimento.findMany({
-    where: { id_usuario: idUsuario },
-    orderBy: { created_at: "desc" },
+    where: { id_usuario: idUsuario, id_estabelecimento: idEstabelecimento },
+    ...(idEstabelecimento === undefined ? {} : { distinct: ["tipo_evento" as const] }),
+    orderBy: [{ created_at: "desc" }, { id_interacao: "desc" }],
     take,
     include: {
       estabelecimento: {
@@ -48,7 +66,8 @@ export function listInteracoesUsuario(idUsuario: number, take = 100) {
 export function listAvaliacoesUsuario(idUsuario: number, take = 100) {
   return prisma.tb_interacao_usuario_estabelecimento.findMany({
     where: { id_usuario: idUsuario, tipo_evento: "rating" },
-    orderBy: { created_at: "desc" },
+    distinct: ["id_estabelecimento"],
+    orderBy: [{ created_at: "desc" }, { id_interacao: "desc" }],
     take,
     include: {
       estabelecimento: {

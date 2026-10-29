@@ -12,8 +12,8 @@
     "prisma:migrate": "prisma migrate deploy",
     "worker:dev": "ts-node-dev --respawn --transpile-only src/workers/mensageria.ts",
     "worker:start": "node dist/src/workers/mensageria.js",
-    "test": "npm run build && node --test dist/src/mensageria/mensageria.test.js",
-    "test:integration": "npm run build && node --test dist/src/mensageria/persistencia.integration.test.js"
+    "test": "npm run build && node --test dist/src/mensageria/mensageria.test.js dist/src/models/avaliacoes.integration.test.js dist/src/models/curtidasComentarios.integration.test.js",
+    "test:integration": "npm run build && node --test --test-concurrency=1 dist/src/mensageria/persistencia.integration.test.js dist/src/mensageria/notificacoes.integration.test.js dist/src/models/avaliacoes.integration.test.js dist/src/mensageria/sugestoes.integration.test.js dist/src/models/curtidasComentarios.integration.test.js"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.4.3",

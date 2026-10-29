@@ -1,14 +1,14 @@
-import { EventoInteracao } from "./contrato";
+import { EventoMensageria } from "./contrato";
 
 export interface EventoPendente {
   id_evento: string;
-  conteudo: EventoInteracao;
+  conteudo: EventoMensageria;
   tentativas: number;
 }
 
 export interface DependenciasPublicador {
   reservar(): Promise<EventoPendente | null>;
-  publicar(evento: EventoInteracao): Promise<string>;
+  publicar(evento: EventoMensageria): Promise<string>;
   confirmar(idEvento: string, idMensagem: string): Promise<void>;
   reagendar(idEvento: string, proximaTentativa: Date): Promise<void>;
   registrar(estado: string, id: string, erro?: unknown): void;

@@ -4,8 +4,44 @@ import { criarEventoInteracao, EventoInteracaoSchema, ErroMensagemInvalida } fro
 import { consumirMensagem, DependenciasConsumidor, MensagemRecebida } from "./consumidor";
 import { publicarProximoEvento, DependenciasPublicador } from "./publicador";
 import { lerConfiguracaoMensageria } from "./configuracao";
+import { InteracaoCreateSchema } from "../types/interacao";
+import { pontuarPreferencia } from "../models/pontuacaoPreferencias";
+import { camposAlterados, criarEventoEstabelecimento, EventoMensageriaSchema } from "./contrato";
 
 const evento = criarEventoInteracao({ id_interacao: 42, created_at: new Date("2026-10-21T12:00:00Z") });
+
+test("remover opiniao aceita evento neutral sem nota", () => {
+  assert.equal(InteracaoCreateSchema.safeParse({ id_estabelecimento: 7, tipo_evento: "neutral" }).success, true);
+});
+
+test("notas altas aproximam perfis, baixas afastam e nota tres e neutral nao pesam", () => {
+  assert.equal(pontuarPreferencia("rating", 5), 3);
+  assert.equal(pontuarPreferencia("rating", 4), 3);
+  assert.equal(pontuarPreferencia("rating", 3), 0);
+  assert.equal(pontuarPreferencia("rating", 2), -3);
+  assert.equal(pontuarPreferencia("rating", 1), -3);
+  assert.equal(pontuarPreferencia("neutral", undefined), 0);
+});
+
+test("alteracoes reais geram eventos de restaurante; salvar os mesmos valores nao gera campos", () => {
+  assert.deepEqual(camposAlterados({ abre: "08:00", avaliacao: "4.5" }, { abre: "08:00", avaliacao: 4.5 }), []);
+  assert.deepEqual(camposAlterados({ abre: "08:00" }, { abre: "09:00" }), ["abre"]);
+  const atualizado = criarEventoEstabelecimento(7, "Restaurante teste", ["abre"]);
+  assert.equal(EventoMensageriaSchema.safeParse(atualizado).success, true);
+  assert.equal(EventoMensageriaSchema.safeParse({ ...atualizado, dados: { ...atualizado.dados, campos: [] } }).success, false);
+});
+
+test("consumidor encaminha atualizacao do restaurante antes de confirmar", async () => {
+  const atualizado = criarEventoEstabelecimento(7, "Restaurante teste", ["fecha"]);
+  const contexto = preparar(Buffer.from(JSON.stringify(atualizado)));
+  contexto.dependencias.processar = async recebido => {
+    assert.deepEqual(recebido, atualizado);
+    contexto.passos.push("commit");
+    return "processado";
+  };
+  await consumirMensagem(contexto.mensagem, contexto.dependencias);
+  assert.deepEqual(contexto.passos, ["commit", "ack", "processado"]);
+});
 function preparar(conteudo: Buffer = Buffer.from(JSON.stringify(evento))) {
   const passos: string[] = [];
   const mensagem: MensagemRecebida = {

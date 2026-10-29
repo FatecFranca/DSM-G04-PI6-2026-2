@@ -10,6 +10,7 @@ import classificacoesRoutes from "./src/routes/classificacoes";
 import classificacoesEstabelecimentosRoutes from "./src/routes/classificacoesEstabelecimentos";
 import recomendacoesRoutes from "./src/routes/recomendacoes";
 import interacoesRoutes from "./src/routes/interacoes";
+import notificacoesRoutes from "./src/routes/notificacoes";
 import { lerConfiguracaoMensageria } from "./src/mensageria/configuracao";
 import { prisma } from "./lib/prisma";
 
@@ -63,6 +64,7 @@ app.use("/classificacoes", classificacoesRoutes);
 app.use("/classificacoes-estabelecimentos", classificacoesEstabelecimentosRoutes);
 app.use("/recomendacoes", recomendacoesRoutes);
 app.use("/interacoes", interacoesRoutes);
+app.use("/notificacoes", notificacoesRoutes);
 
 
 

@@ -44,7 +44,11 @@ export async function listMyInteracoesController(req: AuthenticatedRequest, res:
 
   const take = Math.min(Number(req.query.limit ?? 100) || 100, 300);
   try {
-    const data = await interacoesModel.listInteracoesUsuario(req.user.id_usuario, take);
+    const id = req.query.id_estabelecimento === undefined ? undefined : Number(req.query.id_estabelecimento);
+    if (id !== undefined && (!Number.isInteger(id) || id <= 0)) {
+      return res.status(400).json({ success: false, message: "Estabelecimento invalido" });
+    }
+    const data = await interacoesModel.listInteracoesUsuario(req.user.id_usuario, take, id);
     return res.json({ success: true, data });
   } catch (error) {
     return res.status(500).json({

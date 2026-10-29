@@ -2,6 +2,7 @@ import crypto from "crypto";
 import { Prisma } from "../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { RecomendacoesQueryDTO } from "../types/recomendacao";
+import { pontuarPreferencia } from "./pontuacaoPreferencias";
 
 type CandidateEstabelecimento = {
   id_estabelecimento: number;
@@ -43,7 +44,12 @@ export async function getLatestReadyModelVersion() {
     select: { versao: true },
   });
 
-  return model?.versao ?? "fallback-v1";
+  if (model) return model.versao;
+  await prisma.tb_modelo_recomendacao.upsert({
+    where: { versao: "fallback-v1" },
+    create: { versao: "fallback-v1", algoritmo: "ranking-por-regras", status: "ready" }, update: {},
+  });
+  return "fallback-v1";
 }
 
 export async function getCachedRecommendations(idUsuario: number, modelVersion: string, contextHash: string) {
@@ -97,8 +103,8 @@ export async function upsertRecommendationsCache(
   });
 }
 
-export function listCandidateEstabelecimentos(query: RecomendacoesQueryDTO) {
-  return prisma.tb_estabelecimento.findMany({
+export function listCandidateEstabelecimentos(query: RecomendacoesQueryDTO, db: Prisma.TransactionClient = prisma) {
+  return db.tb_estabelecimento.findMany({
     where: {
       ativo: true,
       tipo: query.tipo,
@@ -125,13 +131,14 @@ export function listCandidateEstabelecimentos(query: RecomendacoesQueryDTO) {
 export async function rankFallbackForUser(
   idUsuario: number,
   candidates: CandidateEstabelecimento[],
-  limit: number
+  limit: number,
+  db: Prisma.TransactionClient = prisma,
 ) {
   // As duas consultas sao independentes; Promise.all permite executa-las ao mesmo tempo.
-  const [userInteractions, preferenceSnapshot] = await Promise.all([
-    prisma.tb_interacao_usuario_estabelecimento.findMany({
-      where: { id_usuario: idUsuario },
-      orderBy: { created_at: "desc" },
+  const [userInteractions, preferenceSnapshot, classificacoes] = await Promise.all([
+    db.tb_interacao_usuario_estabelecimento.findMany({
+      where: { id_usuario: idUsuario, tipo_evento: { in: ["like", "dislike", "neutral", "rating"] } },
+      orderBy: [{ created_at: "desc" }, { id_interacao: "desc" }],
       take: 300,
       include: {
         estabelecimento: {
@@ -143,10 +150,15 @@ export async function rankFallbackForUser(
         },
       },
     }),
-    prisma.tb_usuario_feature_snapshot.findFirst({
+    db.tb_usuario_feature_snapshot.findFirst({
       where: { id_usuario: idUsuario, model_version: "preferencias-v1" },
       orderBy: { created_at: "desc" },
       select: { feature_json: true },
+    }),
+    db.tb_classificacao_estabelecimento.findMany({
+      where: { classificacao: { id_usuario: idUsuario }, nota: { not: null }, id_interacao: null },
+      orderBy: [{ created_at: "desc" }, { id_classificacao: "desc" }], take: 300,
+      include: { estabelecimento: { select: { tipo: true, faixa_preco: true, ambiente: true } } },
     }),
   ]);
 
@@ -159,14 +171,15 @@ export async function rankFallbackForUser(
   const savedCategory = normalizeText(String(savedPreferences?.categoria ?? ""));
   const savedPrice = normalizeText(String(savedPreferences?.faixa_preco ?? ""));
 
-  for (const interaction of userInteractions) {
-    // Regra de negocio: aprendizado baseado apenas em like/dislike.
-    const score =
-      interaction.tipo_evento === "like"
-        ? 3
-        : interaction.tipo_evento === "dislike"
-          ? -3
-          : 0;
+  const opinioesConsideradas = new Set<number>();
+  const historico = [
+    ...userInteractions.map(item => ({ ...item, prioridade: 1, id: item.id_interacao })),
+    ...classificacoes.map(item => ({ ...item, tipo_evento: "rating" as const, valor: item.nota, prioridade: 0, id: item.id_classificacao })),
+  ].sort((a, b) => b.created_at.getTime() - a.created_at.getTime() || b.prioridade - a.prioridade || b.id - a.id);
+  for (const interaction of historico) {
+    if (opinioesConsideradas.has(interaction.id_estabelecimento)) continue;
+    opinioesConsideradas.add(interaction.id_estabelecimento);
+    const score = pontuarPreferencia(interaction.tipo_evento, interaction.valor);
 
     if (score === 0) continue;
 
@@ -233,6 +246,7 @@ export async function rankFallbackForUser(
         ambiente: item.ambiente,
         cidade: item.cidade,
         bairro: item.bairro,
+        avaliacao: Number(item.avaliacao),
         score: Number(score.toFixed(4)),
         motivos,
       };
@@ -242,6 +256,7 @@ export async function rankFallbackForUser(
 
   return ranked;
 }
+
 
 type SuggestionItem = {
   id_estabelecimento: number;
@@ -379,8 +394,8 @@ function diversifyByTasteRoundRobin(
 /** Usa os likes como referencia para encontrar, pontuar e diversificar locais parecidos. */
 export async function listAiSuggestionsFromLikes(idUsuario: number, limit: number) {
   const interactions = await prisma.tb_interacao_usuario_estabelecimento.findMany({
-    where: { id_usuario: idUsuario },
-    orderBy: { created_at: "desc" },
+    where: { id_usuario: idUsuario, tipo_evento: { in: ["like", "dislike", "neutral"] } },
+    orderBy: [{ created_at: "desc" }, { id_interacao: "desc" }],
     take: 500,
     include: {
       estabelecimento: {

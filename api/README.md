@@ -1,5 +1,13 @@
 # Backend Base
 
+Gravação das tabelas e diagnóstico: [PERSISTENCIA.md](PERSISTENCIA.md).
+
+Notificações de favoritos: consulte [NOTIFICACOES.md](NOTIFICACOES.md) para configuração, fluxo e testes.
+
+Notas individuais e média dos estabelecimentos: consulte [AVALIACOES.md](AVALIACOES.md).
+
+Sugestões automáticas após avaliações: consulte [SUGESTOES.md](SUGESTOES.md).
+
 API REST em Node.js, Express, TypeScript e Prisma com autenticacao JWT, documentacao Swagger e CRUDs para organizacoes, cargos, permissoes, usuarios, logs e vinculos entre cargos/permissoes.
 
 ## Stack
@@ -150,6 +158,16 @@ O seed atual cria:
 Senha padrao dos usuarios de seed: `123456`
 
 ## Observacoes de manutencao
+
+### Curtidas de comentários
+
+`PUT /estabelecimentos/:id/comentarios/:classificacao/curtida` registra uma curtida do usuário autenticado. A operação é idempotente e rejeita comentários próprios ou inexistentes. Apenas registros com comentário podem receber curtidas.
+
+A listagem de avaliações inclui `id_classificacao`, `total_curtidas`, `curtido` e `proprio` nos comentários. A primeira curtida e os marcos de 50, 100, 150 etc. gravam um evento `comentario.curtido` na outbox, na mesma transação da curtida. O worker existente publica e consome esses eventos e cria notificações somente para o autor; reentregas não duplicam os avisos.
+
+Para instalar em outro ambiente, execute `npm run prisma:generate`, `npm run prisma:migrate` e reinicie a API e o worker. A entrega depende da configuração Pub/Sub e do worker em execução (`npm run worker:dev` ou `npm run worker:start` após o build). Com o worker parado, os eventos permanecem pendentes na outbox.
+
+Os testes de banco em `src/models/curtidasComentarios.integration.test.ts` usam `DATABASE_URL_TESTE` e verificam concorrência, autoria, contagem, marcos e consumo idempotente. Os dados criados pelo teste são removidos ao final.
 
 - A documentacao Swagger em [`src/docs/swagger.ts`](/c:/Projetos/backend_base/src/docs/swagger.ts) foi ajustada para refletir o comportamento real do projeto em vez do comportamento idealizado.
 - Existem comentarios e textos com problema de codificacao em alguns arquivos (`autenticacao`, `app.ts` e seed), mas isso nao impede o funcionamento da API.

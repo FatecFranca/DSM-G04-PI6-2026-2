@@ -11,6 +11,8 @@
 **/dist/
 **/build/
 **/.dart_tool/
+**/.flutter-plugins-dependencies
+**/coverage/
 
 # Prisma generated client (regenerate with: npx prisma generate)
 api/src/generated/
@@ -20,6 +22,7 @@ api/src/generated/
 Thumbs.db
 .idea/
 *.swp
+*.iml
 
 # Logs
 *.log

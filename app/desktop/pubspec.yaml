@@ -1,0 +1,15 @@
+name: borala_desktop
+description: Configurações desktop preservadas do projeto BoraLá.
+publish_to: none
+version: 1.0.0+1
+environment:
+  sdk: ^3.11.0
+dependencies:
+  flutter:
+    sdk: flutter
+  meu_app:
+    path: ../shared
+dev_dependencies:
+  flutter_lints: ^6.0.0
+flutter:
+  uses-material-design: true

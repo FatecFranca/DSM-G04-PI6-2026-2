@@ -12,7 +12,8 @@ export async function listAvaliacoesEstabelecimentoController(req: Request, res:
     if (!await estabelecimentosModel.getEstabelecimentoById(id)) {
       return res.status(404).json({ success: false, message: "Estabelecimento nao encontrado" });
     }
-    return res.json({ success: true, data: await estabelecimentosModel.listAvaliacoesEstabelecimento(id, pagina) });
+    const usuario = (req as Request & { user?: { id_usuario: number } }).user?.id_usuario;
+    return res.json({ success: true, data: await estabelecimentosModel.listAvaliacoesEstabelecimento(id, pagina, usuario) });
   } catch {
     return res.status(500).json({ success: false, message: "Erro ao carregar avaliacoes" });
   }

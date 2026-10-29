@@ -6,7 +6,7 @@ import { prisma } from "../../lib/prisma";
 import { criarConexaoMensageria } from "../mensageria/cliente";
 import { consumirMensagem } from "../mensageria/consumidor";
 import { publicarProximoEvento } from "../mensageria/publicador";
-import { confirmarPublicacao, processarEventoInteracao, reagendarPublicacao,
+import { confirmarPublicacao, processarEventoMensageria, reagendarPublicacao,
   registrarQuarentena, reservarEventoPendente } from "../mensageria/persistencia";
 
 async function iniciar() {
@@ -16,6 +16,7 @@ async function iniciar() {
     prisma.tb_evento_outbox.findFirst({ select: { id_evento: true } }),
     prisma.tb_evento_processado.findFirst({ select: { id_evento: true } }),
     prisma.tb_mensagem_quarentena.findFirst({ select: { chave: true } }),
+    prisma.tb_notificacao.findFirst({ select: { id_notificacao: true } }),
   ]);
   registrarMensageria("banco_verificado", "worker");
   const conexao = criarConexaoMensageria();
@@ -26,7 +27,7 @@ async function iniciar() {
   const aoReceber = (mensagem: Message) => {
     if (encerrando) { mensagem.nack(); return; }
     const tarefa = consumirMensagem(mensagem, {
-      processar: processarEventoInteracao, quarentena: registrarQuarentena, registrar,
+      processar: processarEventoMensageria, quarentena: registrarQuarentena, registrar,
     });
     tarefas.add(tarefa);
     void tarefa.finally(() => tarefas.delete(tarefa)).catch((erro) => registrar("falha_consumidor", mensagem.id, erro));

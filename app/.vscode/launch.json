@@ -1,28 +1,37 @@
 {
-    // Use o IntelliSense para saber mais sobre os atributos possíveis.
-    // Focalizar para exibir as descrições dos atributos existentes.
-    // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "myApp",
-            "cwd": "myApp",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "myApp (profile mode)",
-            "cwd": "myApp",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "myApp (release mode)",
-            "cwd": "myApp",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "BoraLa Web (Release)",
+      "cwd": "${workspaceFolder}/web",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "flutterMode": "release",
+      "args": [
+        "--web-port=5173",
+        "--dart-define=API_URL=http://localhost:8080"
+      ]
+    },
+    {
+      "name": "BoraLa Web",
+      "cwd": "${workspaceFolder}/web",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "args": [
+        "--web-port=5173",
+        "--dart-define=API_URL=http://localhost:8080"
+      ]
+    },
+    {
+      "name": "BoraLa Mobile",
+      "cwd": "${workspaceFolder}/mobile",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "type": "dart"
+    }
+  ]
 }

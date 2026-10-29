@@ -1,6 +1,17 @@
 import { Request, Response } from "express";
 import { RecomendacoesQuerySchema } from "../types/recomendacao";
 import * as recomendacoesModel from "../models/recomendacoes";
+import { listarSugestoesAutomaticas } from "../models/sugestoesAutomaticas";
+
+export async function listSugestoesAutomaticasController(req: Request & { user?: { id_usuario: number } }, res: Response) {
+  if (!req.user) return res.status(401).json({ success: false });
+  try {
+    const resultado = await listarSugestoesAutomaticas(req.user.id_usuario);
+    return res.json({ success: true, source: "mensageria", atualizado_em: resultado.atualizado_em, data: resultado.sugestoes });
+  } catch {
+    return res.status(500).json({ success: false, message: "Erro ao carregar sugestoes automaticas" });
+  }
+}
 
 /**
  * Monta a lista personalizada: le filtros, procura cache, calcula o ranking quando

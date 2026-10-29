@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { EventoInteracao, EventoInteracaoSchema, ErroMensagemInvalida } from "./contrato";
+import { EventoMensageria, EventoMensageriaSchema, ErroMensagemInvalida } from "./contrato";
 
 export interface MensagemRecebida {
   id: string;
@@ -9,17 +9,17 @@ export interface MensagemRecebida {
 }
 
 export interface DependenciasConsumidor {
-  processar(evento: EventoInteracao): Promise<"processado" | "duplicado">;
+  processar(evento: EventoMensageria): Promise<"processado" | "duplicado">;
   quarentena(registro: { chave: string; id_mensagem: string; conteudo: Buffer; motivo: string }): Promise<void>;
   registrar(estado: string, id: string, erro?: unknown): void;
 }
 
 export async function consumirMensagem(mensagem: MensagemRecebida, dependencias: DependenciasConsumidor) {
   try {
-    let evento: EventoInteracao;
+    let evento: EventoMensageria;
     try {
       if (mensagem.data.length > 65536) throw new Error("Tamanho excedido");
-      evento = EventoInteracaoSchema.parse(JSON.parse(mensagem.data.toString("utf8")));
+      evento = EventoMensageriaSchema.parse(JSON.parse(mensagem.data.toString("utf8")));
     } catch {
       throw new ErroMensagemInvalida("JSON ou contrato de interacao invalido");
     }

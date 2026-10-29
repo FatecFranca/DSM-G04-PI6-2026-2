@@ -38,10 +38,10 @@ test("PostgreSQL: outbox atomica, rollback e idempotencia concorrente", {
       await prisma.tb_recomendacao_cache.create({ data: dadosCache });
       const resultados = await Promise.all([processarEventoInteracao(evento), processarEventoInteracao(evento)]);
       assert.deepEqual(resultados.sort(), ["duplicado", "processado"]);
-      assert.equal(await prisma.tb_recomendacao_cache.count({ where: { id_usuario: usuario.id_usuario } }), 0);
+      assert.equal(await prisma.tb_recomendacao_cache.count({ where: { id_usuario: usuario.id_usuario, model_version: modelo.versao } }), 0);
       await prisma.tb_recomendacao_cache.create({ data: dadosCache });
       assert.equal(await processarEventoInteracao(evento), "duplicado");
-      assert.equal(await prisma.tb_recomendacao_cache.count({ where: { id_usuario: usuario.id_usuario } }), 1);
+      assert.equal(await prisma.tb_recomendacao_cache.count({ where: { id_usuario: usuario.id_usuario, model_version: modelo.versao } }), 1);
       await assert.rejects(processarEventoInteracao({ ...evento, id_evento: idInexistente, dados: { id_interacao: 2147483647 } }));
       assert.equal(await prisma.tb_evento_processado.findUnique({ where: { id_evento: idInexistente } }), null);
       const antes = await prisma.tb_interacao_usuario_estabelecimento.count({ where: { id_usuario: usuario.id_usuario } });
@@ -82,7 +82,10 @@ test("PostgreSQL: outbox atomica, rollback e idempotencia concorrente", {
       await prisma.tb_interacao_usuario_estabelecimento.delete({ where: { id_interacao: idInteracao } });
     }
     if (idEstabelecimento) await prisma.tb_estabelecimento.delete({ where: { id_estabelecimento: idEstabelecimento } });
-    if (idUsuario) await prisma.tb_usuario.delete({ where: { id_usuario: idUsuario } });
+    if (idUsuario) {
+      await prisma.tb_usuario_feature_snapshot.deleteMany({ where: { id_usuario: idUsuario } });
+      await prisma.tb_usuario.delete({ where: { id_usuario: idUsuario } });
+    }
     await prisma.$disconnect();
   }
 });
