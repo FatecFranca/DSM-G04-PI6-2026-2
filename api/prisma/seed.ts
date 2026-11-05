@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { categoriasDoLocal } from "../src/models/categoriasComida";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { prisma } from "../lib/prisma";
@@ -278,7 +279,10 @@ async function main() {
     process.env.SEED_CSV_PATH ??
       "prisma/seed/Base de Dados PI 5º Semestre - 2026 - Página1.csv"
   );
-  const data = parseRows(readFileSync(csvPath, "utf8"));
+  const data = parseRows(readFileSync(csvPath, "utf8")).map(item => ({
+    ...item,
+    tags: categoriasDoLocal(item),
+  }));
   if (data.length === 0) {
     throw new Error("Nenhum estabelecimento valido encontrado para seed.");
   }

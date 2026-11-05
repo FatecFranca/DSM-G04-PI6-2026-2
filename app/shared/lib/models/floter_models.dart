@@ -72,11 +72,11 @@ class PreferenciasFloter {
     required this.modalidadeConsumo,
     this.observacao,
   });
-  final CategoriaComida categoria;
+  final List<CategoriaComida> categoria;
   final PreferenciaSabor sabor;
   final FaixaPreco faixaPreco;
   final QuantidadePessoas quantidadePessoas;
-  final RestricaoAlimentar restricaoAlimentar;
+  final List<RestricaoAlimentar> restricaoAlimentar;
   final ModalidadeConsumo modalidadeConsumo;
   final String? observacao;
 }

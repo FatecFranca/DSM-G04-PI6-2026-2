@@ -36,8 +36,10 @@ class _FloterPageState extends State<FloterPage> {
       if (!mounted || preferencias == null) return;
       setState(() {
         _categoriaSelecionada = CategoriaComida.values
-            .where((v) => v.descricao == preferencias['categoria'])
-            .firstOrNull;
+            .where(
+              (v) => _valores(preferencias['categoria']).contains(v.descricao),
+            )
+            .toSet();
         _saborSelecionado = PreferenciaSabor.values
             .where((v) => v.descricao == preferencias['sabor'])
             .firstOrNull;
@@ -48,8 +50,12 @@ class _FloterPageState extends State<FloterPage> {
             .where((v) => v.descricao == preferencias['quantidade_pessoas'])
             .firstOrNull;
         _restricaoSelecionada = RestricaoAlimentar.values
-            .where((v) => v.descricao == preferencias['restricao_alimentar'])
-            .firstOrNull;
+            .where(
+              (v) => _valores(
+                preferencias['restricao_alimentar'],
+              ).contains(v.descricao),
+            )
+            .toSet();
         _modalidadeSelecionada = ModalidadeConsumo.values
             .where((v) => v.descricao == preferencias['modalidade_consumo'])
             .firstOrNull;
@@ -71,11 +77,11 @@ class _FloterPageState extends State<FloterPage> {
     }
   }
 
-  CategoriaComida? _categoriaSelecionada;
+  Set<CategoriaComida> _categoriaSelecionada = {};
   PreferenciaSabor? _saborSelecionado;
   FaixaPreco? _faixaPrecoSelecionada;
   QuantidadePessoas? _quantidadePessoasSelecionada;
-  RestricaoAlimentar? _restricaoSelecionada;
+  Set<RestricaoAlimentar> _restricaoSelecionada = {};
   ModalidadeConsumo? _modalidadeSelecionada;
 
   static const int _quantidadeEtapas = 7;
@@ -92,7 +98,7 @@ class _FloterPageState extends State<FloterPage> {
   bool get _etapaObrigatoriaRespondida {
     switch (_etapaAtual) {
       case 0:
-        return _categoriaSelecionada != null;
+        return _categoriaSelecionada.isNotEmpty;
       case 1:
         return _saborSelecionado != null;
       case 2:
@@ -100,7 +106,7 @@ class _FloterPageState extends State<FloterPage> {
       case 3:
         return _quantidadePessoasSelecionada != null;
       case 4:
-        return _restricaoSelecionada != null;
+        return _restricaoSelecionada.isNotEmpty;
       case 5:
         return _modalidadeSelecionada != null;
       default:
@@ -122,11 +128,11 @@ class _FloterPageState extends State<FloterPage> {
     }
     if (_etapaAtual == _quantidadeEtapas - 1) {
       final preferencias = PreferenciasFloter(
-        categoria: _categoriaSelecionada!,
+        categoria: _categoriaSelecionada.toList(),
         sabor: _saborSelecionado!,
         faixaPreco: _faixaPrecoSelecionada!,
         quantidadePessoas: _quantidadePessoasSelecionada!,
-        restricaoAlimentar: _restricaoSelecionada!,
+        restricaoAlimentar: _restricaoSelecionada.toList(),
         modalidadeConsumo: _modalidadeSelecionada!,
         observacao: _controladorObservacao.text.trim().isEmpty
             ? null
@@ -135,11 +141,13 @@ class _FloterPageState extends State<FloterPage> {
       setState(() => _salvando = true);
       try {
         await _api.savePreferencias({
-          'categoria': preferencias.categoria.descricao,
+          'categoria': preferencias.categoria.map((v) => v.descricao).toList(),
           'sabor': preferencias.sabor.descricao,
           'faixa_preco': preferencias.faixaPreco.descricao,
           'quantidade_pessoas': preferencias.quantidadePessoas.descricao,
-          'restricao_alimentar': preferencias.restricaoAlimentar.descricao,
+          'restricao_alimentar': preferencias.restricaoAlimentar
+              .map((v) => v.descricao)
+              .toList(),
           'modalidade_consumo': preferencias.modalidadeConsumo.descricao,
           if (preferencias.observacao != null)
             'observacao': preferencias.observacao,
@@ -234,7 +242,7 @@ class _FloterPageState extends State<FloterPage> {
                                 CategoriaComida.values,
                                 _categoriaSelecionada,
                                 (opcao) => setState(
-                                  () => _categoriaSelecionada = opcao,
+                                  () => _alternar(_categoriaSelecionada, opcao),
                                 ),
                                 (opcao) => opcao.descricao,
                               ),
@@ -272,9 +280,16 @@ class _FloterPageState extends State<FloterPage> {
                                 'Sua segurança e preferência vêm primeiro.',
                                 RestricaoAlimentar.values,
                                 _restricaoSelecionada,
-                                (opcao) => setState(
-                                  () => _restricaoSelecionada = opcao,
-                                ),
+                                (opcao) => setState(() {
+                                  if (opcao == RestricaoAlimentar.nenhuma) {
+                                    _restricaoSelecionada.clear();
+                                  } else {
+                                    _restricaoSelecionada.remove(
+                                      RestricaoAlimentar.nenhuma,
+                                    );
+                                  }
+                                  _alternar(_restricaoSelecionada, opcao);
+                                }),
                                 (opcao) => opcao.descricao,
                               ),
                               _paginaDeOpcoes(
@@ -341,11 +356,17 @@ class _FloterPageState extends State<FloterPage> {
     );
   }
 
+  List<dynamic> _valores(dynamic valor) => valor is List ? valor : [valor];
+
+  void _alternar<T>(Set<T> selecionadas, T opcao) {
+    if (!selecionadas.remove(opcao)) selecionadas.add(opcao);
+  }
+
   Widget _paginaDeOpcoes<T>(
     String titulo,
     String subtitulo,
     List<T> opcoes,
-    T? opcaoSelecionada,
+    Object? opcaoSelecionada,
     ValueChanged<T> aoSelecionar,
     String Function(T) obterDescricao,
   ) {
@@ -373,7 +394,9 @@ class _FloterPageState extends State<FloterPage> {
               padding: const EdgeInsets.only(bottom: 10),
               child: FloterOptionCard(
                 label: obterDescricao(opcao),
-                selected: opcao == opcaoSelecionada,
+                selected: opcaoSelecionada is Set<T>
+                    ? opcaoSelecionada.contains(opcao)
+                    : opcao == opcaoSelecionada,
                 onTap: () => aoSelecionar(opcao),
               ),
             ),

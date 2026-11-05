@@ -191,11 +191,11 @@ void main() {
     );
     final locais = await servico.analisarPreferencias(
       const PreferenciasFloter(
-        categoria: CategoriaComida.pizza,
+        categoria: [CategoriaComida.pizza],
         sabor: PreferenciaSabor.salgado,
         faixaPreco: FaixaPreco.medio,
         quantidadePessoas: QuantidadePessoas.duas,
-        restricaoAlimentar: RestricaoAlimentar.nenhuma,
+        restricaoAlimentar: [RestricaoAlimentar.nenhuma],
         modalidadeConsumo: ModalidadeConsumo.restaurante,
       ),
     );

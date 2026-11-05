@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { categoriasSalvas, correspondeCategoria } from "./categoriasComida";
 import { Prisma } from "../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { RecomendacoesQueryDTO } from "../types/recomendacao";
@@ -11,6 +12,7 @@ type CandidateEstabelecimento = {
   faixa_preco: string;
   ambiente: string;
   avaliacao: unknown;
+  tags?: unknown;
   cidade: string | null;
   bairro: string | null;
 };
@@ -120,6 +122,7 @@ export function listCandidateEstabelecimentos(query: RecomendacoesQueryDTO, db: 
       faixa_preco: true,
       ambiente: true,
       avaliacao: true,
+      tags: true,
       cidade: true,
       bairro: true,
     },
@@ -168,7 +171,7 @@ export async function rankFallbackForUser(
   const environmentWeights = new Map<string, number>();
 
   const savedPreferences = preferenceSnapshot?.feature_json as Record<string, unknown> | undefined;
-  const savedCategory = normalizeText(String(savedPreferences?.categoria ?? ""));
+  const savedCategories = categoriasSalvas(savedPreferences?.categoria);
   const savedPrice = normalizeText(String(savedPreferences?.faixa_preco ?? ""));
 
   const opinioesConsideradas = new Set<number>();
@@ -202,7 +205,7 @@ export async function rankFallbackForUser(
       let score = Math.max(0, Math.min(avaliacao, 5)) * 0.4;
       const motivos: string[] = ["avaliacao_publica"];
 
-      if (savedCategory && (tipo.includes(savedCategory) || savedCategory.includes(tipo))) {
+      if (savedCategories.length && correspondeCategoria(item, savedCategories)) {
         score += 2;
         motivos.push("preferencia_informada_por_tipo");
       }

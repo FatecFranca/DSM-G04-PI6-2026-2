@@ -78,9 +78,13 @@ export function getPreferencias(idUsuario: number) {
 
 /** Cria um novo snapshot JSON das preferencias para manter o historico. */
 export function savePreferencias(idUsuario: number, preferencias: Prisma.InputJsonValue) {
-  return prisma.tb_usuario_feature_snapshot.create({
+  return prisma.$transaction(async db => {
+    const snapshot = await db.tb_usuario_feature_snapshot.create({
     data: { id_usuario: idUsuario, model_version: "preferencias-v1", feature_json: preferencias },
-    select: { feature_json: true, created_at: true },
+      select: { feature_json: true, created_at: true },
+    });
+    await db.tb_recomendacao_cache.deleteMany({ where: { id_usuario: idUsuario } });
+    return snapshot;
   });
 }
 
