@@ -1,446 +1,133 @@
-import '../components/app_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../components/floter_option_card.dart';
-import '../models/floter_models.dart';
-import '../router/app_router.dart';
+import '../components/app_bottom_nav.dart';
+import '../components/app_scaffold.dart';
+import '../components/estado_conteudo.dart';
 import '../services/api.dart';
-import '../theme/app_theme.dart';
 
+/// Coleta as respostas definidas no artefato de mineração e envia ao recomendador.
 class FloterPage extends StatefulWidget {
   const FloterPage({this.api, super.key});
   final ApiService? api;
-
   @override
-  /// Cria o estado que guardara respostas e etapa atual do questionario.
   State<FloterPage> createState() => _FloterPageState();
 }
 
 class _FloterPageState extends State<FloterPage> {
   late final ApiService _api = widget.api ?? ApiService();
-  final PageController _controladorPaginas = PageController();
-  final TextEditingController _controladorObservacao = TextEditingController();
-  int _etapaAtual = 0;
-  bool _salvando = false;
-  bool _carregandoPreferencias = true;
-  @override
-  void initState() {
-    super.initState();
-    _restaurarPreferencias();
-  }
-
-  Future<void> _restaurarPreferencias() async {
-    try {
-      final preferencias = await _api.getPreferencias();
-      if (!mounted || preferencias == null) return;
-      setState(() {
-        _categoriaSelecionada = CategoriaComida.values
-            .where(
-              (v) => _valores(preferencias['categoria']).contains(v.descricao),
-            )
-            .toSet();
-        _saborSelecionado = PreferenciaSabor.values
-            .where((v) => v.descricao == preferencias['sabor'])
-            .firstOrNull;
-        _faixaPrecoSelecionada = FaixaPreco.values
-            .where((v) => v.descricao == preferencias['faixa_preco'])
-            .firstOrNull;
-        _quantidadePessoasSelecionada = QuantidadePessoas.values
-            .where((v) => v.descricao == preferencias['quantidade_pessoas'])
-            .firstOrNull;
-        _restricaoSelecionada = RestricaoAlimentar.values
-            .where(
-              (v) => _valores(
-                preferencias['restricao_alimentar'],
-              ).contains(v.descricao),
-            )
-            .toSet();
-        _modalidadeSelecionada = ModalidadeConsumo.values
-            .where((v) => v.descricao == preferencias['modalidade_consumo'])
-            .firstOrNull;
-        _controladorObservacao.text =
-            preferencias['observacao']?.toString() ?? '';
-      });
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Não foi possível recuperar as preferências anteriores. Você pode preencher novamente.',
-            ),
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _carregandoPreferencias = false);
-    }
-  }
-
-  Set<CategoriaComida> _categoriaSelecionada = {};
-  PreferenciaSabor? _saborSelecionado;
-  FaixaPreco? _faixaPrecoSelecionada;
-  QuantidadePessoas? _quantidadePessoasSelecionada;
-  Set<RestricaoAlimentar> _restricaoSelecionada = {};
-  ModalidadeConsumo? _modalidadeSelecionada;
-
-  static const int _quantidadeEtapas = 7;
+  late Future<List<Map<String, dynamic>>> _carregamento = _api
+      .getQuestionarioRecomendacao();
+  final Map<String, dynamic> _respostas = {};
 
   @override
-  /// Libera os controllers quando o questionario deixa de existir.
-  void dispose() {
-    _controladorPaginas.dispose();
-    _controladorObservacao.dispose();
-    super.dispose();
-  }
-
-  /// Retorna se a pergunta obrigatoria da etapa atual ja foi respondida.
-  bool get _etapaObrigatoriaRespondida {
-    switch (_etapaAtual) {
-      case 0:
-        return _categoriaSelecionada.isNotEmpty;
-      case 1:
-        return _saborSelecionado != null;
-      case 2:
-        return _faixaPrecoSelecionada != null;
-      case 3:
-        return _quantidadePessoasSelecionada != null;
-      case 4:
-        return _restricaoSelecionada.isNotEmpty;
-      case 5:
-        return _modalidadeSelecionada != null;
-      default:
-        return true;
-    }
-  }
-
-  /// Avanca uma etapa ou salva tudo e navega aos resultados na ultima etapa.
-  Future<void> _avancar() async {
-    if (_salvando) return;
-    if (!_etapaObrigatoriaRespondida) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Selecione uma opção para continuar.'),
-          backgroundColor: AppTheme.accent,
-        ),
-      );
-      return;
-    }
-    if (_etapaAtual == _quantidadeEtapas - 1) {
-      final preferencias = PreferenciasFloter(
-        categoria: _categoriaSelecionada.toList(),
-        sabor: _saborSelecionado!,
-        faixaPreco: _faixaPrecoSelecionada!,
-        quantidadePessoas: _quantidadePessoasSelecionada!,
-        restricaoAlimentar: _restricaoSelecionada.toList(),
-        modalidadeConsumo: _modalidadeSelecionada!,
-        observacao: _controladorObservacao.text.trim().isEmpty
-            ? null
-            : _controladorObservacao.text.trim(),
-      );
-      setState(() => _salvando = true);
-      try {
-        await _api.savePreferencias({
-          'categoria': preferencias.categoria.map((v) => v.descricao).toList(),
-          'sabor': preferencias.sabor.descricao,
-          'faixa_preco': preferencias.faixaPreco.descricao,
-          'quantidade_pessoas': preferencias.quantidadePessoas.descricao,
-          'restricao_alimentar': preferencias.restricaoAlimentar
-              .map((v) => v.descricao)
-              .toList(),
-          'modalidade_consumo': preferencias.modalidadeConsumo.descricao,
-          if (preferencias.observacao != null)
-            'observacao': preferencias.observacao,
-        });
-      } catch (error) {
-        if (!mounted) return;
-        setState(() => _salvando = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Não foi possível salvar suas preferências: $error'),
-          ),
-        );
-        return;
-      }
-      if (!mounted) return;
-      setState(() => _salvando = false);
-      context.go(AppRouter.floterResultados, extra: preferencias);
-      return;
-    }
-    setState(() => _etapaAtual++);
-    _controladorPaginas.nextPage(
-      duration: const Duration(milliseconds: 280),
-      curve: Curves.easeOut,
-    );
-  }
-
-  /// Volta uma etapa sem apagar as preferencias ja informadas.
-  void _voltar() {
-    if (_etapaAtual == 0) {
-      context.go(AppRouter.sugestoes);
-      return;
-    }
-    setState(() => _etapaAtual--);
-    _controladorPaginas.previousPage(
-      duration: const Duration(milliseconds: 280),
-      curve: Curves.easeOut,
-    );
-  }
-
-  @override
-  /// Monta progresso, pergunta atual e botoes para avancar ou voltar.
-  Widget build(BuildContext context) {
-    return AppScaffold(
-      indice: 2,
-      appBar: AppBar(
-        title: const Text('BoraLá'),
-        leading: IconButton(
-          onPressed: _salvando ? null : _voltar,
-          icon: const Icon(Icons.arrow_back_rounded),
-        ),
-      ),
-      body: _carregandoPreferencias
-          ? const Center(child: CircularProgressIndicator())
-          : SafeArea(
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 720),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: LinearProgressIndicator(
-                                value: (_etapaAtual + 1) / _quantidadeEtapas,
-                                minHeight: 7,
-                                borderRadius: BorderRadius.circular(8),
-                                color: AppTheme.accent,
-                                backgroundColor: AppTheme.inputFill,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              '${_etapaAtual + 1}/$_quantidadeEtapas',
-                              style: const TextStyle(
-                                color: AppTheme.textSecondary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        Expanded(
-                          child: PageView(
-                            controller: _controladorPaginas,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              _paginaDeOpcoes(
-                                'O que você está com vontade de comer?',
-                                'Escolha a opção que mais combina com o momento.',
-                                CategoriaComida.values,
-                                _categoriaSelecionada,
-                                (opcao) => setState(
-                                  () => _alternar(_categoriaSelecionada, opcao),
-                                ),
-                                (opcao) => opcao.descricao,
-                              ),
-                              _paginaDeOpcoes(
-                                'Qual tipo de sabor você prefere?',
-                                'Vamos refinar sua experiência.',
-                                PreferenciaSabor.values,
-                                _saborSelecionado,
-                                (opcao) =>
-                                    setState(() => _saborSelecionado = opcao),
-                                (opcao) => opcao.descricao,
-                              ),
-                              _paginaDeOpcoes(
-                                'Qual faixa de preço você deseja pagar?',
-                                'Selecione o valor que cabe no seu momento.',
-                                FaixaPreco.values,
-                                _faixaPrecoSelecionada,
-                                (opcao) => setState(
-                                  () => _faixaPrecoSelecionada = opcao,
-                                ),
-                                (opcao) => opcao.descricao,
-                              ),
-                              _paginaDeOpcoes(
-                                'Quantas pessoas vão com você?',
-                                'Assim encontramos porções adequadas.',
-                                QuantidadePessoas.values,
-                                _quantidadePessoasSelecionada,
-                                (opcao) => setState(
-                                  () => _quantidadePessoasSelecionada = opcao,
-                                ),
-                                (opcao) => opcao.descricao,
-                              ),
-                              _paginaDeOpcoes(
-                                'Você possui alguma restrição alimentar?',
-                                'Sua segurança e preferência vêm primeiro.',
-                                RestricaoAlimentar.values,
-                                _restricaoSelecionada,
-                                (opcao) => setState(() {
-                                  if (opcao == RestricaoAlimentar.nenhuma) {
-                                    _restricaoSelecionada.clear();
-                                  } else {
-                                    _restricaoSelecionada.remove(
-                                      RestricaoAlimentar.nenhuma,
-                                    );
-                                  }
-                                  _alternar(_restricaoSelecionada, opcao);
-                                }),
-                                (opcao) => opcao.descricao,
-                              ),
-                              _paginaDeOpcoes(
-                                'Como você pretende consumir?',
-                                'Escolha a modalidade mais conveniente.',
-                                ModalidadeConsumo.values,
-                                _modalidadeSelecionada,
-                                (opcao) => setState(
-                                  () => _modalidadeSelecionada = opcao,
-                                ),
-                                (opcao) => opcao.descricao,
-                              ),
-                              _paginaObservacao(),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: OutlinedButton.icon(
-                                onPressed: _voltar,
-                                icon: const Icon(Icons.arrow_back_rounded),
-                                label: const Text('Voltar'),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: AppTheme.textPrimary,
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
-                                  ),
-                                  side: const BorderSide(
-                                    color: AppTheme.textSecondary,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              flex: 2,
-                              child: ElevatedButton.icon(
-                                onPressed: _salvando ? null : _avancar,
-                                icon: Icon(
-                                  _etapaAtual == _quantidadeEtapas - 1
-                                      ? Icons.auto_awesome_rounded
-                                      : Icons.arrow_forward_rounded,
-                                ),
-                                label: Text(
-                                  _etapaAtual == _quantidadeEtapas - 1
-                                      ? 'Encontrar sugestões'
-                                      : 'Continuar',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+  Widget build(BuildContext context) => AppScaffold(
+    indice: 2,
+    bottomNavigationBar: const AppBottomNav(indice: 2),
+    appBar: AppBar(title: const Text('Descobrir')),
+    body: SafeArea(
+      child: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _carregamento,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return EstadoConteudo(
+              titulo: 'Não foi possível carregar as preferências',
+              descricao: '${snapshot.error}',
+              acao: () => setState(
+                () => _carregamento = _api.getQuestionarioRecomendacao(),
+              ),
+            );
+          }
+          final perguntas = snapshot.data ?? [];
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 760),
+              child: ListView(
+                padding: const EdgeInsets.all(24),
+                children: [
+                  Text(
+                    'Encontre um lugar para você',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Escolha o que importa. A ordem das sugestões considera o modelo de recomendações baseado nos estabelecimentos cadastrados.',
+                  ),
+                  const SizedBox(height: 20),
+                  for (final pergunta in perguntas) _pergunta(pergunta),
+                  const SizedBox(height: 12),
+                  FilledButton.icon(
+                    onPressed: () => context.push(
+                      '/floter/resultados',
+                      extra: Map<String, dynamic>.from(_respostas),
+                    ),
+                    icon: const Icon(Icons.auto_awesome),
+                    label: const Text('Ver recomendações'),
+                  ),
+                ],
               ),
             ),
-    );
-  }
-
-  List<dynamic> _valores(dynamic valor) => valor is List ? valor : [valor];
-
-  void _alternar<T>(Set<T> selecionadas, T opcao) {
-    if (!selecionadas.remove(opcao)) selecionadas.add(opcao);
-  }
-
-  Widget _paginaDeOpcoes<T>(
-    String titulo,
-    String subtitulo,
-    List<T> opcoes,
-    Object? opcaoSelecionada,
-    ValueChanged<T> aoSelecionar,
-    String Function(T) obterDescricao,
-  ) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            titulo,
-            style: const TextStyle(
-              fontSize: 24,
-              height: 1.2,
-              fontWeight: FontWeight.w700,
-              color: AppTheme.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            subtitulo,
-            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 14),
-          ),
-          const SizedBox(height: 24),
-          ...opcoes.map(
-            (opcao) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: FloterOptionCard(
-                label: obterDescricao(opcao),
-                selected: opcaoSelecionada is Set<T>
-                    ? opcaoSelecionada.contains(opcao)
-                    : opcao == opcaoSelecionada,
-                onTap: () => aoSelecionar(opcao),
-              ),
-            ),
-          ),
-        ],
+          );
+        },
       ),
-    );
-  }
+    ),
+  );
 
-  /// Cria o campo livre de observacao mostrado na etapa final.
-  Widget _paginaObservacao() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Conte mais sobre o que você gostaria de comer',
-            style: TextStyle(
-              fontSize: 24,
-              height: 1.2,
-              fontWeight: FontWeight.w700,
-              color: AppTheme.textPrimary,
+  Widget _pergunta(Map<String, dynamic> pergunta) {
+    final grupo = '${pergunta['id']}';
+    final multipla = pergunta['tipo_resposta'] == 'multipla';
+    final selecionados = multipla
+        ? List<String>.from(_respostas[grupo] as List? ?? const [])
+        : <String>[if (_respostas[grupo] != null) '${_respostas[grupo]}'];
+    final opcoes = (pergunta['opcoes'] as List? ?? const []).whereType<Map>();
+    return Card(
+      margin: const EdgeInsets.only(bottom: 14),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${pergunta['pergunta']}',
+              style: const TextStyle(fontWeight: FontWeight.w700),
             ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Este campo é opcional. Use-o para contar algum detalhe especial.',
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
-          ),
-          const SizedBox(height: 24),
-          TextField(
-            controller: _controladorObservacao,
-            maxLength: 500,
-            minLines: 5,
-            maxLines: 8,
-            decoration: const InputDecoration(
-              hintText:
-                  'Ex.: algo quentinho, pouco temperado e que seja fácil de compartilhar…',
-              alignLabelWithHint: true,
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                for (final opcao in opcoes)
+                  ChoiceChip(
+                    label: Text('${opcao['rotulo']}'),
+                    selected: selecionados.contains('${opcao['valor']}'),
+                    onSelected: (selecionado) => setState(() {
+                      final valor = '${opcao['valor']}';
+                      if (multipla) {
+                        final atual = [...selecionados];
+                        if (selecionado) {
+                          atual.add(valor);
+                        } else {
+                          atual.remove(valor);
+                        }
+                        if (atual.isEmpty) {
+                          _respostas.remove(grupo);
+                        } else {
+                          _respostas[grupo] = atual;
+                        }
+                      } else if (selecionado) {
+                        _respostas[grupo] = valor;
+                      }
+                    }),
+                  ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
-// Coleta as preferencias que serao usadas para buscar resultados no Floter.

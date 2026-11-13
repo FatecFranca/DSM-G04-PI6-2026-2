@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> _locais = [];
   bool _carregando = true;
   bool _personalizadas = false;
+  Map<String, dynamic> _respostas = {};
   String? _erro;
   String? _categoria;
   String _ordenacao = 'catalogo';
@@ -53,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     });
     try {
       final lista = _personalizadas
-          ? await _api.getRecomendacoes(limit: 50, forceRefresh: true)
+          ? await _api.recomendar(respostas: _respostas, k: 50)
           : await _api.listEstabelecimentos();
       if (!mounted || versao != _versao) return;
       setState(() {
@@ -646,14 +647,129 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _trocarLista(bool personalizadas) {
-    if (personalizadas == _personalizadas) return;
+  Future<void> _trocarLista(bool personalizadas) async {
+    if (personalizadas) {
+      await _abrirQuestionario();
+      return;
+    }
     setState(() {
-      _personalizadas = personalizadas;
+      _personalizadas = false;
+      _respostas = {};
       _pagina = 0;
       _categoria = null;
     });
     _carregar();
+  }
+
+  Future<void> _abrirQuestionario() async {
+    try {
+      final questionario = await _api.getQuestionarioRecomendacao();
+      if (!mounted) return;
+      final respostas = <String, dynamic>{..._respostas};
+      final confirmadas = await showDialog<Map<String, dynamic>>(
+        context: context,
+        builder: (context) => StatefulBuilder(
+          builder: (context, atualizarDialogo) => AlertDialog(
+            title: const Text('O que você procura?'),
+            content: SizedBox(
+              width: 520,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final pergunta in questionario) ...[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12, bottom: 8),
+                        child: Text(
+                          '${pergunta['pergunta']}',
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        children: [
+                          for (final opcao
+                              in (pergunta['opcoes'] as List).whereType<Map>())
+                            Builder(
+                              builder: (_) {
+                                final grupo = '${pergunta['id']}';
+                                final valor = '${opcao['valor']}';
+                                final multipla =
+                                    pergunta['tipo_resposta'] == 'multipla';
+                                final selecionados = multipla
+                                    ? List<String>.from(
+                                        respostas[grupo] as List? ?? const [],
+                                      )
+                                    : <String>[
+                                        if (respostas[grupo] != null)
+                                          '${respostas[grupo]}',
+                                      ];
+                                final selecionado = selecionados.contains(
+                                  valor,
+                                );
+                                return ChoiceChip(
+                                  label: Text('${opcao['rotulo']}'),
+                                  selected: selecionado,
+                                  onSelected: (escolhido) =>
+                                      atualizarDialogo(() {
+                                        if (multipla) {
+                                          if (escolhido) {
+                                            respostas[grupo] = [
+                                              ...selecionados,
+                                              valor,
+                                            ];
+                                          } else {
+                                            final restantes = [...selecionados]
+                                              ..remove(valor);
+                                            if (restantes.isEmpty) {
+                                              respostas.remove(grupo);
+                                            } else {
+                                              respostas[grupo] = restantes;
+                                            }
+                                          }
+                                        } else if (escolhido) {
+                                          respostas[grupo] = valor;
+                                        }
+                                      }),
+                                );
+                              },
+                            ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancelar'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(context, respostas),
+                child: const Text('Ver recomendações'),
+              ),
+            ],
+          ),
+        ),
+      );
+      if (!mounted || confirmadas == null) return;
+      setState(() {
+        _respostas = confirmadas;
+        _personalizadas = true;
+        _categoria = null;
+        _pagina = 0;
+      });
+      await _carregar();
+    } catch (erro) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('$erro')));
+    }
   }
 
   Widget _boasVindas() => Container(

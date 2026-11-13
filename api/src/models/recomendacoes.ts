@@ -1,500 +1,133 @@
-import crypto from "crypto";
-import { categoriasSalvas, correspondeCategoria } from "./categoriasComida";
-import { Prisma } from "../generated/prisma/client";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { prisma } from "../../lib/prisma";
-import { RecomendacoesQueryDTO } from "../types/recomendacao";
-import { pontuarPreferencia } from "./pontuacaoPreferencias";
 
-type CandidateEstabelecimento = {
-  id_estabelecimento: number;
-  nome: string;
-  tipo: string;
-  faixa_preco: string;
-  ambiente: string;
-  avaliacao: unknown;
-  tags?: unknown;
-  cidade: string | null;
-  bairro: string | null;
+type ItemModelo = {
+  id: number; nome: string; tipo: string; tipos: string[]; faixa_preco: string;
+  ambiente: string; publico: string[]; nota: number; qualidade: number;
+  periodos: Record<string, number>; abre: string; fecha: string;
+  abre_min: number; fecha_min: number; cluster?: number | string | null;
 };
-
-
-const CACHE_TTL_MINUTES = 10;
-
-const normalizeText = (value?: string | null) => (value ?? "").trim().toLowerCase();
-
-
-export function buildContextHash(idUsuario: number, query: RecomendacoesQueryDTO) {
- 
-  const payload = JSON.stringify({
-    idUsuario,
-    tipo: normalizeText(query.tipo),
-    faixa_preco: normalizeText(query.faixa_preco),
-    ambiente: normalizeText(query.ambiente),
-    cidade: normalizeText(query.cidade),
-    bairro: normalizeText(query.bairro),
-    limit: query.limit,
-  });
-
-  return crypto.createHash("sha256").update(payload).digest("hex");
-}
-
-
-export async function getLatestReadyModelVersion() {
-  const model = await prisma.tb_modelo_recomendacao.findFirst({
-    where: { status: "ready" },
-    orderBy: [{ trained_at: "desc" }, { created_at: "desc" }],
-    select: { versao: true },
-  });
-
-  if (model) return model.versao;
-  await prisma.tb_modelo_recomendacao.upsert({
-    where: { versao: "fallback-v1" },
-    create: { versao: "fallback-v1", algoritmo: "ranking-por-regras", status: "ready" }, update: {},
-  });
-  return "fallback-v1";
-}
-
-export async function getCachedRecommendations(idUsuario: number, modelVersion: string, contextHash: string) {
-
-  const cache = await prisma.tb_recomendacao_cache.findUnique({
-    where: {
-      id_usuario_model_version_context_hash: {
-        id_usuario: idUsuario,
-        model_version: modelVersion,
-        context_hash: contextHash,
-      },
-    },
-  });
-
-  if (!cache || cache.expires_at <= new Date()) {
-    return null;
-  }
-
-  const ranking = Array.isArray(cache.ranking_json) ? cache.ranking_json : [];
-  return ranking;
-}
-
-
-export async function upsertRecommendationsCache(
-  idUsuario: number,
-  modelVersion: string,
-  contextHash: string,
-  ranking: Prisma.InputJsonValue
-) {
-  const expiresAt = new Date(Date.now() + CACHE_TTL_MINUTES * 60 * 1000);
-
-  await prisma.tb_recomendacao_cache.upsert({
-    where: {
-      id_usuario_model_version_context_hash: {
-        id_usuario: idUsuario,
-        model_version: modelVersion,
-        context_hash: contextHash,
-      },
-    },
-    create: {
-      id_usuario: idUsuario,
-      model_version: modelVersion,
-      context_hash: contextHash,
-      ranking_json: ranking,
-      expires_at: expiresAt,
-    },
-    update: {
-      ranking_json: ranking,
-      expires_at: expiresAt,
-    },
-  });
-}
-
-export function listCandidateEstabelecimentos(query: RecomendacoesQueryDTO, db: Prisma.TransactionClient = prisma) {
-  return db.tb_estabelecimento.findMany({
-    where: {
-      ativo: true,
-      tipo: query.tipo,
-      faixa_preco: query.faixa_preco,
-      ambiente: query.ambiente,
-      cidade: query.cidade,
-      bairro: query.bairro,
-    },
-    select: {
-      id_estabelecimento: true,
-      nome: true,
-      tipo: true,
-      faixa_preco: true,
-      ambiente: true,
-      avaliacao: true,
-      tags: true,
-      cidade: true,
-      bairro: true,
-    },
-    take: 250,
-  });
-}
-
-/** Pontua candidatos usando avaliacao, preferencias salvas, likes e dislikes. */
-export async function rankFallbackForUser(
-  idUsuario: number,
-  candidates: CandidateEstabelecimento[],
-  limit: number,
-  db: Prisma.TransactionClient = prisma,
-) {
-  // As duas consultas sao independentes; Promise.all permite executa-las ao mesmo tempo.
-  const [userInteractions, preferenceSnapshot, classificacoes] = await Promise.all([
-    db.tb_interacao_usuario_estabelecimento.findMany({
-      where: { id_usuario: idUsuario, tipo_evento: { in: ["like", "dislike", "neutral", "rating"] } },
-      orderBy: [{ created_at: "desc" }, { id_interacao: "desc" }],
-      take: 300,
-      include: {
-        estabelecimento: {
-          select: {
-            tipo: true,
-            faixa_preco: true,
-            ambiente: true,
-          },
-        },
-      },
-    }),
-    db.tb_usuario_feature_snapshot.findFirst({
-      where: { id_usuario: idUsuario, model_version: "preferencias-v1" },
-      orderBy: { created_at: "desc" },
-      select: { feature_json: true },
-    }),
-    db.tb_classificacao_estabelecimento.findMany({
-      where: { classificacao: { id_usuario: idUsuario }, nota: { not: null }, id_interacao: null },
-      orderBy: [{ created_at: "desc" }, { id_classificacao: "desc" }], take: 300,
-      include: { estabelecimento: { select: { tipo: true, faixa_preco: true, ambiente: true } } },
-    }),
-  ]);
-
-  // Os mapas acumulam quanto o usuario gosta ou nao de cada caracteristica.
-  const typeWeights = new Map<string, number>();
-  const priceWeights = new Map<string, number>();
-  const environmentWeights = new Map<string, number>();
-
-  const savedPreferences = preferenceSnapshot?.feature_json as Record<string, unknown> | undefined;
-  const savedCategories = categoriasSalvas(savedPreferences?.categoria);
-  const savedPrice = normalizeText(String(savedPreferences?.faixa_preco ?? ""));
-
-  const opinioesConsideradas = new Set<number>();
-  const historico = [
-    ...userInteractions.map(item => ({ ...item, prioridade: 1, id: item.id_interacao })),
-    ...classificacoes.map(item => ({ ...item, tipo_evento: "rating" as const, valor: item.nota, prioridade: 0, id: item.id_classificacao })),
-  ].sort((a, b) => b.created_at.getTime() - a.created_at.getTime() || b.prioridade - a.prioridade || b.id - a.id);
-  for (const interaction of historico) {
-    if (opinioesConsideradas.has(interaction.id_estabelecimento)) continue;
-    opinioesConsideradas.add(interaction.id_estabelecimento);
-    const score = pontuarPreferencia(interaction.tipo_evento, interaction.valor);
-
-    if (score === 0) continue;
-
-    const tipo = normalizeText(interaction.estabelecimento.tipo);
-    const faixaPreco = normalizeText(interaction.estabelecimento.faixa_preco);
-    const ambiente = normalizeText(interaction.estabelecimento.ambiente);
-
-    typeWeights.set(tipo, (typeWeights.get(tipo) ?? 0) + score);
-    priceWeights.set(faixaPreco, (priceWeights.get(faixaPreco) ?? 0) + score);
-    environmentWeights.set(ambiente, (environmentWeights.get(ambiente) ?? 0) + score);
-  }
-
-  const ranked = candidates
-    .map((item) => {
-      const tipo = normalizeText(item.tipo);
-      const faixaPreco = normalizeText(item.faixa_preco);
-      const ambiente = normalizeText(item.ambiente);
-      const avaliacao = Number(item.avaliacao ?? 0);
-
-      let score = Math.max(0, Math.min(avaliacao, 5)) * 0.4;
-      const motivos: string[] = ["avaliacao_publica"];
-
-      if (savedCategories.length && correspondeCategoria(item, savedCategories)) {
-        score += 2;
-        motivos.push("preferencia_informada_por_tipo");
-      }
-      if (savedPrice && (faixaPreco.includes(savedPrice) || savedPrice.includes(faixaPreco))) {
-        score += 1;
-        motivos.push("preferencia_informada_por_preco");
-      }
-
-      const typeScore = typeWeights.get(tipo) ?? 0;
-      if (typeScore > 0) {
-        score += Math.min(typeScore, 10) * 0.35;
-        motivos.push("preferencia_por_tipo");
-      } else if (typeScore < 0) {
-        score += Math.max(typeScore, -10) * 0.35;
-        motivos.push("evita_tipo");
-      }
-
-      const priceScore = priceWeights.get(faixaPreco) ?? 0;
-      if (priceScore > 0) {
-        score += Math.min(priceScore, 10) * 0.25;
-        motivos.push("preferencia_por_faixa_preco");
-      } else if (priceScore < 0) {
-        score += Math.max(priceScore, -10) * 0.25;
-        motivos.push("evita_faixa_preco");
-      }
-
-      const environmentScore = environmentWeights.get(ambiente) ?? 0;
-      if (environmentScore > 0) {
-        score += Math.min(environmentScore, 10) * 0.2;
-        motivos.push("preferencia_por_ambiente");
-      } else if (environmentScore < 0) {
-        score += Math.max(environmentScore, -10) * 0.2;
-        motivos.push("evita_ambiente");
-      }
-
-      return {
-        id_estabelecimento: item.id_estabelecimento,
-        nome: item.nome,
-        tipo: item.tipo,
-        faixa_preco: item.faixa_preco,
-        ambiente: item.ambiente,
-        cidade: item.cidade,
-        bairro: item.bairro,
-        avaliacao: Number(item.avaliacao),
-        score: Number(score.toFixed(4)),
-        motivos,
-      };
-    })
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit);
-
-  return ranked;
-}
-
-
-type SuggestionItem = {
-  id_estabelecimento: number;
-  nome: string;
-  tipo: string;
-  faixa_preco: string;
-  ambiente: string;
-  score: number;
-  baseado_em: string[];
+type ModeloRecomendacao = {
+  questionario: { id: string; pergunta: string; tipo_resposta: string; obrigatoria: boolean; opcoes: { valor: string; rotulo: string }[] }[];
+  faixa_preco_ordem: string[]; pesos: Record<string, number>;
+  qualidade: { beta: Record<string, number> };
+  diversidade: { delta: number };
+  similaridade: { tipo: Record<string, Record<string, number>>; ambiente: Record<string, Record<string, number>> };
+  rotulos_motivos: Record<string, Record<string, string>>;
+  estabelecimentos: ItemModelo[]; algoritmo: { top_k_padrao: number };
 };
+type Respostas = Record<string, string | string[] | undefined>;
+const grupos = ["tipo", "faixa_preco", "ambiente", "publico", "periodo"] as const;
 
-type LikedPlace = {
-  id_estabelecimento: number;
-  nome: string;
-  tipo: string;
-  faixa_preco: string;
-  ambiente: string;
-  created_at: Date;
-};
+function carregarModelo(): ModeloRecomendacao {
+  const candidatos = [resolve(__dirname, "../../modelo_recomendacao.json"), resolve(__dirname, "../../../modelo_recomendacao.json")];
+  const caminho = candidatos.find(existsSync);
+  if (!caminho) throw new Error("Arquivo modelo_recomendacao.json não encontrado.");
+  return JSON.parse(readFileSync(caminho, "utf8")) as ModeloRecomendacao;
+}
+export const modeloRecomendacao = carregarModelo();
+export const obterQuestionarioRecomendacao = () => modeloRecomendacao.questionario;
 
-/** Divide tipos compostos em valores menores e normalizados para comparacao. */
-function splitTipoVariants(tipo: string) {
-  return tipo
-    .split(/[/,]/)
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .map((part) => normalizeText(part));
+function normalizarRespostas(respostas: Respostas) {
+  const normalizadas: Record<string, string[]> = {};
+  for (const grupo of grupos) {
+    const valor = respostas[grupo];
+    const valores = valor == null || valor === "" ? [] : Array.isArray(valor) ? valor : [valor];
+    const unicos = [...new Set(valores)];
+    const opcoes = modeloRecomendacao.questionario.find(q => q.id === grupo)?.opcoes.map(o => o.valor) ?? [];
+    const invalidos = unicos.filter(item => typeof item !== "string" || !opcoes.includes(item));
+    if (invalidos.length) throw new Error(`Valores inválidos para '${grupo}': ${invalidos.join(", ")}.`);
+    if (unicos.length) normalizadas[grupo] = unicos;
+  }
+  const importancia = String(respostas.importancia_nota || "media");
+  if (!(importancia in modeloRecomendacao.qualidade.beta)) throw new Error(`importancia_nota inválida: ${importancia}`);
+  return { respostas: normalizadas, importancia };
 }
 
-/** Mede a coincidencia entre os tipos do candidato e de um local curtido. */
-function tipoOverlapScore(candidateTipo: string, likedTipo: string) {
-  const cParts = splitTipoVariants(candidateTipo);
-  const lParts = splitTipoVariants(likedTipo);
-  if (cParts.length === 0 || lParts.length === 0) return 0;
+function similaridade(grupo: string, selecao: string[], item: ItemModelo): number {
+  if (grupo === "tipo") return Math.max(...selecao.flatMap(u => item.tipos.map(t => modeloRecomendacao.similaridade.tipo[u][t])));
+  if (grupo === "faixa_preco") {
+    const ordem = modeloRecomendacao.faixa_preco_ordem, n = ordem.length - 1, p = ordem.indexOf(item.faixa_preco);
+    return Math.max(...selecao.map(u => 1 - Math.abs(ordem.indexOf(u) - p) / n));
+  }
+  if (grupo === "ambiente") return Math.max(...selecao.map(u => modeloRecomendacao.similaridade.ambiente[u][item.ambiente]));
+  if (grupo === "publico") return item.publico.filter(p => selecao.includes(p)).length / selecao.length;
+  if (grupo === "periodo") return selecao.filter(p => item.periodos[p]).length / selecao.length;
+  throw new Error(`Grupo inválido: ${grupo}`);
+}
+function somaSequencial(valores: number[]) { let total = 0; for (const valor of valores) total += valor; return total; }
+function abertoAgora(item: ItemModelo, minuto: number) {
+  return (item.abre_min <= minuto && minuto < item.fecha_min) || (item.fecha_min > 1440 && item.abre_min <= minuto + 1440 && minuto + 1440 < item.fecha_min);
+}
+function arredondarPython(valor: number, casas: number) {
+  const fator = 10 ** casas, escalado = valor * fator, base = Math.floor(escalado), fracao = escalado - base;
+  if (fracao === 0.5) return (base % 2 === 0 ? base : base + 1) / fator;
+  return Math.round(escalado) / fator;
+}
+type Candidato = { id: number; item: ItemModelo; score: number; qualidade: number; ajuste: number | null; componentes: Record<string, number>; cluster: number | string | null | undefined; periodo_ok: boolean; aberto: boolean | null };
 
-  let best = 0;
-  for (const c of cParts) {
-    for (const l of lParts) {
-      if (c === l) best = Math.max(best, 1);
-      else if (c.includes(l) || l.includes(c)) best = Math.max(best, 0.75);
+export function recomendar(respostasUsuario: Respostas, k?: number, agoraMin: number | null = null, diversificar = true) {
+  const { respostas, importancia } = normalizarRespostas(respostasUsuario);
+  if (agoraMin !== null && (!Number.isInteger(agoraMin) || agoraMin < 0 || agoraMin > 1439)) throw new Error("agora_min deve estar entre 0 e 1439 ou ser null.");
+  const quantidade = k || modeloRecomendacao.algoritmo.top_k_padrao;
+  if (!Number.isInteger(quantidade) || quantidade < 1 || quantidade > modeloRecomendacao.estabelecimentos.length) throw new Error("k inválido.");
+  const respondidos = grupos.filter(g => respostas[g]);
+  const totalPesos = somaSequencial(respondidos.map(g => modeloRecomendacao.pesos[g]));
+  const beta = modeloRecomendacao.qualidade.beta[importancia];
+  const ranking: Candidato[] = modeloRecomendacao.estabelecimentos.map(item => {
+    const componentes = Object.fromEntries(respondidos.map(g => [g, similaridade(g, respostas[g], item)]));
+    const ajuste = totalPesos > 0 ? somaSequencial(respondidos.map(g => modeloRecomendacao.pesos[g] * componentes[g])) / totalPesos : null;
+    const score = ajuste === null ? item.qualidade : (1 - beta) * ajuste + beta * item.qualidade;
+    return { id: item.id, item, score, qualidade: item.qualidade, ajuste, componentes,
+      cluster: item.cluster, periodo_ok: !componentes.periodo || componentes.periodo > 0,
+      aberto: agoraMin === null ? null : abertoAgora(item, agoraMin) };
+  }).sort((a, b) => b.score - a.score || b.qualidade - a.qualidade || a.id - b.id);
+  const elegiveis = ranking.filter(c => c.periodo_ok && c.aberto !== false);
+  const selecionados: Candidato[] = [];
+  const restantes = [...elegiveis], contagem = new Map<Candidato["cluster"], number>();
+  const delta = diversificar ? modeloRecomendacao.diversidade.delta : 0;
+  while (restantes.length && selecionados.length < quantidade) {
+    let melhorIndice = 0;
+    for (let i = 1; i < restantes.length; i++) {
+      const a = restantes[i], b = restantes[melhorIndice];
+      const as = a.score - delta * (contagem.get(a.cluster) ?? 0), bs = b.score - delta * (contagem.get(b.cluster) ?? 0);
+      if (as > bs || (as === bs && (a.qualidade > b.qualidade || (a.qualidade === b.qualidade && a.id < b.id)))) melhorIndice = i;
     }
+    const [item] = restantes.splice(melhorIndice, 1); selecionados.push(item);
+    contagem.set(item.cluster, (contagem.get(item.cluster) ?? 0) + 1);
   }
-
-  const setL = new Set(lParts);
-  for (const c of cParts) {
-    if (setL.has(c)) best = Math.max(best, 1);
+  const elegiveisIds = new Set(elegiveis.map(c => c.id));
+  const fora = new Set<number>();
+  if (selecionados.length < quantidade) for (const item of ranking) {
+    if (elegiveisIds.has(item.id) || selecionados.length >= quantidade) continue;
+    selecionados.push(item); fora.add(item.id);
   }
-  return best;
-}
-
-/** Semelhança 0–1 entre um candidato e um estabelecimento que o usuário curtiu. */
-/** Soma semelhancas de tipo, faixa de preco e ambiente entre dois locais. */
-function similarityToLiked(candidate: { tipo: string; faixa_preco: string; ambiente: string }, liked: LikedPlace) {
-  const faixaC = normalizeText(candidate.faixa_preco);
-  const ambienteC = normalizeText(candidate.ambiente);
-
-  const faixaL = normalizeText(liked.faixa_preco);
-  const ambienteL = normalizeText(liked.ambiente);
-
-  const tipoS = tipoOverlapScore(candidate.tipo, liked.tipo);
-  const faixaS = faixaC === faixaL ? 1 : 0;
-  const ambienteS = ambienteC === ambienteL ? 1 : 0;
-
-  return 0.45 * tipoS + 0.3 * faixaS + 0.25 * ambienteS;
-}
-
-type ScoredSuggestion = SuggestionItem & {
-  primary_like_id: number;
-};
-
-/** Intercala sugestoes ligadas a likes diferentes para refletir gosto variado. */
-/** Alterna grupos de gosto para produzir resultados variados, sem duplicatas. */
-function diversifyByTasteRoundRobin(
-  limit: number,
-  likedOrderIds: number[],
-  allScored: ScoredSuggestion[],
-): Omit<ScoredSuggestion, "primary_like_id">[] {
-  const byPrimary = new Map<number, ScoredSuggestion[]>();
-  for (const item of allScored) {
-    const bucket = byPrimary.get(item.primary_like_id) ?? [];
-    bucket.push(item);
-    byPrimary.set(item.primary_like_id, bucket);
-  }
-
-  for (const arr of byPrimary.values()) arr.sort((a, b) => b.score - a.score);
-
-  const preferenceOrder =
-    likedOrderIds.length > 0
-      ? likedOrderIds.filter((id) => byPrimary.has(id))
-      : [...byPrimary.keys()];
-
-  const picked: ScoredSuggestion[] = [];
-  const usedCandidateIds = new Set<number>();
-  const nextIndexByLike = new Map<number, number>();
-
-  let rounds = 0;
-  while (picked.length < limit && rounds < 2000) {
-    rounds += 1;
-    let addedThisRound = false;
-
-    for (const likeId of preferenceOrder) {
-      if (picked.length >= limit) break;
-      const queue = byPrimary.get(likeId) ?? [];
-      let index = nextIndexByLike.get(likeId) ?? 0;
-
-      while (index < queue.length) {
-        const candidate = queue[index];
-        index += 1;
-        nextIndexByLike.set(likeId, index);
-
-        if (usedCandidateIds.has(candidate.id_estabelecimento)) continue;
-
-        usedCandidateIds.add(candidate.id_estabelecimento);
-        picked.push(candidate);
-        addedThisRound = true;
-        break;
-      }
+  return selecionados.map((c, indice) => {
+    const motivos: string[] = [];
+    for (const [grupo, valor] of Object.entries(c.componentes)) {
+      if (valor >= 0.999) motivos.push(modeloRecomendacao.rotulos_motivos[grupo].exato);
+      else if (grupo === "tipo" && valor >= 0.3) motivos.push(modeloRecomendacao.rotulos_motivos[grupo].parcial);
     }
-
-    if (!addedThisRound) break;
-  }
-
-  if (picked.length < limit) {
-    for (const item of allScored) {
-      if (picked.length >= limit) break;
-      if (usedCandidateIds.has(item.id_estabelecimento)) continue;
-      usedCandidateIds.add(item.id_estabelecimento);
-      picked.push(item);
-    }
-  }
-
-  return picked.map(({ primary_like_id: _omit, ...rest }) => rest);
-}
-
-/** Usa os likes como referencia para encontrar, pontuar e diversificar locais parecidos. */
-export async function listAiSuggestionsFromLikes(idUsuario: number, limit: number) {
-  const interactions = await prisma.tb_interacao_usuario_estabelecimento.findMany({
-    where: { id_usuario: idUsuario, tipo_evento: { in: ["like", "dislike", "neutral"] } },
-    orderBy: [{ created_at: "desc" }, { id_interacao: "desc" }],
-    take: 500,
-    include: {
-      estabelecimento: {
-        select: {
-          id_estabelecimento: true,
-          nome: true,
-          tipo: true,
-          faixa_preco: true,
-          ambiente: true,
-        },
-      },
-    },
+    if (c.qualidade >= 0.8) motivos.push(modeloRecomendacao.rotulos_motivos.qualidade.exato);
+    return { posicao: indice + 1, id: c.item.id, nome: c.item.nome, tipo: c.item.tipo,
+      faixa_preco: c.item.faixa_preco, ambiente: c.item.ambiente, publico: c.item.publico,
+      nota: c.item.nota, abre: c.item.abre, fecha: c.item.fecha,
+      score: arredondarPython(c.score * 100, 1), compatibilidade: c.ajuste === null ? null : arredondarPython(c.ajuste * 100, 1),
+      cluster: c.cluster, motivos, aberto_agora: c.aberto, fora_do_filtro: fora.has(c.id) };
   });
+}
 
-  const latestByPlace = new Map<number, (typeof interactions)[number]>();
-  for (const interaction of interactions) {
-    if (!latestByPlace.has(interaction.id_estabelecimento)) {
-      latestByPlace.set(interaction.id_estabelecimento, interaction);
-    }
-  }
-
-  const likedInteractions = [...latestByPlace.values()].filter((item) => item.tipo_evento === "like");
-  if (likedInteractions.length === 0) return [];
-
-  const likedSortedDesc = [...likedInteractions].sort(
-    (a, b) => b.created_at.getTime() - a.created_at.getTime(),
-  );
-
-  const likedPlaces: LikedPlace[] = likedSortedDesc.map((row) => ({
-    id_estabelecimento: row.estabelecimento.id_estabelecimento,
-    nome: row.estabelecimento.nome,
-    tipo: row.estabelecimento.tipo,
-    faixa_preco: row.estabelecimento.faixa_preco,
-    ambiente: row.estabelecimento.ambiente,
-    created_at: row.created_at,
-  }));
-
-  const likedIdsOrder = likedPlaces.map((l) => l.id_estabelecimento);
-
-  const excludedIds = new Set<number>([...latestByPlace.keys()]);
-
-  const candidates = await prisma.tb_estabelecimento.findMany({
-    where: { ativo: true },
-    select: {
-      id_estabelecimento: true,
-      nome: true,
-      tipo: true,
-      faixa_preco: true,
-      ambiente: true,
-      avaliacao: true,
-    },
-    take: 500,
+function normalizarNome(nome: string) { return nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLocaleLowerCase("pt-BR"); }
+/** Associa itens do artefato minerado aos estabelecimentos cadastrados sem duplicar seus dados. */
+export async function recomendarEstabelecimentos(respostas: Respostas, k?: number, agoraMin: number | null = null) {
+  const ranking = recomendar(respostas, k, agoraMin);
+  const nomes = new Set(ranking.map(item => normalizarNome(item.nome)));
+  const registros = await prisma.tb_estabelecimento.findMany({ where: { ativo: true }, select: { id_estabelecimento: true, nome: true, avaliacao: true, cidade: true, bairro: true } });
+  const registroPorNome = new Map(registros.filter(item => nomes.has(normalizarNome(item.nome))).map(item => [normalizarNome(item.nome), item]));
+  return ranking.flatMap(item => {
+    const registro = registroPorNome.get(normalizarNome(item.nome));
+    return registro === undefined ? [] : [{ ...item, id_estabelecimento: registro.id_estabelecimento,
+      avaliacao: Number(registro.avaliacao), cidade: registro.cidade, bairro: registro.bairro }];
   });
-
-  const epsilon = 0.02;
-  const allScored: ScoredSuggestion[] = [];
-
-  for (const item of candidates) {
-    if (excludedIds.has(item.id_estabelecimento)) continue;
-
-    const avaliacao = Number(item.avaliacao ?? 0);
-    const avaliacaoPart = Math.max(0, Math.min(avaliacao, 5)) * 0.15;
-
-    const sims = likedPlaces.map((L) => ({ L, sim: similarityToLiked(item, L) }));
-    const maxSimValue = sims.reduce((best, candidate) => Math.max(best, candidate.sim), 0);
-
-    let primaryLikeId = likedIdsOrder[0];
-    for (const id of likedIdsOrder) {
-      const hit = sims.find((s) => s.L.id_estabelecimento === id && s.sim >= maxSimValue - epsilon);
-      if (hit) {
-        primaryLikeId = id;
-        break;
-      }
-    }
-
-    const baseadoEm = sims
-      .filter(({ sim }) => sim >= maxSimValue - epsilon && sim >= 0.3)
-      .sort((a, b) => b.sim - a.sim)
-      .slice(0, 3)
-      .map(({ L }) => L.nome);
-
-    const scoreFinal = Number((maxSimValue * 4 + avaliacaoPart).toFixed(4));
-
-    allScored.push({
-      id_estabelecimento: item.id_estabelecimento,
-      nome: item.nome,
-      tipo: item.tipo,
-      faixa_preco: item.faixa_preco,
-      ambiente: item.ambiente,
-      score: scoreFinal,
-      baseado_em: baseadoEm.length > 0 ? baseadoEm : [likedPlaces[0].nome],
-      primary_like_id: primaryLikeId,
-    });
-  }
-
-  allScored.sort((a, b) => b.score - a.score);
-
-  return diversifyByTasteRoundRobin(limit, likedIdsOrder, allScored);
 }

@@ -49,9 +49,9 @@ nova avaliação ou opinião da pessoa dispara o processamento.
 
 ## Executar e verificar
 
-Reinicie API e worker após atualizar o código. O worker é iniciado com
-`npm run worker:dev`, usando a configuração Pub/Sub existente (`PUBSUB_ATIVO=true`
-e credenciais ADC). Assinaturas com filtros devem aceitar `interacao.registrada`,
+Reinicie a API após atualizar o código. Com a configuração Pub/Sub existente
+(`PUBSUB_ATIVO=true` e credenciais ADC), o worker inicia automaticamente junto
+com a API. Assinaturas com filtros devem aceitar `interacao.registrada`,
 `estabelecimento.atualizado` e `preferencias.atualizadas`.
 Não é necessária nova migration para este recurso.
 

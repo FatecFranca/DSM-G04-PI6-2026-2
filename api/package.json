@@ -8,11 +8,10 @@
     "dev": "ts-node-dev --respawn --transpile-only app.ts",
     "build": "tsc",
     "start": "node dist/app.js",
+    "seed": "prisma db seed",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
-    "worker:dev": "ts-node-dev --respawn --transpile-only src/workers/mensageria.ts",
-    "worker:start": "node dist/src/workers/mensageria.js",
-    "test": "npm run build && node --test dist/src/mensageria/mensageria.test.js dist/src/models/avaliacoes.integration.test.js dist/src/models/curtidasComentarios.integration.test.js dist/src/models/categoriasComida.test.js",
+    "test": "npm run build && node --test dist/src/mensageria/mensageria.test.js dist/src/models/avaliacoes.integration.test.js dist/src/models/curtidasComentarios.integration.test.js dist/src/models/categoriasComida.test.js dist/src/models/recomendacoes.test.js",
     "test:integration": "npm run build && node --test --test-concurrency=1 dist/src/mensageria/persistencia.integration.test.js dist/src/mensageria/notificacoes.integration.test.js dist/src/models/avaliacoes.integration.test.js dist/src/mensageria/sugestoes.integration.test.js dist/src/models/curtidasComentarios.integration.test.js"
   },
   "dependencies": {

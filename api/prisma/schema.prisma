@@ -94,6 +94,23 @@ model tb_estabelecimento {
   total_avaliacoes    Int                              @default(0)
   abre                String
   fecha               String
+
+  // Horários em formato numérico (minutos desde 00:00) e duração em horas.
+  // Opcionais para não quebrar registros já existentes.
+  abre_min            Int?
+  fecha_min           Int?
+  duracao_h           Float?
+
+  // Indica se o estabelecimento fecha depois da meia-noite.
+  fecha_apos_meia_noite Boolean                        @default(false)
+
+  // Períodos do dia em que o estabelecimento está aberto.
+  aberto_manha        Boolean                          @default(false)
+  aberto_almoco       Boolean                          @default(false)
+  aberto_tarde        Boolean                          @default(false)
+  aberto_noite        Boolean                          @default(false)
+  aberto_madrugada    Boolean                          @default(false)
+
   latitude            Decimal?
   longitude           Decimal?
   cidade              String?

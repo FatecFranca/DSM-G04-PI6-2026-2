@@ -1,0 +1,278 @@
+nome,tipo,faixa_preco,ambiente,publico,nota,abre,fecha,abre_min,fecha_min,duracao_h,fecha_apos_meia_noite,aberto_manha,aberto_almoco,aberto_tarde,aberto_noite,aberto_madrugada
+Barracao Skate Club,bar,medio,informal,jovem,4.8,22:00,03:00,1320,1620,5.0,1,0,0,0,0,1
+Matheus & Rosaria Bar,bar,medio,formal,jovem,4.6,11:00,00:00,660,1440,13.0,1,0,1,1,1,0
+Bar da Careta,bar,medio,formal,jovem,4.4,16:00,01:00,960,1500,9.0,1,0,0,1,1,1
+Villa Madalena Soul Bar,bar,caro,formal,adulto,4.6,11:00,00:00,660,1440,13.0,1,0,1,1,1,0
+Espina Espetos,bar,barato,informal,jovem,4.4,10:30,23:00,630,1380,12.5,0,0,1,1,1,0
+Jacare,bar,medio,informal,jovem,4.7,11:00,14:30,660,870,3.5,0,0,1,0,0,0
+The roots,bar,medio,informal,jovem,4.6,20:00,02:00,1200,1560,6.0,1,0,0,0,1,1
+Bitelo,hamburgueria,medio,informal,jovem,4.5,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Chic10,lanchonete,barato,formal,jovem/adulto,4.5,10:00,03:00,600,1620,17.0,1,0,1,1,1,1
+Brutu's Lanches,lanchonete,barato,formal,jovem/adulto,4.4,10:00,03:00,600,1620,17.0,1,0,1,1,1,1
+Bonitos,lanchonete,barato,informal,jovem/adulto,4.5,16:30,01:00,990,1500,8.5,1,0,0,0,1,1
+Capitao Prime,hamburgueria,barato,formal,jovem/adulto,4.8,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Senhor Burguer,hamburgueria,barato,formal,jovem/adulto,4.5,19:00,23:30,1140,1410,4.5,0,0,0,0,1,0
+Games Burguer,restaurante,medio,informal,jovem/adulto,4.8,16:00,02:00,960,1560,10.0,1,0,0,1,1,1
+Peks,restaurante,barato,informal,jovem,4.9,19:00,23:00,1140,1380,4.0,0,0,0,0,1,0
+Miguelzinho Snooker Bar,bar,barato,informal,jovem,4.3,16:00,03:00,960,1620,11.0,1,0,0,1,1,1
+Bistro,restaurante,medio,formal,adulto,4.7,11:00,14:00,660,840,3.0,0,0,1,0,0,0
+Cafeteria Affamato,cafeteria,caro,formal,adulto,5.0,09:00,17:30,540,1050,8.5,0,1,1,1,0,0
+Rancho Picanha na Tabua,restaurante,medio,formal,adulto,4.5,18:00,22:30,1080,1350,4.5,0,0,0,0,1,0
+Choperia n1,bar,medio,informal,jovem,4.8,11:00,23:00,660,1380,12.0,0,0,1,1,1,0
+Bar Do Gerente,bar,medio,informal,jovem,4.6,17:00,01:00,1020,1500,8.0,1,0,0,0,1,1
+Maria E Jose Parrilha,restaurante,caro,formal,jovem/adulto,4.4,11:00,23:00,660,1380,12.0,0,0,1,1,1,0
+The Spot,restaurante,barato,informal,jovem,4.6,08:00,00:00,480,1440,16.0,1,1,1,1,1,0
+Pesque & Pague Santa Clara,restaurante,medio,formal,adulto,4.4,10:00,18:00,600,1080,8.0,0,0,1,1,0,0
+Tabua Mista,restaurante,barato,formal,adulto,4.1,11:00,00:00,660,1440,13.0,1,0,1,1,1,0
+Taberna,bar,caro,formal,jovem,4.5,17:00,23:00,1020,1380,6.0,0,0,0,0,1,0
+Gran Rock,bar,caro,informal,jovem,4.9,18:30,00:00,1110,1440,5.5,1,0,0,0,1,0
+Brooks Hamburgueria,hamburgueria,medio,formal,jovem/adulto,4.6,18:00,00:00,1080,1440,6.0,1,0,0,0,1,0
+Burguer House,hamburgueria,barato,formal,adulto,4.6,18:30,23:30,1110,1410,5.0,0,0,0,0,1,0
+Boteco do Joca,bar,barato,formal,jovem/adulto,4.4,11:00,23:00,660,1380,12.0,0,0,1,1,1,0
+Agro Bar,bar,medio,formal,jovem,3.7,17:00,20:00,1020,1200,3.0,0,0,0,0,0,0
+O Boteco do Pátio,bar,barato,formal,jovem,4.8,17:00,23:00,1020,1380,6.0,0,0,0,0,1,0
+TutiYa Sushi Bar - Comida Japonesa,restaurante,caro,formal,adulto,4.7,11:00,23:00,660,1380,12.0,0,0,1,1,1,0
+Daniel San,restaurante,caro,formal,adulto,4.4,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Atlântico Gastrobar,bar,caro,formal,adulto,4.4,11:30,00:00,690,1440,12.5,1,0,1,1,1,0
+São Bernardo Bar e Cervejaria,bar,medio,formal,jovem,4.8,18:00,00:00,1080,1440,6.0,1,0,0,0,1,0
+Planeta Malte Bar,bar,medio,formal,adulto,4.8,17:00,00:00,1020,1440,7.0,1,0,0,0,1,0
+Feitoria Da Cerveja,bar,medio,formal,adulto,4.8,16:00,23:00,960,1380,7.0,0,0,0,1,1,0
+Confraria,bar/hamburgueria,barato,formal,jovem/adulto,4.0,16:00,23:30,960,1410,7.5,0,0,0,1,1,0
+Duze,hamburgueria,barato,formal,adulto,4.6,17:00,00:00,1020,1440,7.0,1,0,0,0,1,0
+Cascata Pizzas Rodízio,pizzaria,barato,formal,adulto,4.1,19:00,23:30,1140,1410,4.5,0,0,0,0,1,0
+Pizza Bar,pizzaria,medio,formal,adulto,4.5,18:15,23:30,1095,1410,5.25,0,0,0,0,1,0
+Parmegiana Pizzas,pizzaria,medio,formal,adulto,4.3,10:00,23:30,600,1410,13.5,0,0,1,1,1,0
+Mousse Cake Franca - Café e Restaurante,restaurante,caro,formal,adulto,4.3,09:00,22:40,540,1360,13.666.666.666.666.600,0,1,1,1,1,0
+Pizzaria Castelo Franca,pizzaria,barato,formal,adulto,4.6,18:00,00:00,1080,1440,6.0,1,0,0,0,1,0
+Costelao De Ouro,restaurante,caro,informal,jovem/adulto,4.5,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Scamboo Petiscaria,lanchonete,caro,formal,jovem/adulto,4.4,17:00,01:30,1020,1530,8.5,1,0,0,0,1,1
+Konomi,restaurante,caro,formal,adulto,4.7,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Box Beef,restaurante,medio,informal,jovem,4.4,10:00,23:00,600,1380,13.0,0,0,1,1,1,0
+Pereira,bar,barato,informal,jovem,4.7,17:00,23:00,1020,1380,6.0,0,0,0,0,1,0
+Morada du Capiau,bar,caro,formal,adulto,4.7,19:00,02:00,1140,1560,7.0,1,0,0,0,1,1
+Laber Jake,restaurante,barato,formal,jovem/adulto,4.6,20:00,23:00,1200,1380,3.0,0,0,0,0,1,0
+Culinária tex-mex,restaurante,caro,formal,jovem/adulto,4.8,19:00,00:00,1140,1440,5.0,1,0,0,0,1,0
+Lambari,lanchonete,caro,formal,adulto,4.7,18:30,23:30,1110,1410,5.0,0,0,0,0,1,0
+Traíra Resto - Bar E Choperia,bar,barato,formal,jovem,2.5,19:00,00:00,1140,1440,5.0,1,0,0,0,1,0
+Madero & Jeronimo Burger Franca,hamburgueria,caro,formal,adulto,4.6,11:30,23:00,690,1380,11.5,0,0,1,1,1,0
+Barbarus Burger - Hamburgueria Medieval,hamburgueria,medio,formal,jovem/adulto,4.7,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Hamburgueria Alameda,hamburgueria,caro,formal,jovem/adulto,4.7,19:00,23:00,1140,1380,4.0,0,0,0,0,1,0
+Trapstar Burguer,hamburgueria,caro,formal,jovem/adulto,4.9,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Bahia Lanches,lanchonete,barato,informal,jovem/adulto,4.5,17:00,01:00,1020,1500,8.0,1,0,0,0,1,1
+Nostravamus o bar,bar,barato,informal,jovem,4.6,16:00,00:00,960,1440,8.0,1,0,0,1,1,0
+Noite Nossa Bar,bar,medio,informal,jovem,4.6,17:30,01:00,1050,1500,7.5,1,0,0,0,1,1
+Quintal Bar do Burrinho,bar,medio,informal,jovem,4.6,17:30,01:30,1050,1530,8.0,1,0,0,0,1,1
+Villa Franca Bar,bar,caro,informal,jovem,4.7,16:00,00:00,960,1440,8.0,1,0,0,1,1,0
+Shadow Wolf - Beer Spot,bar,caro,formal,jovem,4.9,10:00,23:00,600,1380,13.0,0,0,1,1,1,0
+Armazém 43,bar,barato,informal,jovem,4.5,17:00,01:00,1020,1500,8.0,1,0,0,0,1,1
+Brothers Bar e Petiscaria,bar,caro,informal,jovem/adulto,4.6,17:00,00:00,1020,1440,7.0,1,0,0,0,1,0
+Chopperia Raposa do Ártico,bar,caro,informal,adulto,4.4,11:00,00:00,660,1440,13.0,1,0,1,1,1,0
+Bar'Budus Beer e Chopp,bar,medio,informal,jovem,4.7,17:00,00:00,1020,1440,7.0,1,0,0,0,1,0
+BarUke beer,bar,medio,informal,jovem,4.8,17:00,00:00,1020,1440,7.0,1,0,0,0,1,0
+Butecando Franca Espeto Bar,bar,barato,informal,jovem,4.8,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Barucksbar,bar,medio,informal,jovem,4.7,15:00,23:00,900,1380,8.0,0,0,0,1,1,0
+Butiquim do Sabiá,bar,barato,informal,jovem,4.4,17:00,00:00,1020,1440,7.0,1,0,0,0,1,0
+Petiscaria Mineira/Bar do twonay,bar,medio,informal,adulto,4.4,16:45,01:00,1005,1500,8.25,1,0,0,0,1,1
+Garrafada Coquetéis | Bar em Franca,bar,medio,informal,jovem,5.0,17:30,01:00,1050,1500,7.5,1,0,0,0,1,1
+Embrazza - Espeto Bar,bar,medio,informal,jovem/adulto,5.0,17:00,01:00,1020,1500,8.0,1,0,0,0,1,1
+Espetisko's Bar,bar,barato,informal,jovem/adulto,4.7,18:00,00:00,1080,1440,6.0,1,0,0,0,1,0
+Padrão 12 Bar,bar,medio,informal,jovem,4.3,16:30,02:00,990,1560,9.5,1,0,0,0,1,1
+After Burguer - Hamburgueria,hamburgueria,caro,informal,jovem/adulto,4.6,18:00,04:30,1080,1710,10.5,1,0,0,0,1,1
+Escritório Bar,bar,barato,informal,jovem,4.7,15:30,00:00,930,1440,8.5,1,0,0,1,1,0
+Biroska do Piri,bar,medio,informal,jovem/adulto,4.9,16:00,00:00,960,1440,8.0,1,0,0,1,1,0
+Bar do Zam,bar,barato,informal,jovem,4.7,15:30,23:30,930,1410,8.0,0,0,0,1,1,0
+Capetaria Tony,bar,medio,informal,jovem,4.7,18:00,03:00,1080,1620,9.0,1,0,0,0,1,1
+Frio Da Madrugada,bar,caro,formal,jovem/adulto,4.2,10:30,00:00,630,1440,13.5,1,0,1,1,1,0
+OquiOsque Pastelburger,hamburgueria,caro,formal,jovem/adulto,5.0,10:00,23:00,600,1380,13.0,0,0,1,1,1,0
+Fratelli Burguer,hamburgueria,medio,formal,jovem/adulto,4.3,18:30,23:00,1110,1380,4.5,0,0,0,0,1,0
+Darini's Burguer,hamburgueria,medio,formal,jovem/adulto,4.8,18:30,00:00,1110,1440,5.5,1,0,0,0,1,0
+Barba,restaurante,medio,formal,jovem,4.5,19:00,02:00,1140,1560,7.0,1,0,0,0,1,1
+Larica na Brasa,hamburgueria,medio,formal,jovem/adulto,4.2,18:00,00:00,1080,1440,6.0,1,0,0,0,1,0
+Muvuca Lanches e Hot Dogs,lanchonete,barato,informal,jovem/adulto,4.5,11:00,05:00,660,1740,18.0,1,0,1,1,1,1
+Altas Horas Lanches,restaurante,barato,informal,jovem/adulto,4.6,19:00,03:00,1140,1620,8.0,1,0,0,0,1,1
+Cia Japa Franca,restaurante,caro,formal,adulto,4.6,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Saiko Nani,restaurante,caro,informal,adulto,4.8,12:00,00:00,720,1440,12.0,1,0,1,1,1,0
+Hammay Sushi,restaurante,caro,formal,adulto,5.0,11:00,22:30,660,1350,11.5,0,0,1,1,1,0
+Lu Wasabi,restaurante,medio,informal,adulto,4.6,18:30,00:00,1110,1440,5.5,1,0,0,0,1,0
+Yuyake Sushi,restaurante,medio,formal,adulto,4.6,19:00,23:00,1140,1380,4.0,0,0,0,0,1,0
+Cobra Kai,restaurante,caro,formal,adulto,4.3,11:00,00:00,660,1440,13.0,1,0,1,1,1,0
+Sumo Day,restaurante,caro,formal,adulto,4.5,11:30,23:30,690,1410,12.0,0,0,1,1,1,0
+Keyko Sushi Bar,bar,caro,formal,jovem/adulto,4.5,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Jin Jin wok,restaurante,medio,formal,adulto,4.2,10:00,21:30,600,1290,11.5,0,0,1,1,1,0
+Pizzaria Tarantella Franca - Pizzas Artesanais,pizzaria,medio,formal,adulto,4.6,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Pizzaria Boa Massa,pizzaria,medio,formal,adulto,4.7,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Pizzaria D'Napole,pizzaria,medio,formal,adulto,4.5,18:00,00:00,1080,1440,6.0,1,0,0,0,1,0
+Two Brother's Pizzaria,pizzaria,caro,formal,adulto,4.9,19:00,23:30,1140,1410,4.5,0,0,0,0,1,0
+Baú da Pizza,pizzaria,medio,formal,adulto,4.1,18:00,00:00,1080,1440,6.0,1,0,0,0,1,0
+Bella Capri Pizzaria - Franca,pizzaria,barato,formal,adulto,4.6,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Pizzaria Vitória Franca,pizzaria,barato,formal,adulto,4.7,16:00,23:00,960,1380,7.0,0,0,0,1,1,0
+Mozzarella Pizzaria,pizzaria,barato,formal,adulto,4.4,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+City Lanches,pizzaria,barato,formal,jovem/adulto,4.2,18:00,02:00,1080,1560,8.0,1,0,0,0,1,1
+Sapataria da Pizza,pizzaria,caro,formal,adulto,4.7,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Pizzaria Aquarius,pizzaria,medio,formal,adulto,4.7,18:30,23:00,1110,1380,4.5,0,0,0,0,1,0
+Bella Gula Pizzaria,pizzaria,medio,formal,adulto,4.9,18:30,23:00,1110,1380,4.5,0,0,0,0,1,0
+Pizzaria do Gaúcho,pizzaria,medio,formal,adulto,4.5,17:00,23:30,1020,1410,6.5,0,0,0,0,1,0
+Bar do Alemão,bar,medio,informal,adulto,4.4,17:00,00:00,1020,1440,7.0,1,0,0,0,1,0
+Picanha do Zé,churrascaria,medio,familiar,adulto,4.6,11:00,15:00,660,900,4.0,0,0,1,0,0,0
+Santa Pizza,pizzaria,medio,familiar,adulto,4.5,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Beco Burguer,hamburgueria,medio,informal,jovem/adulto,4.7,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Bar do Paulista,bar,barato,informal,adulto,4.3,16:00,23:00,960,1380,7.0,0,0,0,1,1,0
+Cantina da Nonna,restaurante,medio,familiar,adulto,4.6,11:30,14:30,690,870,3.0,0,0,1,0,0,0
+Tokyo Sushi Franca,sushi bar,caro,formal,adulto,4.5,18:30,23:30,1110,1410,5.0,0,0,0,0,1,0
+Chopp Time Franca,choperia,medio,informal,adulto,4.4,17:00,00:00,1020,1440,7.0,1,0,0,0,1,0
+Espeto do Chef,espetaria,barato,informal,adulto,4.2,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Pizzaria La Casa,pizzaria,medio,familiar,familiar,4.6,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Garage Beer,bar,medio,informal,adulto,4.7,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Pastelaria Central,lanchonete,barato,familiar,todos,4.4,09:00,20:00,540,1200,11.0,0,1,1,1,0,0
+Villa Grill,restaurante,medio,familiar,adulto,4.5,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Burger 360,hamburgueria,medio,informal,jovem,4.6,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Café do Centro,cafeteria,barato,formal,adulto,4.5,08:00,18:00,480,1080,10.0,0,1,1,1,0,0
+Bar do Chicão,bar,barato,informal,adulto,4.3,16:00,22:00,960,1320,6.0,0,0,0,1,1,0
+Espaço Prime Franca,restaurante,caro,formal,adulto,4.7,19:00,23:00,1140,1380,4.0,0,0,0,0,1,0
+Ponto do Hot Dog,lanchonete,barato,informal,jovem,4.4,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Bar e Petiscaria São Jorge,bar,medio,informal,adulto,4.5,17:00,00:00,1020,1440,7.0,1,0,0,0,1,0
+Sabor Mineiro Franca,restaurante,medio,familiar,adulto,4.6,11:00,15:00,660,900,4.0,0,0,1,0,0,0
+Nonno Grill,churrascaria,medio,formal,adulto,4.7,11:00,15:30,660,930,4.5,0,0,1,0,0,0
+Azul Culinaria Brasileira,restaurante,caro,formal,adulto,4.6,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Restaurante Barao,restaurante,medio,formal,adulto,4.4,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Arroz Com Feijao,restaurante,medio,formal,adulto,4.6,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+La Borgata Espaco E Restaurante,restaurante,medio,formal,adulto,4.7,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Restaurante Bistro Retro,bar,medio,informal,jovem,4.3,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+La Finestra Restaurante,churrascaria,medio,formal,adulto,4.4,11:00,15:30,660,930,4.5,0,0,1,0,0,0
+Masano Trattoria,restaurante,medio,formal,adulto,4.4,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Top Grill Churrascaria,churrascaria,medio,formal,adulto,3.8,11:00,15:30,660,930,4.5,0,0,1,0,0,0
+Sumo Sushi Bar,sushi bar,medio,formal,adulto,4.0,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Famiglia Petri Ristorante,restaurante,medio,formal,adulto,4.1,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Restaurante Gasparini,restaurante,medio,formal,adulto,4.2,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Mansuetto Ristorante,restaurante,medio,formal,adulto,4.2,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Minuano 3,churrascaria,medio,formal,adulto,4.1,11:00,15:30,660,930,4.5,0,0,1,0,0,0
+Bangalo Batataria,restaurante,medio,formal,adulto,4.3,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Aquarela Pizzaria Franca,pizzaria,medio,informal,jovem,5.0,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Pizzaria Pauliceia,pizzaria,medio,informal,jovem,4.4,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Feng,sushi bar,medio,formal,adulto,4.3,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Latteria Di Ophelia,cafeteria,barato,informal,adulto,4.9,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Velasco Pizzas,pizzaria,medio,informal,jovem,4.8,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Cozinha Dona Maria,restaurante,barato,formal,adulto,4.8,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Chef Salud,restaurante,medio,formal,adulto,4.7,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Mineiro Sucos e Lanches,lanchonete,barato,informal,jovem/adulto,4.6,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Sakura Sushi,sushi bar,medio,formal,adulto,3.0,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Adega Galo Branco,restaurante,medio,formal,adulto,5.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Almada Creperia,cafeteria,medio,informal,adulto,4.5,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Epic Pizza,pizzaria,medio,informal,jovem,5.0,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Jacare E Cidinha,restaurante,barato,formal,adulto,4.4,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Zaz Coffee & Beer,bar,barato,informal,jovem,5.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Restaurante Cozinha Da Fazenda,restaurante,medio,formal,adulto,4.2,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Doces Binuto,cafeteria,medio,informal,adulto,5.0,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Panificadora Rossato,cafeteria,barato,informal,adulto,4.3,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Tia Maria Comida Caseira,restaurante,barato,formal,adulto,4.2,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Babbo Franca Pizzaria,pizzaria,medio,informal,jovem,4.6,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Muringa Gelada,churrascaria,barato,formal,adulto,3.8,11:00,15:30,660,930,4.5,0,0,1,0,0,0
+JK Do Paje,restaurante,medio,formal,adulto,4.3,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Tenda Arabe,restaurante,medio,formal,adulto,4.3,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Chop Real JK,bar,medio,informal,jovem,4.7,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Dois Tche,restaurante,medio,formal,adulto,4.5,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Mr Chang,restaurante,medio,formal,adulto,4.2,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Gran Roque Hamburgueria,hamburgueria,medio,informal,jovem,5.0,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Rotisserie A Siciliana,restaurante,medio,formal,adulto,4.3,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Los Chapolitos Paletas Mexicanas,cafeteria,medio,informal,adulto,5.0,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+A Tasca,restaurante,medio,formal,adulto,3.9,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Pizza Holic,pizzaria,medio,informal,jovem,2.3,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Cascata Express Pizzaria,pizzaria,barato,informal,jovem,3.9,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Bitelo Lanches,lanchonete,barato,informal,jovem/adulto,4.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Le Bolo Bolos Caseiros,cafeteria,medio,informal,adulto,4.5,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Gramado Fast Food,restaurante,medio,formal,adulto,4.2,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Cia Da Pizza,pizzaria,medio,informal,jovem,3.0,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Restaurante Cio da Terra Grill,restaurante,barato,formal,adulto,4.3,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Casa Mix Pizzaria E Yakisoba,pizzaria,medio,informal,jovem,5.0,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Churrascaria Beta,churrascaria,medio,formal,adulto,3.6,11:00,15:30,660,930,4.5,0,0,1,0,0,0
+Suco Bagaco,lanchonete,medio,informal,jovem/adulto,4.1,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Yoki Sushi,sushi bar,medio,formal,adulto,3.8,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Bella Cozinha Restaurante,restaurante,medio,formal,adulto,5.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Rancho da Picanha,churrascaria,medio,formal,adulto,4.4,11:00,15:30,660,930,4.5,0,0,1,0,0,0
+Fiori Trattoria,restaurante,medio,formal,adulto,3.5,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Ponto Do Peixe,restaurante,medio,formal,adulto,4.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Canjao,restaurante,barato,formal,adulto,4.2,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+X-Baskete,lanchonete,barato,informal,jovem/adulto,4.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Divina Gula Sucos e Lanches,lanchonete,barato,informal,jovem/adulto,4.4,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Restaurante Natural Dona Octalina,restaurante,medio,formal,adulto,4.3,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Black Ship Beer Truck,bar,medio,informal,jovem,5.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Villa di Gaia Restaurante,pizzaria,medio,informal,jovem,3.8,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Comida Restaurante,restaurante,barato,formal,adulto,4.5,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Padaria Massa Pura,cafeteria,barato,informal,adulto,3.7,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Fogazzaria Do Guto,lanchonete,barato,informal,jovem/adulto,5.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Luizao Lanches,lanchonete,medio,informal,jovem/adulto,5.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Choripan Franca,bar,medio,informal,jovem,4.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Fish Petiscaria,bar,medio,informal,jovem,4.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Restaurante Progresso,restaurante,medio,formal,adulto,4.5,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Adoro Massas,restaurante,medio,formal,adulto,4.4,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Cantinho Da Canastra Restaurante,restaurante,medio,formal,adulto,5.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Mustache Restaurante,restaurante,medio,formal,adulto,4.2,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Pizzaria Al Castelo,pizzaria,medio,informal,jovem,4.5,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Franca Point,bar,medio,informal,jovem,4.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Hugg's,hamburgueria,medio,informal,jovem,2.9,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Amaretto,pizzaria,medio,informal,jovem,3.4,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Patio Sette Bar,bar,barato,informal,jovem,5.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Pastelaria Santa Cruz,lanchonete,medio,informal,jovem/adulto,4.3,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Crepe E Cia,cafeteria,medio,informal,adulto,4.5,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Pizzaria e Chopperia D'Italia,pizzaria,medio,informal,jovem,5.0,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Seu Dito Batataria E Gelateria,lanchonete,barato,informal,jovem/adulto,3.6,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Espeto Do Jacare,espetaria,medio,informal,jovem/adulto,4.0,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Sushi House Franca,sushi bar,medio,formal,adulto,3.0,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Don Diego Hamburgueria,hamburgueria,medio,informal,jovem,4.0,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Marmitaria Mais Por Voce,restaurante,medio,formal,adulto,4.7,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Restaurante Cozinha Mineira,restaurante,medio,formal,adulto,5.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Canastra Burger,hamburgueria,medio,informal,jovem,4.7,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Mr Fit Fast Food Saudavel,lanchonete,barato,informal,jovem/adulto,4.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Paulinhu's Petiscaria,bar,medio,informal,jovem,4.3,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Restaurante Distrito,restaurante,medio,formal,adulto,3.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Banana Power,lanchonete,barato,informal,jovem/adulto,4.8,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Chopp do Patrao,bar,medio,informal,jovem,5.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Restaurante Panela Velha,restaurante,medio,formal,adulto,4.3,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Billy The Kid Lanches Artesanais,lanchonete,medio,informal,jovem/adulto,5.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Le Pingue Franca,lanchonete,medio,informal,jovem/adulto,3.3,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Akio Sushi Lounge,sushi bar,medio,formal,adulto,5.0,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Quintal Fogo Vivo,pizzaria,medio,informal,jovem,5.0,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Encontros Lanches,lanchonete,medio,informal,jovem/adulto,5.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Cantina Uno Piatto,restaurante,medio,formal,adulto,4.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Gaia & Ribeiro,restaurante,medio,formal,adulto,4.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Chic Dez Lanches,lanchonete,medio,informal,jovem/adulto,4.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Ponto Do Espeto,espetaria,medio,informal,jovem/adulto,4.4,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Padaria Priscila,cafeteria,medio,informal,adulto,3.0,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Pizzaria e Restaurante Forno De Barro,pizzaria,medio,informal,jovem,4.0,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Frangasso Frango Assado e Rotisseria,restaurante,medio,formal,adulto,4.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Dog's Retro,lanchonete,medio,informal,jovem/adulto,5.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Parada Obrigatoria,bar,medio,informal,jovem,4.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Colher De Pau Bolos E Doces,cafeteria,medio,informal,adulto,2.0,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Tavares Refeicoes,restaurante,medio,formal,adulto,3.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Tavares Refeicoes III,restaurante,medio,formal,adulto,4.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Marcellu's Pizzaria,pizzaria,medio,informal,jovem,5.0,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Nosso Restaurante,restaurante,medio,formal,adulto,4.5,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Panificadora Padoka,cafeteria,medio,informal,adulto,4.7,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Restaurante E Pizzaria Bom Vivant,pizzaria,medio,informal,jovem,5.0,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Bar Do Said Comida Arabe,bar,medio,informal,jovem,5.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Ilha Do Acai,lanchonete,medio,informal,jovem/adulto,4.6,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Quentinho Restaurante,restaurante,medio,formal,adulto,3.3,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Chok Doce,cafeteria,medio,informal,adulto,4.0,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Al Sabor,restaurante,medio,formal,adulto,4.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Espetinho Do Batatinha,espetaria,medio,informal,jovem/adulto,5.0,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Bar Do Mineiro,bar,medio,informal,jovem,3.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Cozinha A Moda Antiga,restaurante,medio,formal,adulto,5.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Kreppe Mania,cafeteria,medio,informal,adulto,4.3,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Franca Chopp,choperia,medio,informal,jovem,4.5,17:00,01:00,1020,1500,8.0,1,0,0,0,1,1
+Candeeiro Pizza Bar,pizzaria,medio,informal,jovem,3.0,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Restaurante Chiarelo,restaurante,medio,formal,adulto,3.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Boteco Simprao,bar,medio,informal,jovem,4.7,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Bar Lanchonete Avenida,lanchonete,medio,informal,jovem/adulto,4.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Cunha Restaurante,restaurante,medio,formal,adulto,4.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Recanto Dos Amigos,bar,medio,informal,jovem,5.0,18:00,01:00,1080,1500,7.0,1,0,0,0,1,1
+Ipanema Sucos & Vitaminas,lanchonete,medio,informal,jovem/adulto,4.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Lanchonete 09 De Julho,lanchonete,barato,informal,jovem/adulto,4.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Hot Haru Sushi Bar,sushi bar,medio,formal,adulto,4.0,18:00,23:00,1080,1380,5.0,0,0,0,0,1,0
+Pizzaria Romanela,pizzaria,medio,informal,jovem,3.7,18:00,23:30,1080,1410,5.5,0,0,0,0,1,0
+Tiagos Lanchonhete,lanchonete,medio,informal,jovem/adulto,3.5,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Focacci Padaria,cafeteria,medio,informal,adulto,4.0,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Sabor de Minas,churrascaria,medio,formal,adulto,3.0,11:00,15:30,660,930,4.5,0,0,1,0,0,0
+Restaurante Tempero Manero,restaurante,medio,formal,adulto,4.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0
+Padaria Primavera,cafeteria,medio,informal,adulto,4.0,08:00,20:00,480,1200,12.0,0,1,1,1,0,0
+Gibba Sucos,lanchonete,medio,informal,jovem/adulto,5.0,08:00,22:00,480,1320,14.0,0,1,1,1,1,0
+Kizzar Haus,restaurante,medio,formal,adulto,5.0,11:00,22:00,660,1320,11.0,0,0,1,1,1,0

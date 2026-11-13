@@ -5,8 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:meu_app/services/api.dart';
 import 'package:meu_app/services/sessao.dart';
-import 'package:meu_app/services/floter_service.dart';
-import 'package:meu_app/models/floter_models.dart';
 import 'apoio.dart';
 
 void main() {
@@ -149,57 +147,25 @@ void main() {
       origem: 'app-flutter',
     );
   });
-  test('recomendacoes omitirem force_refresh quando falso', () async {
+  test('recomendacoes enviam respostas no contrato do modelo', () async {
     await api(
       MockClient((req) async {
-        expect(req.url.queryParameters.containsKey('force_refresh'), isFalse);
+        expect(req.method, 'POST');
+        expect(req.url.path, '/recomendacoes');
+        expect(jsonDecode(req.body), {
+          'respostas': {
+            'tipo': ['pizzaria'],
+          },
+          'agora_min': null,
+          'k': 5,
+        });
         return http.Response('{"data":[]}', 200);
       }),
-    ).getRecomendacoes();
-  });
-  test('preferencias existentes sao lidas do snapshot', () async {
-    final dados = await api(
-      MockClient(
-        (_) async => http.Response(
-          '{"data":{"feature_json":{"categoria":"Pizza"}}}',
-          200,
-        ),
-      ),
-    ).getPreferencias();
-    expect(dados?['categoria'], 'Pizza');
-  });
-  test('preferencias ausentes sao permitidas', () async {
-    expect(
-      await api(
-        MockClient((_) async => http.Response('{"data":null}', 200)),
-      ).getPreferencias(),
-      isNull,
+    ).recomendar(
+      respostas: {
+        'tipo': ['pizzaria'],
+      },
+      k: 5,
     );
-  });
-  test('Floter usa ranking real em vez de sugestoes simuladas', () async {
-    final servico = FloterService(
-      api: api(
-        MockClient((req) async {
-          expect(req.url.path, '/recomendacoes');
-          expect(req.url.queryParameters['force_refresh'], 'true');
-          return http.Response(
-            '{"data":[{"id_estabelecimento":18,"nome":"Local real","tipo":"Pizza","faixa_preco":"medio","ambiente":"familiar"}]}',
-            200,
-          );
-        }),
-      ),
-    );
-    final locais = await servico.analisarPreferencias(
-      const PreferenciasFloter(
-        categoria: [CategoriaComida.pizza],
-        sabor: PreferenciaSabor.salgado,
-        faixaPreco: FaixaPreco.medio,
-        quantidadePessoas: QuantidadePessoas.duas,
-        restricaoAlimentar: [RestricaoAlimentar.nenhuma],
-        modalidadeConsumo: ModalidadeConsumo.restaurante,
-      ),
-    );
-    expect(locais.single.idEstabelecimento, 18);
-    expect(locais.single.nome, 'Local real');
   });
 }

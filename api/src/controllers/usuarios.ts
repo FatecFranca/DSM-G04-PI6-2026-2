@@ -1,22 +1,8 @@
 import { Request, Response } from "express";
 import * as usuariosModel from "../models/usuarios";
-import { PreferenciasUsuarioSchema, UsuarioSchema, UsuarioUpdateSchema } from "../types/usuario";
+import { UsuarioSchema, UsuarioUpdateSchema } from "../types/usuario";
 
 type AuthenticatedRequest = Request & { user?: { id_usuario: number } };
-
-/** Busca e devolve as preferencias do usuario identificado pelo token JWT. */
-export async function getMyPreferenciasController(req: AuthenticatedRequest, res: Response) {
-  const data = await usuariosModel.getPreferencias(req.user!.id_usuario);
-  return res.json({ success: true, data });
-}
-
-/** Valida e salva as preferencias enviadas pelo usuario autenticado. */
-export async function saveMyPreferenciasController(req: AuthenticatedRequest, res: Response) {
-  const parsed = PreferenciasUsuarioSchema.safeParse(req.body);
-  if (!parsed.success) return res.status(400).json({ success: false, errors: parsed.error.flatten() });
-  const data = await usuariosModel.savePreferencias(req.user!.id_usuario, parsed.data);
-  return res.status(201).json({ success: true, data });
-}
 
 /** Cria uma conta com os dados do corpo da requisicao e devolve o usuario criado. */
 export async function createUsuarioController(req: Request, res: Response) {

@@ -1,326 +1,143 @@
 import "dotenv/config";
-import { categoriasDoLocal } from "../src/models/categoriasComida";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { categoriasDoLocal } from "../src/models/categoriasComida";
 import { prisma } from "../lib/prisma";
 
-const rawData = `
-BARRACAO SKATE CLUB	bar	media	informal	jovem	4,8	22:00	03:00
-Matheus & Rosaria Bar	bar	media	formal	jovem	4,6	11:00	00:00
-Bar da Careta	bar	media	formal	jovem	4,4	16:00	01:00
-Villa Madalena Soul Bar	bar	caro	formal	adulto	4,6	11:00	00:00
-Espina Espetos	bar	barato	informal	jovem	4,4	10:30	23:00
-Jacare	bar	medio	informal	jovem	4,7	11:00	14:30
-The roots	bar	medio	informal	jovem	4,6	20:00	02:00
-Bitelo	hamburgueria	medio	informal	jovem	4,5	18:00	01:00
-Chic10	lanchonete	barato	formal	jovem/adulto	4,5	10:00	03:00
-Brutu's Lanches	lanchonete	barato	formal	jovem/adulto	4,4	10:00	03:00
-Bonitos	lanchonete	barato	informal	jovem/adulto	4,5	16:30	01:00
-Capitao Prime	hamburgueria	barato	formal	jovem/adulto	4,8	18:00	23:30
-Senhor Burguer	hamburgueria	barato	formal	jovem/adulto	4,5	19:00	23:30
-Games Burguer	restaurante	medio	informal	jovem/adulto	4,8	16:00	02:00
-Peks	restaurante	barato	informal	jovem	4,9	19:00	23:00
-Miguelzinho Snooker Bar	bar	barato	informal	jovem	4,3	16:00	03:00
-Bistro	restaurante	medio	formal	adulto	4,7	11:00	14:00
-Cafeteria Affamato	cafeteria	caro	formal	adulto	5	09:00	17:30
-Rancho Picanha na Tabua	restaurante	medio	formal	adulto	4,5	18:00	22:30
-Choperia n1	bar	medio	informal	jovem	4,8	11:00	23:00
-bar do gerente	bar	medio	informal	jovem	4,6	17:00	01:00
-maria e jose parrilha	restaurante	caro	formal	jovem/adulto	4,4	11:00	23:00
-The Spot	restaurante	barato	informal	jovem	4,6	08:00	00:00
-Pesque & Pague Santa Clara	restaurante	medio	formal	adulto	4,4	10:00	18:00
-tabua mista	restaurante	barato	formal	adulto	4,1	11:00	00:00
-taberna	bar	caro	formal	jovem	4,5	17:00	23:00
-gran rock	bar	caro	informal	jovem	4,9	18:30	00:00
-Brooks Hamburgueria	hamburgueria	medio	formal	jovem/adulto	4,6	18:00	00:00
-burguer house	hamburgueria	barato	formal	adulto	4,6	18:30	23:30
-Boteco do Joca	bar	barato	formal	jovem/adulto	4,4	11:00	23:00
-agro bar	bar	medio	formal	jovem	3,7	17:00	20:00
-O Boteco do Patio	bar	barato	formal	jovem	4,8	17:00	23:00
-TutiYa Sushi Bar - Comida Japonesa	restaurante	caro	formal	adulto	4,7	11:00	23:00
-daniel san	restaurante	caro	formal	adulto	4,4	18:00	23:00
-Atlantico Gastrobar	bar	caro	formal	adulto	4,4	11:30	00:00
-Sao Bernardo Bar e Cervejaria	bar	medio	formal	jovem	4,8	18:00	00:00
-Planeta Malte Bar	bar	medio	formal	adulto	4,8	17:00	00:00
-feitoria da cerveja	bar	medio	formal	adulto	4,8	16:00	23:00
-confraria	bar/hamburgueria	barato	formal	jovem/adulto	4	16:00	23:30
-duze	hamburgueria	barato	formal	adulto	4,6	17:00	00:00
-Cascata Pizzas Rodizio	pizzaria	barato	formal	adulto	4,1	19:00	23:30
-pizza bar	pizzaria	medio	formal	adulto	4,5	18:15	23:30
-Parmegiana Pizzas	pizzaria	medio	formal	adulto	4,3	10:00	23:30
-Mousse Cake Franca - Cafe e Restaurante	restaurante	caro	formal	adulto	4,3	09:00	22:40
-Pizzaria Castelo Franca	pizzaria	barato	formal	adulto	4,6	18:00	00:00
-costelao de ouro	restaurante	caro	informal	jovem/adulto	4,5	18:00	23:00
-Scamboo Petiscaria	lanchonete	caro	formal	jovem/adulto	4,4	17:00	01:30
-Konomi	restaurante	caro	formal	adulto	4,7	11:00	22:00
-box beef	restaurante	medio	informal	jovem	4,4	10:00	23:00
-pereira	bar	barato	informal	jovem	4,7	17:00	23:00
-Morada du Capiau	bar	caro	formal	adulto	4,7	19:00	02:00
-laber jake	restaurante	barato	formal	jovem/adulto	4,6	20:00	23:00
-Culinaria tex-mex	restaurante	caro	formal	jovem/adulto	4,8	19:00	00:00
-lambari	lanchonete	caro	formal	adulto	4,7	18:30	23:30
-Traira Resto - Bar E Choperia	bar	barato	formal	jovem	2,5	19:00	00:00
-Madero & Jeronimo Burger Franca	hamburgueria	caro	formal	adulto	4,6	11:30	23:00
-Barbarus Burger - Hamburgueria Medieval	hamburgueria	medio	formal	jovem/adulto	4,7	18:00	23:30
-Hamburgueria Alameda	hamburgueria	caro	formal	jovem/adulto	4,7	19:00	23:00
-TRAPSTAR BURGUER	hamburgueria	caro	formal	jovem/adulto	4,9	18:00	23:00
-bahia lanches	lanchonete	barato	informal	jovem/adulto	4,5	17:00	01:00
-Nostravamus o bar	bar	barato	informal	jovem	4,6	16:00	00:00
-Noite Nossa Bar	bar	medio	informal	jovem	4,6	17:30	01:00
-Quintal Bar do Burrinho	bar	medio	informal	jovem	4,6	17:30	01:30
-Villa Franca Bar	bar	caro	informal	jovem	4,7	16:00	00:00
-Shadow Wolf - Beer Spot	bar	caro	formal	jovem	4,9	10:00	23:00
-Armazem 43	bar	barato	informal	jovem	4,5	17:00	01:00
-Brothers Bar e Petiscaria	bar	caro	informal	jovem/adulto	4,6	17:00	00:00
-Chopperia Raposa do Artico	bar	caro	informal	adulto	4,4	11:00	00:00
-Bar'Budus Beer e Chopp	bar	medio	informal	jovem	4,7	17:00	00:00
-BarUke beer	bar	medio	informal	jovem	4,8	17:00	00:00
-Butecando Franca Espeto Bar	bar	barato	informal	jovem	4,8	18:00	23:00
-Barucksbar	bar	medio	informal	jovem	4,7	15:00	23:00
-Butiquim do Sabia	bar	barato	informal	jovem	4,4	17:00	00:00
-Petiscaria Mineira/Bar do twonay	bar	medio	informal	adulto	4,4	16:45	01:00
-Garrafada Coqueteis | Bar em Franca	bar	medio	informal	jovem	5	17:30	01:00
-Embrazza - Espeto Bar	bar	medio	informal	jovem/adulto	5	17:00	01:00
-Espetisko's Bar	bar	barato	informal	jovem/adulto	4,7	18:00	00:00
-Padrao 12 Bar	bar	medio	informal	jovem	4,3	16:30	02:00
-After Burguer - Hamburgueria	hamburgueria	caro	informal	jovem/adulto	4,6	18:00	04:30
-Escritorio Bar	bar	barato	informal	jovem	4,7	15:30	00:00
-Biroska do Piri	bar	medio	informal	jovem/adulto	4,9	16:00	00:00
-Bar do Zam	bar	barato	informal	jovem	4,7	15:30	23:30
-Capetaria Tony	bar	medio	informal	jovem	4,7	18:00	03:00
-FRIO DA MADRUGADA	bar	caro	formal	jovem/adulto	4,2	10:30	00:00
-OquiOsque Pastelburger	hamburgueria	caro	formal	jovem/adulto	5	10:00	23:00
-Fratelli Burguer	hamburgueria	medio	formal	jovem/adulto	4,3	18:30	23:00
-Darini's Burguer	hamburgueria	medio	formal	jovem/adulto	4,8	18:30	00:00
-barba	restaurante	medio	formal	jovem	4,5	19:00	02:00
-Larica na Brasa	hamburgueria	medio	formal	jovem/adulto	4,2	18:00	00:00
-Muvuca Lanches e Hot Dogs	lanchonete	barato	informal	jovem/adulto	4,5	11:00	05:00
-Altas Horas Lanches	restaurante	barato	informal	jovem/adulto	4,6	19:00	03:00
-Cia Japa Franca	restaurante	caro	formal	adulto	4,6	18:00	23:00
-Saiko Nani	restaurante	caro	informal	adulto	4,8	12:00	00:00
-HAMMAY SUSHI	restaurante	caro	formal	adulto	5	11:00	22:30
-Lu Wasabi	restaurante	medio	informal	adulto	4,6	18:30	00:00
-Yuyake Sushi	restaurante	medio	formal	adulto	4,6	19:00	23:00
-Cobra Kai	restaurante	caro	formal	adulto	4,3	11:00	00:00
-Sumo Day	restaurante	caro	formal	adulto	4,5	11:30	23:30
-Keyko Sushi Bar	bar	caro	formal	jovem/adulto	4,5	18:00	23:00
-Jin Jin wok	restaurante	medio	formal	adulto	4,2	10:00	21:30
-Pizzaria Tarantella Franca - Pizzas Artesanais	pizzaria	medio	formal	adulto	4,6	18:00	01:00
-Pizzaria Boa Massa	pizzaria	medio	formal	adulto	4,7	18:00	23:30
-Pizzaria D'Napole	pizzaria	medio	formal	adulto	4,5	18:00	00:00
-Two Brother's Pizzaria	pizzaria	caro	formal	adulto	4,9	19:00	23:30
-Bau da Pizza	pizzaria	medio	formal	adulto	4,1	18:00	00:00
-Bella Capri Pizzaria - Franca	pizzaria	barato	formal	adulto	4,6	18:00	23:00
-Pizzaria Vitoria Franca	pizzaria	barato	formal	adulto	4,7	16:00	23:00
-Mozzarella Pizzaria	pizzaria	barato	formal	adulto	4,4	18:00	23:30
-City Lanches	pizzaria	barato	formal	jovem/adulto	4,2	18:00	02:00
-Sapataria da Pizza	pizzaria	caro	formal	adulto	4,7	18:00	23:30
-Pizzaria Aquarius	pizzaria	medio	formal	adulto	4,7	18:30	23:00
-Bella Gula Pizzaria	pizzaria	medio	formal	adulto	4,9	18:30	23:00
-Pizzaria do Gaucho	pizzaria	medio	formal	adulto	4,5	17:00	23:30
-Bar do Alemao	bar	medio	informal	adulto	4,4	17:00	00:00
-Picanha do Ze	restaurante	medio	familiar	adulto	4,6	11:00	15:00
-Santa Pizza	pizzaria	medio	familiar	adulto	4,5	18:00	23:30
-Beco Burguer	hamburgueria	medio	informal	jovem/adulto	4,7	18:00	23:00
-Bar do Paulista	bar	barato	informal	adulto	4,3	16:00	23:00
-Cantina da Nonna	restaurante	medio	familiar	adulto	4,6	11:30	14:30
-Tokyo Sushi Franca	restaurante	caro	formal	adulto	4,5	18:30	23:30
-Chopp Time Franca	bar	medio	informal	adulto	4,4	17:00	00:00
-Espeto do Chef	bar	barato	informal	adulto	4,2	18:00	23:00
-Pizzaria La Casa	pizzaria	medio	familiar	familiar	4,6	18:00	23:00
-Garage Beer	bar	medio	informal	adulto	4,7	18:00	01:00
-Pastelaria Central	lanchonete	barato	familiar	todos	4,4	09:00	20:00
-Villa Grill	restaurante	medio	familiar	adulto	4,5	11:00	22:00
-Burger 360	hamburgueria	medio	informal	jovem	4,6	18:00	23:30
-Cafe do Centro	cafeteria	barato	formal	adulto	4,5	08:00	18:00
-Bar do Chicao	bar	barato	informal	adulto	4,3	16:00	22:00
-Espaco Prime Franca	restaurante	caro	formal	adulto	4,7	19:00	23:00
-Ponto do Hot Dog	lanchonete	barato	informal	jovem	4,4	18:00	23:00
-Bar e Petiscaria Sao Jorge	bar	medio	informal	adulto	4,5	17:00	00:00
-Sabor Mineiro Franca	restaurante	medio	familiar	adulto	4,6	11:00	15:00
-`;
+type CsvRow = Record<string, string>;
 
-type SeedEstabelecimento = {
-  nome: string;
-  tipo: string;
-  faixa_preco: string;
-  ambiente: string;
-  publico: string;
-  avaliacao: number;
-  abre: string;
-  fecha: string;
-};
+function parseCsv(content: string): CsvRow[] {
+  const records: string[][] = [];
+  let row: string[] = [];
+  let field = "";
+  let quoted = false;
+  const text = content.replace(/^\uFEFF/, "");
 
-/** Normaliza texto do CSV para permitir comparacoes consistentes. */
-function normalize(value: string) {
-  return value.trim().toLowerCase();
-}
-
-/** Le as linhas do CSV, valida os campos e cria objetos de estabelecimentos. */
-function parseCsvLine(line: string): string[] {
-  const values: string[] = [];
-  let current = "";
-  let insideQuotes = false;
-
-  for (let index = 0; index < line.length; index += 1) {
-    const character = line[index];
-
-    if (character === '"') {
-      // Duas aspas dentro de um campo representam uma aspa literal no CSV.
-      if (insideQuotes && line[index + 1] === '"') {
-        current += '"';
-        index += 1;
-      } else {
-        insideQuotes = !insideQuotes;
-      }
-    } else if (character === "," && !insideQuotes) {
-      values.push(current.trim());
-      current = "";
-    } else {
-      current += character;
-    }
+  for (let i = 0; i < text.length; i += 1) {
+    const char = text[i];
+    if (char === '"') {
+      if (quoted && text[i + 1] === '"') {
+        field += '"';
+        i += 1;
+      } else quoted = !quoted;
+    } else if (char === "," && !quoted) {
+      row.push(field.trim());
+      field = "";
+    } else if ((char === "\n" || char === "\r") && !quoted) {
+      if (char === "\r" && text[i + 1] === "\n") i += 1;
+      row.push(field.trim());
+      if (row.some((value) => value !== "")) records.push(row);
+      row = [];
+      field = "";
+    } else field += char;
   }
+  row.push(field.trim());
+  if (row.some((value) => value !== "")) records.push(row);
 
-  values.push(current.trim());
-  return values;
-}
-
-/**
- * Separa registros completos sem cortar uma quebra de linha que esteja dentro
- * de aspas. Isso e necessario para nomes multilinha existentes na planilha.
- */
-function splitCsvRecords(csvContent: string): string[] {
-  const records: string[] = [];
-  let current = "";
-  let insideQuotes = false;
-
-  for (let index = 0; index < csvContent.length; index += 1) {
-    const character = csvContent[index];
-
-    if (character === '"') {
-      if (insideQuotes && csvContent[index + 1] === '"') {
-        current += '""';
-        index += 1;
-        continue;
-      }
-      insideQuotes = !insideQuotes;
+  const headers = records.shift();
+  if (!headers?.length) throw new Error("CSV sem cabeçalho ou sem registros.");
+  return records.map((values, index) => {
+    if (values.length !== headers.length) {
+      throw new Error(`Registro ${index + 2}: esperado ${headers.length} colunas, recebido ${values.length}.`);
     }
-
-    if ((character === "\n" || character === "\r") && !insideQuotes) {
-      if (current.trim()) records.push(current.trim());
-      current = "";
-      if (character === "\r" && csvContent[index + 1] === "\n") index += 1;
-    } else {
-      current += character;
-    }
-  }
-
-  if (current.trim()) records.push(current.trim());
-  return records;
+    return Object.fromEntries(headers.map((header, column) => [header, values[column]]));
+  });
 }
 
-/**
- * Converte o conteudo CSV em estabelecimentos, ignora o cabecalho e elimina
- * nomes repetidos. A funcao tambem corrige pequenas variacoes conhecidas da base.
- */
-function parseRows(csvContent: string): SeedEstabelecimento[] {
-  const rows = splitCsvRecords(csvContent.replace(/^\uFEFF/, "")).slice(1);
-
-  const uniqueByName = new Map<string, SeedEstabelecimento>();
-
-  for (const row of rows) {
-    const parts = parseCsvLine(row);
-    if (parts.length < 8) continue;
-
-    const nome = parts[0];
-    const faixaPrecoRaw = normalize(parts[2]);
-    const ambienteRaw = normalize(parts[3]);
-    const publicoRaw = normalize(parts[4]);
-    const avaliacaoRaw = parts[5].replace(",", ".");
-
-    const estabelecimento: SeedEstabelecimento = {
-      nome,
-      tipo: normalize(parts[1]),
-      faixa_preco: faixaPrecoRaw === "média" ? "medio" : faixaPrecoRaw,
-      ambiente: ambienteRaw === "fomral" ? "formal" : ambienteRaw,
-      publico: publicoRaw
-        .replace("aduldo", "adulto")
-        .replace("jovem adulto", "jovem/adulto"),
-      avaliacao: Number.parseFloat(avaliacaoRaw),
-      abre: parts[6],
-      fecha: parts[7],
-    };
-
-    uniqueByName.set(normalize(nome), estabelecimento);
-  }
-
-  return [...uniqueByName.values()];
+function requiredText(row: CsvRow, column: string): string {
+  const value = row[column]?.trim();
+  if (!value) throw new Error(`Campo obrigatório '${column}' vazio no registro '${row.nome}'.`);
+  return value;
 }
 
-/** Executa a carga inicial dos estabelecimentos no banco de dados. */
+function numberValue(row: CsvRow, column: string): number | null {
+  const value = row[column]?.trim();
+  if (!value) return null;
+  // Alguns valores decimais exportados da planilha chegam com pontos de grupo
+  // indevidos (por exemplo, 13.666.666.666.666.600 para 13.666666666666600).
+  const normalized = value.includes(",")
+    ? value.replace(/\./g, "").replace(",", ".")
+    : value.includes(".")
+      ? value.replace(/^(-?\d+)\.(.*)$/, (_match, integer: string, decimals: string) => `${integer}.${decimals.replace(/\./g, "")}`)
+      : value;
+  const parsed = Number(normalized);
+  if (!Number.isFinite(parsed)) throw new Error(`Valor numérico inválido em '${column}': '${value}'.`);
+  return parsed;
+}
+
+function booleanValue(row: CsvRow, column: string): boolean {
+  const value = row[column]?.trim().toLowerCase();
+  if (!value) return false;
+  if (["1", "true", "sim"].includes(value)) return true;
+  if (["0", "false", "não", "nao"].includes(value)) return false;
+  throw new Error(`Valor booleano inválido em '${column}': '${value}'.`);
+}
+
+function normalize(value: string): string {
+  return value.trim().toLocaleLowerCase("pt-BR");
+}
+
 async function main() {
   await prisma.tb_modelo_recomendacao.upsert({
     where: { versao: "fallback-v1" },
-    create: {
-      versao: "fallback-v1",
-      algoritmo: "rule-based-fallback",
-      status: "ready",
-      trained_at: new Date(),
-    },
-    update: {
-      algoritmo: "rule-based-fallback",
-      status: "ready",
-    },
+    create: { versao: "fallback-v1", algoritmo: "rule-based-fallback", status: "ready", trained_at: new Date() },
+    update: { algoritmo: "rule-based-fallback", status: "ready" },
   });
 
-  // SEED_CSV_PATH permite importar qualquer CSV sem deixar um caminho pessoal
-  // gravado no codigo. Sem a variavel, usamos o arquivo versionado no projeto.
-  const csvPath = resolve(
-    process.env.SEED_CSV_PATH ??
-      "prisma/seed/Base de Dados PI 5º Semestre - 2026 - Página1.csv"
-  );
-  const data = parseRows(readFileSync(csvPath, "utf8")).map(item => ({
-    ...item,
-    tags: categoriasDoLocal(item),
-  }));
-  if (data.length === 0) {
-    throw new Error("Nenhum estabelecimento valido encontrado para seed.");
-  }
+  const csvPath = resolve(process.env.SEED_CSV_PATH ?? "prisma/seed/base_limpa - base_limpa.csv (2).csv");
+  const rows = parseCsv(readFileSync(csvPath, "utf8"));
+  if (rows.length === 0) throw new Error("Nenhum estabelecimento encontrado no CSV.");
 
-  // Comparamos nomes normalizados para que executar o seed novamente atualize
-  // os locais existentes, em vez de criar copias deles.
+  const data = rows.map((row) => {
+    const avaliacao = numberValue(row, "nota");
+    if (avaliacao === null) throw new Error(`Nota vazia no registro '${row.nome}'.`);
+    const item = {
+      nome: requiredText(row, "nome"),
+      tipo: requiredText(row, "tipo"),
+      faixa_preco: requiredText(row, "faixa_preco"),
+      ambiente: requiredText(row, "ambiente"),
+      publico: requiredText(row, "publico"),
+      avaliacao,
+      abre: requiredText(row, "abre"),
+      fecha: requiredText(row, "fecha"),
+      abre_min: numberValue(row, "abre_min"),
+      fecha_min: numberValue(row, "fecha_min"),
+      duracao_h: numberValue(row, "duracao_h"),
+      fecha_apos_meia_noite: booleanValue(row, "fecha_apos_meia_noite"),
+      aberto_manha: booleanValue(row, "aberto_manha"),
+      aberto_almoco: booleanValue(row, "aberto_almoco"),
+      aberto_tarde: booleanValue(row, "aberto_tarde"),
+      aberto_noite: booleanValue(row, "aberto_noite"),
+      aberto_madrugada: booleanValue(row, "aberto_madrugada"),
+    };
+    return { ...item, tags: categoriasDoLocal(item) };
+  });
+
+  // A tabela não possui uma chave única de negócio para nome. Buscar os nomes
+  // atuais e atualizar por ID torna a carga repetível sem duplicar registros.
   const existing = await prisma.tb_estabelecimento.findMany({
     select: { id_estabelecimento: true, nome: true },
   });
-  const existingByName = new Map(
-    existing.map((item) => [normalize(item.nome), item.id_estabelecimento])
-  );
-
+  const existingByName = new Map(existing.map((item) => [normalize(item.nome), item.id_estabelecimento]));
   const operations = data.map((item) => {
-    const existingId = existingByName.get(normalize(item.nome));
-    return existingId
-      ? prisma.tb_estabelecimento.update({
-          where: { id_estabelecimento: existingId },
-          data: item,
-        })
+    const id = existingByName.get(normalize(item.nome));
+    return id
+      ? prisma.tb_estabelecimento.update({ where: { id_estabelecimento: id }, data: item })
       : prisma.tb_estabelecimento.create({ data: item });
   });
 
-  await prisma.$transaction(operations);
+  // Executa em lotes para manter o tamanho da transação controlado.
+  const batchSize = 100;
+  for (let offset = 0; offset < operations.length; offset += batchSize) {
+    await prisma.$transaction(operations.slice(offset, offset + batchSize));
+  }
   const updated = data.filter((item) => existingByName.has(normalize(item.nome))).length;
-  const inserted = data.length - updated;
-  console.log(
-    `CSV importado: ${inserted} inseridos, ${updated} atualizados, ${data.length} processados. Arquivo: ${csvPath}`
-  );
+  console.log(`CSV importado: ${data.length - updated} inseridos, ${updated} atualizados, ${data.length} processados. Arquivo: ${csvPath}`);
 }
 
 main()
   .catch((error) => {
     console.error("Erro no seed:", error);
-    process.exit(1);
+    process.exitCode = 1;
   })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
-// Seed preenche um banco vazio com dados iniciais para desenvolvimento e testes.
-// Ele pode ser executado novamente conforme a estrategia definida abaixo.
+  .finally(async () => prisma.$disconnect());

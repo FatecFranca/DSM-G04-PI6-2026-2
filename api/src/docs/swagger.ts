@@ -13,7 +13,6 @@ import {
 } from "../types/estabelecimento";
 import { ClassificacaoSchema, ClassificacaoUpdateSchema } from "../types/classificacao";
 import { ClassificacaoEstabelecimentoSchema } from "../types/classificacaoEstabelecimento";
-import { RecomendacoesQuerySchema } from "../types/recomendacao";
 import { InteracaoCreateSchema } from "../types/interacao";
 
 extendZodWithOpenApi(z);
@@ -101,13 +100,13 @@ registerProtectedPath({
   method: "put",
   path: "/estabelecimentos/{id}/comentarios/{classificacao}/curtida",
   tags: ["Estabelecimentos"],
-  description: "Curte um comentário de outro usuário. Idempotente: uma curtida por usuário. Gera evento na outbox na primeira curtida e a cada 50 curtidas; o worker notifica o autor.",
+  description: "Curte um comentÃ¡rio de outro usuÃ¡rio. Idempotente: uma curtida por usuÃ¡rio. Gera evento na outbox na primeira curtida e a cada 50 curtidas; o worker notifica o autor.",
   request: { params: z.object({ id: z.coerce.number().int().positive(), classificacao: z.coerce.number().int().positive() }) },
   responses: {
     200: { description: "Curtida registrada", content: { "application/json": { schema: z.object({ success: z.literal(true), data: z.object({ curtido: z.literal(true), total_curtidas: z.number().int() }) }) } } },
-    400: { description: "Identificador inválido ou comentário do próprio usuário" },
+    400: { description: "Identificador invÃ¡lido ou comentÃ¡rio do prÃ³prio usuÃ¡rio" },
     401: unauthorizedResponse,
-    404: { description: "Comentário não encontrado" },
+    404: { description: "ComentÃ¡rio nÃ£o encontrado" },
   },
 });
 
@@ -646,52 +645,72 @@ registerProtectedPath({
   },
 });
 
-registerProtectedPath({
+const perguntaRecomendacaoSchema = z.object({
+  id: z.string(),
+  pergunta: z.string(),
+  tipo_resposta: z.string(),
+  obrigatoria: z.boolean(),
+  opcoes: z.array(z.object({ valor: z.string(), rotulo: z.string() })),
+});
+const recomendacaoItemSchema = z.object({
+  posicao: z.number().int(),
+  id: z.number().int(),
+  id_estabelecimento: z.number().int(),
+  nome: z.string(),
+  tipo: z.string(),
+  faixa_preco: z.string(),
+  ambiente: z.string(),
+  publico: z.array(z.string()),
+  nota: z.number(),
+  avaliacao: z.number(),
+  abre: z.string(),
+  fecha: z.string(),
+  score: z.number(),
+  compatibilidade: z.number().nullable(),
+  cluster: z.union([z.number(), z.string()]).nullable().optional(),
+  motivos: z.array(z.string()),
+  aberto_agora: z.boolean().nullable(),
+  fora_do_filtro: z.boolean(),
+  cidade: z.string().nullable(),
+  bairro: z.string().nullable(),
+});
+const requisicaoRecomendacaoSchema = z.object({
+  respostas: z.record(z.string(), z.union([z.string(), z.array(z.string())])).default({}),
+  agora_min: z.number().int().min(0).max(1439).nullable().optional(),
+  k: z.number().int().min(1).max(50).optional(),
+});
+
+registry.registerPath({
   method: "get",
-  path: "/recomendacoes",
-  description: "Lista recomendacoes personalizadas (cache ou ranking fallback por preferencias de like/dislike).",
+  path: "/recomendacoes/modelo",
   tags: ["Recomendacoes"],
-  request: { query: RecomendacoesQuerySchema },
+  description: "Retorna as perguntas e opções de modelo_recomendacao.json. Esta rota é pública.",
   responses: {
     200: {
-      description: "Recomendacoes retornadas",
-      content: { "application/json": { schema: errorResponseSchema } },
+      description: "Questionário do modelo de recomendação",
+      content: { "application/json": { schema: singleItemResponse(z.object({ questionario: z.array(perguntaRecomendacaoSchema) })) } },
+    },
+  },
+});
+
+registerProtectedPath({
+  method: "post",
+  path: "/recomendacoes",
+  tags: ["Recomendacoes"],
+  description: "Calcula recomendações usando pesos, similaridades, qualidade, horários e clusters definidos em modelo_recomendacao.json.",
+  request: { body: { content: { "application/json": { schema: requisicaoRecomendacaoSchema } } } },
+  responses: {
+    200: {
+      description: "Estabelecimentos ativos ordenados pelo modelo de mineração",
+      content: { "application/json": { schema: z.object({ success: z.literal(true), source: z.literal("modelo-mineracao"), data: z.array(recomendacaoItemSchema) }) } },
     },
     400: {
-      description: "Parametros invalidos",
-      content: { "application/json": { schema: errorResponseSchema } },
+      description: "Corpo inválido ou respostas fora das opções do questionário",
+      content: { "application/json": { schema: z.object({ success: z.literal(false), message: z.string().optional(), errors: z.unknown().optional() }) } },
     },
     401: unauthorizedResponse,
-    500: {
-      description: "Erro interno",
-      content: { "application/json": { schema: errorResponseSchema } },
-    },
   },
 });
-
-registerProtectedPath({
-  method: "get",
-  path: "/recomendacoes/ia-sugestoes",
-  description: "Sugestoes por IA baseadas nos estabelecimentos que o usuario curtiu (semelhanca de perfil).",
-  tags: ["Recomendacoes"],
-  request: {
-    query: z.object({
-      limit: z.coerce.number().int().min(1).max(50).optional(),
-    }),
-  },
-  responses: {
-    200: {
-      description: "Sugestoes geradas",
-      content: { "application/json": { schema: errorResponseSchema } },
-    },
-    401: unauthorizedResponse,
-    500: {
-      description: "Erro interno",
-      content: { "application/json": { schema: errorResponseSchema } },
-    },
-  },
-});
-
 registerProtectedPath({
   method: "post",
   path: "/interacoes",
@@ -764,20 +783,6 @@ registerProtectedPath({
     200: { description: "Aviso marcado como lido" },
     401: unauthorizedResponse,
     404: { description: "Notificacao nao encontrada" },
-  },
-});
-
-registerProtectedPath({
-  method: "get", path: "/recomendacoes/automaticas", tags: ["Recomendacoes"],
-  description: "Retorna as sugestoes da conta autenticada, preparadas pelo consumidor Pub/Sub apos notas ou mudancas de opiniao. Lista vazia enquanto nao houver processamento.",
-  responses: {
-    200: { description: "Sugestoes preparadas pela mensageria", content: { "application/json": { schema: z.object({
-      success: z.boolean(), source: z.literal("mensageria"), atualizado_em: z.string().nullable(),
-      data: z.array(z.object({ id_estabelecimento: z.number().int(), nome: z.string(), tipo: z.string(),
-        faixa_preco: z.string(), ambiente: z.string(), avaliacao: z.number(), score: z.number(), motivos: z.array(z.string()) })),
-    }) } } },
-    401: unauthorizedResponse,
-    500: { description: "Erro ao carregar sugestoes" },
   },
 });
 

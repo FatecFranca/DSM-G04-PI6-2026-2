@@ -5,22 +5,12 @@ import { consumirMensagem, DependenciasConsumidor, MensagemRecebida } from "./co
 import { publicarProximoEvento, DependenciasPublicador } from "./publicador";
 import { lerConfiguracaoMensageria } from "./configuracao";
 import { InteracaoCreateSchema } from "../types/interacao";
-import { pontuarPreferencia } from "../models/pontuacaoPreferencias";
 import { camposAlterados, criarEventoEstabelecimento, EventoMensageriaSchema } from "./contrato";
 
 const evento = criarEventoInteracao({ id_interacao: 42, created_at: new Date("2026-10-21T12:00:00Z") });
 
 test("remover opiniao aceita evento neutral sem nota", () => {
   assert.equal(InteracaoCreateSchema.safeParse({ id_estabelecimento: 7, tipo_evento: "neutral" }).success, true);
-});
-
-test("notas altas aproximam perfis, baixas afastam e nota tres e neutral nao pesam", () => {
-  assert.equal(pontuarPreferencia("rating", 5), 3);
-  assert.equal(pontuarPreferencia("rating", 4), 3);
-  assert.equal(pontuarPreferencia("rating", 3), 0);
-  assert.equal(pontuarPreferencia("rating", 2), -3);
-  assert.equal(pontuarPreferencia("rating", 1), -3);
-  assert.equal(pontuarPreferencia("neutral", undefined), 0);
 });
 
 test("alteracoes reais geram eventos de restaurante; salvar os mesmos valores nao gera campos", () => {

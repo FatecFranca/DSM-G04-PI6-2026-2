@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import '../models/floter_models.dart';
 import '../pages/floter_page.dart';
 import '../pages/floter_resultados_page.dart';
 import '../pages/login_page.dart';
@@ -58,9 +57,9 @@ class AppRouter {
         GoRoute(
           path: floterResultados,
           redirect: (_, state) =>
-              state.extra is PreferenciasFloter ? null : floter,
+              state.extra is Map<String, dynamic> ? null : floter,
           builder: (_, state) => FloterResultadosPage(
-            preferencias: state.extra! as PreferenciasFloter,
+            respostas: Map<String, dynamic>.from(state.extra! as Map),
           ),
         ),
         GoRoute(

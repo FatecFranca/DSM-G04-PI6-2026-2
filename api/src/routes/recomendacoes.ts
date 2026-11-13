@@ -1,13 +1,9 @@
 import { Router } from "express";
 import { authMiddleware } from "../middlewares/autentication";
-import { listAiSuggestionsController, listRecomendacoesController, listSugestoesAutomaticasController } from "../controllers/recomendacoes";
+import { getModeloRecomendacaoController, recomendarController } from "../controllers/recomendacoes";
 
 const router = Router();
-
+router.get("/modelo", getModeloRecomendacaoController);
 router.use(authMiddleware);
-router.get("/", listRecomendacoesController);
-router.get("/ia-sugestoes", listAiSuggestionsController);
-router.get("/automaticas", listSugestoesAutomaticasController);
-
+router.post("/", recomendarController);
 export default router;
-

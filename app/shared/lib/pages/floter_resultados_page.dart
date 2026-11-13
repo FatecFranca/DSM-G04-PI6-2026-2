@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../components/estado_conteudo.dart';
-import '../models/floter_models.dart';
-import '../services/floter_service.dart';
+import '../services/api.dart';
 
 class FloterResultadosPage extends StatefulWidget {
-  const FloterResultadosPage({required this.preferencias, super.key});
-  final PreferenciasFloter preferencias;
+  const FloterResultadosPage({required this.respostas, super.key});
+  final Map<String, dynamic> respostas;
   @override
   State<FloterResultadosPage> createState() => _FloterResultadosPageState();
 }
 
 class _FloterResultadosPageState extends State<FloterResultadosPage> {
-  final _servico = FloterService();
-  late Future<List<SugestaoFloter>> _consulta;
-  @override
-  void initState() {
-    super.initState();
-    _consulta = _servico.analisarPreferencias(widget.preferencias);
-  }
+  final _api = ApiService();
+  late Future<List<Map<String, dynamic>>> _consulta = _api.recomendar(
+    respostas: widget.respostas,
+    k: 20,
+  );
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -26,12 +23,12 @@ class _FloterResultadosPageState extends State<FloterResultadosPage> {
       title: const Text('Sugestões do BoraLá'),
       leading: IconButton(
         tooltip: 'Voltar para descobrir',
-        onPressed: () => context.go('/sugestoes'),
+        onPressed: () => context.go('/floter'),
         icon: const Icon(Icons.arrow_back),
       ),
     ),
     body: SafeArea(
-      child: FutureBuilder<List<SugestaoFloter>>(
+      child: FutureBuilder<List<Map<String, dynamic>>>(
         future: _consulta,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
@@ -42,8 +39,9 @@ class _FloterResultadosPageState extends State<FloterResultadosPage> {
               titulo: 'Não foi possível buscar sugestões',
               descricao: '${snapshot.error}',
               acao: () => setState(
-                () => _consulta = _servico.analisarPreferencias(
-                  widget.preferencias,
+                () => _consulta = _api.recomendar(
+                  respostas: widget.respostas,
+                  k: 20,
                 ),
               ),
             );
@@ -64,21 +62,24 @@ class _FloterResultadosPageState extends State<FloterResultadosPage> {
                 'Encontramos ${locais.length} locais para você',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               const Text(
-                'Com base nas preferências salvas e nas suas interações. Confirme opções alimentares diretamente com o estabelecimento.',
+                'A compatibilidade e a qualidade dos locais são calculadas pelo modelo de mineração.',
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               ...locais.map(
                 (local) => Card(
                   child: ListTile(
                     contentPadding: const EdgeInsets.all(16),
                     leading: const Icon(Icons.restaurant),
-                    title: Text(local.nome),
-                    subtitle: Text('${local.tipo} · ${local.faixaPreco}'),
+                    title: Text('${local['nome']}'),
+                    subtitle: Text(
+                      '${local['tipo']} · ${local['faixa_preco']} · Compatibilidade ${local['compatibilidade'] ?? '—'}%\n${(local['motivos'] as List? ?? const []).join(' · ')}',
+                    ),
+                    isThreeLine: true,
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => context.push(
-                      '/estabelecimentos/${local.idEstabelecimento}',
+                      '/estabelecimentos/${local['id_estabelecimento']}',
                     ),
                   ),
                 ),

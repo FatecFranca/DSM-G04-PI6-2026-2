@@ -119,7 +119,7 @@ class AppScaffold extends StatelessWidget {
   static const _rotulos = [
     'Descobrir',
     'Avaliar',
-    'Preferências',
+    'Descobrir',
     'Histórico',
     'Perfil',
   ];

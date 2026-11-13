@@ -67,27 +67,6 @@ export async function updateUsuario(id_usuario: number, data: type.UsuarioUpdate
   });
 }
 
-/** Busca o snapshot mais recente que guarda as preferencias do usuario. */
-export function getPreferencias(idUsuario: number) {
-  return prisma.tb_usuario_feature_snapshot.findFirst({
-    where: { id_usuario: idUsuario, model_version: "preferencias-v1" },
-    orderBy: { created_at: "desc" },
-    select: { feature_json: true, created_at: true },
-  });
-}
-
-/** Cria um novo snapshot JSON das preferencias para manter o historico. */
-export function savePreferencias(idUsuario: number, preferencias: Prisma.InputJsonValue) {
-  return prisma.$transaction(async db => {
-    const snapshot = await db.tb_usuario_feature_snapshot.create({
-    data: { id_usuario: idUsuario, model_version: "preferencias-v1", feature_json: preferencias },
-      select: { feature_json: true, created_at: true },
-    });
-    await db.tb_recomendacao_cache.deleteMany({ where: { id_usuario: idUsuario } });
-    return snapshot;
-  });
-}
-
 /** Exclui definitivamente a linha do usuario pela chave primaria. */
 export function deleteUsuario(id_usuario: number) {
   return prisma.tb_usuario.delete({

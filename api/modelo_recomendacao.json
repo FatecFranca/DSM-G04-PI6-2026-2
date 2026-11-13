@@ -1,0 +1,8124 @@
+{
+ "questionario": [
+  {
+   "id": "tipo",
+   "pergunta": "Que tipo de lugar você procura?",
+   "tipo_resposta": "multipla",
+   "obrigatoria": false,
+   "opcoes": [
+    {
+     "valor": "restaurante",
+     "rotulo": "Restaurante"
+    },
+    {
+     "valor": "bar",
+     "rotulo": "Bar"
+    },
+    {
+     "valor": "pizzaria",
+     "rotulo": "Pizzaria"
+    },
+    {
+     "valor": "lanchonete",
+     "rotulo": "Lanchonete"
+    },
+    {
+     "valor": "hamburgueria",
+     "rotulo": "Hamburgueria"
+    },
+    {
+     "valor": "cafeteria",
+     "rotulo": "Cafeteria / Padaria"
+    },
+    {
+     "valor": "churrascaria",
+     "rotulo": "Churrascaria"
+    },
+    {
+     "valor": "sushi bar",
+     "rotulo": "Japonês / Sushi"
+    },
+    {
+     "valor": "espetaria",
+     "rotulo": "Espetaria"
+    },
+    {
+     "valor": "choperia",
+     "rotulo": "Choperia"
+    }
+   ]
+  },
+  {
+   "id": "faixa_preco",
+   "pergunta": "Qual faixa de preço cabe no seu bolso?",
+   "tipo_resposta": "multipla",
+   "obrigatoria": false,
+   "opcoes": [
+    {
+     "valor": "barato",
+     "rotulo": "Barato"
+    },
+    {
+     "valor": "medio",
+     "rotulo": "Médio"
+    },
+    {
+     "valor": "caro",
+     "rotulo": "Caro"
+    }
+   ]
+  },
+  {
+   "id": "ambiente",
+   "pergunta": "Qual clima você prefere?",
+   "tipo_resposta": "multipla",
+   "obrigatoria": false,
+   "opcoes": [
+    {
+     "valor": "informal",
+     "rotulo": "Descontraído"
+    },
+    {
+     "valor": "formal",
+     "rotulo": "Mais formal"
+    },
+    {
+     "valor": "familiar",
+     "rotulo": "Familiar"
+    }
+   ]
+  },
+  {
+   "id": "publico",
+   "pergunta": "Que perfil de público você prefere encontrar?",
+   "tipo_resposta": "multipla",
+   "obrigatoria": false,
+   "opcoes": [
+    {
+     "valor": "jovem",
+     "rotulo": "Jovem"
+    },
+    {
+     "valor": "adulto",
+     "rotulo": "Adulto"
+    },
+    {
+     "valor": "familiar",
+     "rotulo": "Família"
+    }
+   ]
+  },
+  {
+   "id": "periodo",
+   "pergunta": "Em que momento do dia?",
+   "tipo_resposta": "multipla",
+   "obrigatoria": false,
+   "opcoes": [
+    {
+     "valor": "manha",
+     "rotulo": "Manhã"
+    },
+    {
+     "valor": "almoco",
+     "rotulo": "Almoço"
+    },
+    {
+     "valor": "tarde",
+     "rotulo": "Tarde"
+    },
+    {
+     "valor": "noite",
+     "rotulo": "Noite"
+    },
+    {
+     "valor": "madrugada",
+     "rotulo": "Madrugada"
+    }
+   ]
+  },
+  {
+   "id": "importancia_nota",
+   "pergunta": "Quanto a nota dos clientes importa para você?",
+   "tipo_resposta": "unica",
+   "obrigatoria": false,
+   "opcoes": [
+    {
+     "valor": "baixa",
+     "rotulo": "Pouco"
+    },
+    {
+     "valor": "media",
+     "rotulo": "Médio"
+    },
+    {
+     "valor": "alta",
+     "rotulo": "Muito"
+    }
+   ]
+  }
+ ],
+ "faixa_preco_ordem": [
+  "barato",
+  "medio",
+  "caro"
+ ],
+ "pesos": {
+  "tipo": 0.35,
+  "faixa_preco": 0.2,
+  "ambiente": 0.15,
+  "publico": 0.15,
+  "periodo": 0.15
+ },
+ "qualidade": {
+  "metodo": "percentil da nota (sem n_avaliacoes na base)",
+  "beta": {
+   "baixa": 0.1,
+   "media": 0.2,
+   "alta": 0.35
+  }
+ },
+ "diversidade": {
+  "metodo": "penalidade_por_cluster",
+  "delta": 0.02
+ },
+ "similaridade": {
+  "tipo": {
+   "bar": {
+    "bar": 1.0,
+    "cafeteria": 0.0,
+    "choperia": 0.3568,
+    "churrascaria": 0.0,
+    "espetaria": 0.1958,
+    "hamburgueria": 0.2117,
+    "lanchonete": 0.0,
+    "pizzaria": 0.2467,
+    "restaurante": 0.0,
+    "sushi bar": 0.0
+   },
+   "cafeteria": {
+    "bar": 0.0,
+    "cafeteria": 1.0,
+    "choperia": 0.0,
+    "churrascaria": 0.2117,
+    "espetaria": 0.0,
+    "hamburgueria": 0.0,
+    "lanchonete": 0.2316,
+    "pizzaria": 0.0,
+    "restaurante": 0.002,
+    "sushi bar": 0.0
+   },
+   "choperia": {
+    "bar": 0.3568,
+    "cafeteria": 0.0,
+    "choperia": 1.0,
+    "churrascaria": 0.0,
+    "espetaria": 0.331,
+    "hamburgueria": 0.1038,
+    "lanchonete": 0.0,
+    "pizzaria": 0.3049,
+    "restaurante": 0.0,
+    "sushi bar": 0.0093
+   },
+   "churrascaria": {
+    "bar": 0.0,
+    "cafeteria": 0.2117,
+    "choperia": 0.0,
+    "churrascaria": 1.0,
+    "espetaria": 0.0,
+    "hamburgueria": 0.0,
+    "lanchonete": 0.0,
+    "pizzaria": 0.0,
+    "restaurante": 0.1729,
+    "sushi bar": 0.1479
+   },
+   "espetaria": {
+    "bar": 0.1958,
+    "cafeteria": 0.0,
+    "choperia": 0.331,
+    "churrascaria": 0.0,
+    "espetaria": 1.0,
+    "hamburgueria": 0.2243,
+    "lanchonete": 0.0247,
+    "pizzaria": 0.2852,
+    "restaurante": 0.0,
+    "sushi bar": 0.03
+   },
+   "hamburgueria": {
+    "bar": 0.2117,
+    "cafeteria": 0.0,
+    "choperia": 0.1038,
+    "churrascaria": 0.0,
+    "espetaria": 0.2243,
+    "hamburgueria": 1.0,
+    "lanchonete": 0.0,
+    "pizzaria": 0.3155,
+    "restaurante": 0.0,
+    "sushi bar": 0.2009
+   },
+   "lanchonete": {
+    "bar": 0.0,
+    "cafeteria": 0.2316,
+    "choperia": 0.0,
+    "churrascaria": 0.0,
+    "espetaria": 0.0247,
+    "hamburgueria": 0.0,
+    "lanchonete": 1.0,
+    "pizzaria": 0.0,
+    "restaurante": 0.0,
+    "sushi bar": 0.0
+   },
+   "pizzaria": {
+    "bar": 0.2467,
+    "cafeteria": 0.0,
+    "choperia": 0.3049,
+    "churrascaria": 0.0,
+    "espetaria": 0.2852,
+    "hamburgueria": 0.3155,
+    "lanchonete": 0.0,
+    "pizzaria": 1.0,
+    "restaurante": 0.0,
+    "sushi bar": 0.2188
+   },
+   "restaurante": {
+    "bar": 0.0,
+    "cafeteria": 0.002,
+    "choperia": 0.0,
+    "churrascaria": 0.1729,
+    "espetaria": 0.0,
+    "hamburgueria": 0.0,
+    "lanchonete": 0.0,
+    "pizzaria": 0.0,
+    "restaurante": 1.0,
+    "sushi bar": 0.19
+   },
+   "sushi bar": {
+    "bar": 0.0,
+    "cafeteria": 0.0,
+    "choperia": 0.0093,
+    "churrascaria": 0.1479,
+    "espetaria": 0.03,
+    "hamburgueria": 0.2009,
+    "lanchonete": 0.0,
+    "pizzaria": 0.2188,
+    "restaurante": 0.19,
+    "sushi bar": 1.0
+   }
+  },
+  "ambiente": {
+   "familiar": {
+    "familiar": 1.0,
+    "formal": 0.0615,
+    "informal": 0.0
+   },
+   "formal": {
+    "familiar": 0.0615,
+    "formal": 1.0,
+    "informal": 0.0
+   },
+   "informal": {
+    "familiar": 0.0,
+    "formal": 0.0,
+    "informal": 1.0
+   }
+  }
+ },
+ "rotulos_motivos": {
+  "tipo": {
+   "exato": "É o tipo de lugar que você procura",
+   "parcial": "Tipo parecido com o que você escolheu"
+  },
+  "faixa_preco": {
+   "exato": "Dentro da faixa de preço escolhida"
+  },
+  "ambiente": {
+   "exato": "Ambiente que você prefere"
+  },
+  "publico": {
+   "exato": "Público que combina com você"
+  },
+  "periodo": {
+   "exato": "Aberto no período que você quer"
+  },
+  "qualidade": {
+   "exato": "Muito bem avaliado"
+  }
+ },
+ "clusters": [
+  {
+   "id": 0,
+   "nome": "lanchonete | barato | informal | manha+almoco+tarde+noite",
+   "n": 31,
+   "nota_media": 4.37,
+   "tipos": {
+    "lanchonete": 31
+   },
+   "faixa_preco_dominante": "barato",
+   "ambiente_dominante": "informal",
+   "publico_frac": {
+    "jovem": 0.49,
+    "adulto": 0.49,
+    "familiar": 0.02
+   },
+   "periodos_frac": {
+    "manha": 0.74,
+    "almoco": 0.84,
+    "tarde": 0.84,
+    "noite": 0.97,
+    "madrugada": 0.19
+   },
+   "exemplos": [
+    "Fogazzaria Do Guto",
+    "Luizao Lanches",
+    "Billy The Kid Lanches Artesanais"
+   ]
+  },
+  {
+   "id": 1,
+   "nome": "pizzaria | medio | formal | noite",
+   "n": 40,
+   "nota_media": 4.45,
+   "tipos": {
+    "pizzaria": 19,
+    "hamburgueria": 13,
+    "sushi bar": 8
+   },
+   "faixa_preco_dominante": "medio",
+   "ambiente_dominante": "formal",
+   "publico_frac": {
+    "adulto": 0.76,
+    "jovem": 0.22,
+    "familiar": 0.02
+   },
+   "periodos_frac": {
+    "manha": 0.0,
+    "almoco": 0.07,
+    "tarde": 0.1,
+    "noite": 1.0,
+    "madrugada": 0.05
+   },
+   "exemplos": [
+    "OquiOsque Pastelburger",
+    "Akio Sushi Lounge",
+    "Trapstar Burguer"
+   ]
+  },
+  {
+   "id": 2,
+   "nome": "bar | medio | informal | noite",
+   "n": 67,
+   "nota_media": 4.53,
+   "tipos": {
+    "bar": 67,
+    "hamburgueria": 1
+   },
+   "faixa_preco_dominante": "medio",
+   "ambiente_dominante": "informal",
+   "publico_frac": {
+    "jovem": 0.73,
+    "adulto": 0.27
+   },
+   "periodos_frac": {
+    "manha": 0.0,
+    "almoco": 0.15,
+    "tarde": 0.31,
+    "noite": 0.96,
+    "madrugada": 0.45
+   },
+   "exemplos": [
+    "Garrafada Coquetéis | Bar em Franca",
+    "Embrazza - Espeto Bar",
+    "Zaz Coffee & Beer"
+   ]
+  },
+  {
+   "id": 3,
+   "nome": "pizzaria | medio | informal | noite",
+   "n": 33,
+   "nota_media": 4.3,
+   "tipos": {
+    "pizzaria": 19,
+    "hamburgueria": 8,
+    "espetaria": 4,
+    "choperia": 2
+   },
+   "faixa_preco_dominante": "medio",
+   "ambiente_dominante": "informal",
+   "publico_frac": {
+    "jovem": 0.82,
+    "adulto": 0.18
+   },
+   "periodos_frac": {
+    "manha": 0.0,
+    "almoco": 0.0,
+    "tarde": 0.0,
+    "noite": 1.0,
+    "madrugada": 0.09
+   },
+   "exemplos": [
+    "Aquarela Pizzaria Franca",
+    "Epic Pizza",
+    "Gran Roque Hamburgueria"
+   ]
+  },
+  {
+   "id": 4,
+   "nome": "cafeteria | medio | informal | manha+almoco+tarde",
+   "n": 17,
+   "nota_media": 4.23,
+   "tipos": {
+    "cafeteria": 17
+   },
+   "faixa_preco_dominante": "medio",
+   "ambiente_dominante": "informal",
+   "publico_frac": {
+    "adulto": 1.0
+   },
+   "periodos_frac": {
+    "manha": 1.0,
+    "almoco": 1.0,
+    "tarde": 1.0,
+    "noite": 0.0,
+    "madrugada": 0.0
+   },
+   "exemplos": [
+    "Cafeteria Affamato",
+    "Doces Binuto",
+    "Los Chapolitos Paletas Mexicanas"
+   ]
+  },
+  {
+   "id": 5,
+   "nome": "churrascaria | medio | formal | almoco",
+   "n": 9,
+   "nota_media": 4.04,
+   "tipos": {
+    "churrascaria": 9
+   },
+   "faixa_preco_dominante": "medio",
+   "ambiente_dominante": "formal",
+   "publico_frac": {
+    "adulto": 1.0
+   },
+   "periodos_frac": {
+    "manha": 0.0,
+    "almoco": 1.0,
+    "tarde": 0.0,
+    "noite": 0.0,
+    "madrugada": 0.0
+   },
+   "exemplos": [
+    "Nonno Grill",
+    "Picanha do Zé",
+    "La Finestra Restaurante"
+   ]
+  },
+  {
+   "id": 6,
+   "nome": "restaurante | medio | formal | almoco+tarde+noite",
+   "n": 80,
+   "nota_media": 4.38,
+   "tipos": {
+    "restaurante": 80
+   },
+   "faixa_preco_dominante": "medio",
+   "ambiente_dominante": "formal",
+   "publico_frac": {
+    "adulto": 0.88,
+    "jovem": 0.12
+   },
+   "periodos_frac": {
+    "manha": 0.03,
+    "almoco": 0.84,
+    "tarde": 0.81,
+    "noite": 0.95,
+    "madrugada": 0.04
+   },
+   "exemplos": [
+    "Hammay Sushi",
+    "Adega Galo Branco",
+    "Bella Cozinha Restaurante"
+   ]
+  }
+ ],
+ "estabelecimentos": [
+  {
+   "id": 0,
+   "nome": "Barracao Skate Club",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 1
+   },
+   "abre": "22:00",
+   "fecha": "03:00",
+   "abre_min": 1320,
+   "fecha_min": 1620,
+   "cluster": 2
+  },
+  {
+   "id": 1,
+   "nome": "Matheus & Rosaria Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "00:00",
+   "abre_min": 660,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 2,
+   "nome": "Bar da Careta",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "16:00",
+   "fecha": "01:00",
+   "abre_min": 960,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 3,
+   "nome": "Villa Madalena Soul Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "00:00",
+   "abre_min": 660,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 4,
+   "nome": "Espina Espetos",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "10:30",
+   "fecha": "23:00",
+   "abre_min": 630,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 5,
+   "nome": "Jacare",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "14:30",
+   "abre_min": 660,
+   "fecha_min": 870,
+   "cluster": 2
+  },
+  {
+   "id": 6,
+   "nome": "The roots",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "20:00",
+   "fecha": "02:00",
+   "abre_min": 1200,
+   "fecha_min": 1560,
+   "cluster": 2
+  },
+  {
+   "id": 7,
+   "nome": "Bitelo",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 3
+  },
+  {
+   "id": 8,
+   "nome": "Chic10",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "10:00",
+   "fecha": "03:00",
+   "abre_min": 600,
+   "fecha_min": 1620,
+   "cluster": 0
+  },
+  {
+   "id": 9,
+   "nome": "Brutu's Lanches",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "10:00",
+   "fecha": "03:00",
+   "abre_min": 600,
+   "fecha_min": 1620,
+   "cluster": 0
+  },
+  {
+   "id": 10,
+   "nome": "Bonitos",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "16:30",
+   "fecha": "01:00",
+   "abre_min": 990,
+   "fecha_min": 1500,
+   "cluster": 0
+  },
+  {
+   "id": 11,
+   "nome": "Capitao Prime",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 12,
+   "nome": "Senhor Burguer",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "19:00",
+   "fecha": "23:30",
+   "abre_min": 1140,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 13,
+   "nome": "Games Burguer",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "16:00",
+   "fecha": "02:00",
+   "abre_min": 960,
+   "fecha_min": 1560,
+   "cluster": 6
+  },
+  {
+   "id": 14,
+   "nome": "Peks",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.9,
+   "qualidade": 0.8605,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "19:00",
+   "fecha": "23:00",
+   "abre_min": 1140,
+   "fecha_min": 1380,
+   "cluster": 6
+  },
+  {
+   "id": 15,
+   "nome": "Miguelzinho Snooker Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "16:00",
+   "fecha": "03:00",
+   "abre_min": 960,
+   "fecha_min": 1620,
+   "cluster": 2
+  },
+  {
+   "id": 16,
+   "nome": "Bistro",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "14:00",
+   "abre_min": 660,
+   "fecha_min": 840,
+   "cluster": 6
+  },
+  {
+   "id": 17,
+   "nome": "Cafeteria Affamato",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "09:00",
+   "fecha": "17:30",
+   "abre_min": 540,
+   "fecha_min": 1050,
+   "cluster": 4
+  },
+  {
+   "id": 18,
+   "nome": "Rancho Picanha na Tabua",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "22:30",
+   "abre_min": 1080,
+   "fecha_min": 1350,
+   "cluster": 6
+  },
+  {
+   "id": 19,
+   "nome": "Choperia n1",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "23:00",
+   "abre_min": 660,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 20,
+   "nome": "Bar Do Gerente",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "17:00",
+   "fecha": "01:00",
+   "abre_min": 1020,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 21,
+   "nome": "Maria E Jose Parrilha",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "23:00",
+   "abre_min": 660,
+   "fecha_min": 1380,
+   "cluster": 6
+  },
+  {
+   "id": 22,
+   "nome": "The Spot",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "00:00",
+   "abre_min": 480,
+   "fecha_min": 1440,
+   "cluster": 6
+  },
+  {
+   "id": 23,
+   "nome": "Pesque & Pague Santa Clara",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "10:00",
+   "fecha": "18:00",
+   "abre_min": 600,
+   "fecha_min": 1080,
+   "cluster": 6
+  },
+  {
+   "id": 24,
+   "nome": "Tabua Mista",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.1,
+   "qualidade": 0.2192,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "00:00",
+   "abre_min": 660,
+   "fecha_min": 1440,
+   "cluster": 6
+  },
+  {
+   "id": 25,
+   "nome": "Taberna",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "23:00",
+   "abre_min": 1020,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 26,
+   "nome": "Gran Rock",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.9,
+   "qualidade": 0.8605,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:30",
+   "fecha": "00:00",
+   "abre_min": 1110,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 27,
+   "nome": "Brooks Hamburgueria",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "00:00",
+   "abre_min": 1080,
+   "fecha_min": 1440,
+   "cluster": 1
+  },
+  {
+   "id": 28,
+   "nome": "Burguer House",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:30",
+   "fecha": "23:30",
+   "abre_min": 1110,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 29,
+   "nome": "Boteco do Joca",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "23:00",
+   "abre_min": 660,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 30,
+   "nome": "Agro Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 3.7,
+   "qualidade": 0.0797,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "20:00",
+   "abre_min": 1020,
+   "fecha_min": 1200,
+   "cluster": 2
+  },
+  {
+   "id": 31,
+   "nome": "O Boteco do Pátio",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "23:00",
+   "abre_min": 1020,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 32,
+   "nome": "TutiYa Sushi Bar - Comida Japonesa",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "23:00",
+   "abre_min": 660,
+   "fecha_min": 1380,
+   "cluster": 6
+  },
+  {
+   "id": 33,
+   "nome": "Daniel San",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 6
+  },
+  {
+   "id": 34,
+   "nome": "Atlântico Gastrobar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:30",
+   "fecha": "00:00",
+   "abre_min": 690,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 35,
+   "nome": "São Bernardo Bar e Cervejaria",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "00:00",
+   "abre_min": 1080,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 36,
+   "nome": "Planeta Malte Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "00:00",
+   "abre_min": 1020,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 37,
+   "nome": "Feitoria Da Cerveja",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "16:00",
+   "fecha": "23:00",
+   "abre_min": 960,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 38,
+   "nome": "Confraria",
+   "tipo": "bar/hamburgueria",
+   "tipos": [
+    "bar",
+    "hamburgueria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "16:00",
+   "fecha": "23:30",
+   "abre_min": 960,
+   "fecha_min": 1410,
+   "cluster": 2
+  },
+  {
+   "id": 39,
+   "nome": "Duze",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "00:00",
+   "abre_min": 1020,
+   "fecha_min": 1440,
+   "cluster": 1
+  },
+  {
+   "id": 40,
+   "nome": "Cascata Pizzas Rodízio",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.1,
+   "qualidade": 0.2192,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "19:00",
+   "fecha": "23:30",
+   "abre_min": 1140,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 41,
+   "nome": "Pizza Bar",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:15",
+   "fecha": "23:30",
+   "abre_min": 1095,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 42,
+   "nome": "Parmegiana Pizzas",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "10:00",
+   "fecha": "23:30",
+   "abre_min": 600,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 43,
+   "nome": "Mousse Cake Franca - Café e Restaurante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "09:00",
+   "fecha": "22:40",
+   "abre_min": 540,
+   "fecha_min": 1360,
+   "cluster": 6
+  },
+  {
+   "id": 44,
+   "nome": "Pizzaria Castelo Franca",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "00:00",
+   "abre_min": 1080,
+   "fecha_min": 1440,
+   "cluster": 1
+  },
+  {
+   "id": 45,
+   "nome": "Costelao De Ouro",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 6
+  },
+  {
+   "id": 46,
+   "nome": "Scamboo Petiscaria",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "17:00",
+   "fecha": "01:30",
+   "abre_min": 1020,
+   "fecha_min": 1530,
+   "cluster": 0
+  },
+  {
+   "id": 47,
+   "nome": "Konomi",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 48,
+   "nome": "Box Beef",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "10:00",
+   "fecha": "23:00",
+   "abre_min": 600,
+   "fecha_min": 1380,
+   "cluster": 6
+  },
+  {
+   "id": 49,
+   "nome": "Pereira",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "23:00",
+   "abre_min": 1020,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 50,
+   "nome": "Morada du Capiau",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "19:00",
+   "fecha": "02:00",
+   "abre_min": 1140,
+   "fecha_min": 1560,
+   "cluster": 2
+  },
+  {
+   "id": 51,
+   "nome": "Laber Jake",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "20:00",
+   "fecha": "23:00",
+   "abre_min": 1200,
+   "fecha_min": 1380,
+   "cluster": 6
+  },
+  {
+   "id": 52,
+   "nome": "Culinária tex-mex",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "19:00",
+   "fecha": "00:00",
+   "abre_min": 1140,
+   "fecha_min": 1440,
+   "cluster": 6
+  },
+  {
+   "id": 53,
+   "nome": "Lambari",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:30",
+   "fecha": "23:30",
+   "abre_min": 1110,
+   "fecha_min": 1410,
+   "cluster": 0
+  },
+  {
+   "id": 54,
+   "nome": "Traíra Resto - Bar E Choperia",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 2.5,
+   "qualidade": 0.0072,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "19:00",
+   "fecha": "00:00",
+   "abre_min": 1140,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 55,
+   "nome": "Madero & Jeronimo Burger Franca",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:30",
+   "fecha": "23:00",
+   "abre_min": 690,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 56,
+   "nome": "Barbarus Burger - Hamburgueria Medieval",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 57,
+   "nome": "Hamburgueria Alameda",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "19:00",
+   "fecha": "23:00",
+   "abre_min": 1140,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 58,
+   "nome": "Trapstar Burguer",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.9,
+   "qualidade": 0.8605,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 59,
+   "nome": "Bahia Lanches",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "17:00",
+   "fecha": "01:00",
+   "abre_min": 1020,
+   "fecha_min": 1500,
+   "cluster": 0
+  },
+  {
+   "id": 60,
+   "nome": "Nostravamus o bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "16:00",
+   "fecha": "00:00",
+   "abre_min": 960,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 61,
+   "nome": "Noite Nossa Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "17:30",
+   "fecha": "01:00",
+   "abre_min": 1050,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 62,
+   "nome": "Quintal Bar do Burrinho",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "17:30",
+   "fecha": "01:30",
+   "abre_min": 1050,
+   "fecha_min": 1530,
+   "cluster": 2
+  },
+  {
+   "id": 63,
+   "nome": "Villa Franca Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "16:00",
+   "fecha": "00:00",
+   "abre_min": 960,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 64,
+   "nome": "Shadow Wolf - Beer Spot",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.9,
+   "qualidade": 0.8605,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "10:00",
+   "fecha": "23:00",
+   "abre_min": 600,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 65,
+   "nome": "Armazém 43",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "17:00",
+   "fecha": "01:00",
+   "abre_min": 1020,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 66,
+   "nome": "Brothers Bar e Petiscaria",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "00:00",
+   "abre_min": 1020,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 67,
+   "nome": "Chopperia Raposa do Ártico",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "00:00",
+   "abre_min": 660,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 68,
+   "nome": "Bar'Budus Beer e Chopp",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "00:00",
+   "abre_min": 1020,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 69,
+   "nome": "BarUke beer",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "00:00",
+   "abre_min": 1020,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 70,
+   "nome": "Butecando Franca Espeto Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 71,
+   "nome": "Barucksbar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "15:00",
+   "fecha": "23:00",
+   "abre_min": 900,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 72,
+   "nome": "Butiquim do Sabiá",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "00:00",
+   "abre_min": 1020,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 73,
+   "nome": "Petiscaria Mineira/Bar do twonay",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "16:45",
+   "fecha": "01:00",
+   "abre_min": 1005,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 74,
+   "nome": "Garrafada Coquetéis | Bar em Franca",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "17:30",
+   "fecha": "01:00",
+   "abre_min": 1050,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 75,
+   "nome": "Embrazza - Espeto Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "17:00",
+   "fecha": "01:00",
+   "abre_min": 1020,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 76,
+   "nome": "Espetisko's Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "00:00",
+   "abre_min": 1080,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 77,
+   "nome": "Padrão 12 Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "16:30",
+   "fecha": "02:00",
+   "abre_min": 990,
+   "fecha_min": 1560,
+   "cluster": 2
+  },
+  {
+   "id": 78,
+   "nome": "After Burguer - Hamburgueria",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "04:30",
+   "abre_min": 1080,
+   "fecha_min": 1710,
+   "cluster": 3
+  },
+  {
+   "id": 79,
+   "nome": "Escritório Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "15:30",
+   "fecha": "00:00",
+   "abre_min": 930,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 80,
+   "nome": "Biroska do Piri",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.9,
+   "qualidade": 0.8605,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "16:00",
+   "fecha": "00:00",
+   "abre_min": 960,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 81,
+   "nome": "Bar do Zam",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "15:30",
+   "fecha": "23:30",
+   "abre_min": 930,
+   "fecha_min": 1410,
+   "cluster": 2
+  },
+  {
+   "id": 82,
+   "nome": "Capetaria Tony",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "03:00",
+   "abre_min": 1080,
+   "fecha_min": 1620,
+   "cluster": 2
+  },
+  {
+   "id": 83,
+   "nome": "Frio Da Madrugada",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "10:30",
+   "fecha": "00:00",
+   "abre_min": 630,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 84,
+   "nome": "OquiOsque Pastelburger",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "10:00",
+   "fecha": "23:00",
+   "abre_min": 600,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 85,
+   "nome": "Fratelli Burguer",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:30",
+   "fecha": "23:00",
+   "abre_min": 1110,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 86,
+   "nome": "Darini's Burguer",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:30",
+   "fecha": "00:00",
+   "abre_min": 1110,
+   "fecha_min": 1440,
+   "cluster": 1
+  },
+  {
+   "id": 87,
+   "nome": "Barba",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "19:00",
+   "fecha": "02:00",
+   "abre_min": 1140,
+   "fecha_min": 1560,
+   "cluster": 6
+  },
+  {
+   "id": 88,
+   "nome": "Larica na Brasa",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "00:00",
+   "abre_min": 1080,
+   "fecha_min": 1440,
+   "cluster": 1
+  },
+  {
+   "id": 89,
+   "nome": "Muvuca Lanches e Hot Dogs",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "11:00",
+   "fecha": "05:00",
+   "abre_min": 660,
+   "fecha_min": 1740,
+   "cluster": 0
+  },
+  {
+   "id": 90,
+   "nome": "Altas Horas Lanches",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "19:00",
+   "fecha": "03:00",
+   "abre_min": 1140,
+   "fecha_min": 1620,
+   "cluster": 6
+  },
+  {
+   "id": 91,
+   "nome": "Cia Japa Franca",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 6
+  },
+  {
+   "id": 92,
+   "nome": "Saiko Nani",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "12:00",
+   "fecha": "00:00",
+   "abre_min": 720,
+   "fecha_min": 1440,
+   "cluster": 6
+  },
+  {
+   "id": 93,
+   "nome": "Hammay Sushi",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:30",
+   "abre_min": 660,
+   "fecha_min": 1350,
+   "cluster": 6
+  },
+  {
+   "id": 94,
+   "nome": "Lu Wasabi",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:30",
+   "fecha": "00:00",
+   "abre_min": 1110,
+   "fecha_min": 1440,
+   "cluster": 6
+  },
+  {
+   "id": 95,
+   "nome": "Yuyake Sushi",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "19:00",
+   "fecha": "23:00",
+   "abre_min": 1140,
+   "fecha_min": 1380,
+   "cluster": 6
+  },
+  {
+   "id": 96,
+   "nome": "Cobra Kai",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "00:00",
+   "abre_min": 660,
+   "fecha_min": 1440,
+   "cluster": 6
+  },
+  {
+   "id": 97,
+   "nome": "Sumo Day",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:30",
+   "fecha": "23:30",
+   "abre_min": 690,
+   "fecha_min": 1410,
+   "cluster": 6
+  },
+  {
+   "id": 98,
+   "nome": "Keyko Sushi Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 99,
+   "nome": "Jin Jin wok",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "10:00",
+   "fecha": "21:30",
+   "abre_min": 600,
+   "fecha_min": 1290,
+   "cluster": 6
+  },
+  {
+   "id": 100,
+   "nome": "Pizzaria Tarantella Franca - Pizzas Artesanais",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 1
+  },
+  {
+   "id": 101,
+   "nome": "Pizzaria Boa Massa",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 102,
+   "nome": "Pizzaria D'Napole",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "00:00",
+   "abre_min": 1080,
+   "fecha_min": 1440,
+   "cluster": 1
+  },
+  {
+   "id": 103,
+   "nome": "Two Brother's Pizzaria",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.9,
+   "qualidade": 0.8605,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "19:00",
+   "fecha": "23:30",
+   "abre_min": 1140,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 104,
+   "nome": "Baú da Pizza",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.1,
+   "qualidade": 0.2192,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "00:00",
+   "abre_min": 1080,
+   "fecha_min": 1440,
+   "cluster": 1
+  },
+  {
+   "id": 105,
+   "nome": "Bella Capri Pizzaria - Franca",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 106,
+   "nome": "Pizzaria Vitória Franca",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "16:00",
+   "fecha": "23:00",
+   "abre_min": 960,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 107,
+   "nome": "Mozzarella Pizzaria",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 108,
+   "nome": "City Lanches",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "02:00",
+   "abre_min": 1080,
+   "fecha_min": 1560,
+   "cluster": 1
+  },
+  {
+   "id": 109,
+   "nome": "Sapataria da Pizza",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 110,
+   "nome": "Pizzaria Aquarius",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:30",
+   "fecha": "23:00",
+   "abre_min": 1110,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 111,
+   "nome": "Bella Gula Pizzaria",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.9,
+   "qualidade": 0.8605,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:30",
+   "fecha": "23:00",
+   "abre_min": 1110,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 112,
+   "nome": "Pizzaria do Gaúcho",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "23:30",
+   "abre_min": 1020,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 113,
+   "nome": "Bar do Alemão",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "00:00",
+   "abre_min": 1020,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 114,
+   "nome": "Picanha do Zé",
+   "tipo": "churrascaria",
+   "tipos": [
+    "churrascaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "familiar",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "15:00",
+   "abre_min": 660,
+   "fecha_min": 900,
+   "cluster": 5
+  },
+  {
+   "id": 115,
+   "nome": "Santa Pizza",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "familiar",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 116,
+   "nome": "Beco Burguer",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 3
+  },
+  {
+   "id": 117,
+   "nome": "Bar do Paulista",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "16:00",
+   "fecha": "23:00",
+   "abre_min": 960,
+   "fecha_min": 1380,
+   "cluster": 2
+  },
+  {
+   "id": 118,
+   "nome": "Cantina da Nonna",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "familiar",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:30",
+   "fecha": "14:30",
+   "abre_min": 690,
+   "fecha_min": 870,
+   "cluster": 6
+  },
+  {
+   "id": 119,
+   "nome": "Tokyo Sushi Franca",
+   "tipo": "sushi bar",
+   "tipos": [
+    "sushi bar"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:30",
+   "fecha": "23:30",
+   "abre_min": 1110,
+   "fecha_min": 1410,
+   "cluster": 1
+  },
+  {
+   "id": 120,
+   "nome": "Chopp Time Franca",
+   "tipo": "choperia",
+   "tipos": [
+    "choperia"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "00:00",
+   "abre_min": 1020,
+   "fecha_min": 1440,
+   "cluster": 3
+  },
+  {
+   "id": 121,
+   "nome": "Espeto do Chef",
+   "tipo": "espetaria",
+   "tipos": [
+    "espetaria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 3
+  },
+  {
+   "id": 122,
+   "nome": "Pizzaria La Casa",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "familiar",
+   "publico": [
+    "familiar"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 123,
+   "nome": "Garage Beer",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 124,
+   "nome": "Pastelaria Central",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "familiar",
+   "publico": [
+    "jovem",
+    "adulto",
+    "familiar"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "09:00",
+   "fecha": "20:00",
+   "abre_min": 540,
+   "fecha_min": 1200,
+   "cluster": 0
+  },
+  {
+   "id": 125,
+   "nome": "Villa Grill",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "familiar",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 126,
+   "nome": "Burger 360",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 127,
+   "nome": "Café do Centro",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "18:00",
+   "abre_min": 480,
+   "fecha_min": 1080,
+   "cluster": 4
+  },
+  {
+   "id": 128,
+   "nome": "Bar do Chicão",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "16:00",
+   "fecha": "22:00",
+   "abre_min": 960,
+   "fecha_min": 1320,
+   "cluster": 2
+  },
+  {
+   "id": 129,
+   "nome": "Espaço Prime Franca",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "19:00",
+   "fecha": "23:00",
+   "abre_min": 1140,
+   "fecha_min": 1380,
+   "cluster": 6
+  },
+  {
+   "id": 130,
+   "nome": "Ponto do Hot Dog",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 0
+  },
+  {
+   "id": 131,
+   "nome": "Bar e Petiscaria São Jorge",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "17:00",
+   "fecha": "00:00",
+   "abre_min": 1020,
+   "fecha_min": 1440,
+   "cluster": 2
+  },
+  {
+   "id": 132,
+   "nome": "Sabor Mineiro Franca",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "familiar",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "15:00",
+   "abre_min": 660,
+   "fecha_min": 900,
+   "cluster": 6
+  },
+  {
+   "id": 133,
+   "nome": "Nonno Grill",
+   "tipo": "churrascaria",
+   "tipos": [
+    "churrascaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "15:30",
+   "abre_min": 660,
+   "fecha_min": 930,
+   "cluster": 5
+  },
+  {
+   "id": 134,
+   "nome": "Azul Culinaria Brasileira",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "caro",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 135,
+   "nome": "Restaurante Barao",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 136,
+   "nome": "Arroz Com Feijao",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 137,
+   "nome": "La Borgata Espaco E Restaurante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 138,
+   "nome": "Restaurante Bistro Retro",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 139,
+   "nome": "La Finestra Restaurante",
+   "tipo": "churrascaria",
+   "tipos": [
+    "churrascaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "15:30",
+   "abre_min": 660,
+   "fecha_min": 930,
+   "cluster": 5
+  },
+  {
+   "id": 140,
+   "nome": "Masano Trattoria",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 141,
+   "nome": "Top Grill Churrascaria",
+   "tipo": "churrascaria",
+   "tipos": [
+    "churrascaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.8,
+   "qualidade": 0.0924,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "15:30",
+   "abre_min": 660,
+   "fecha_min": 930,
+   "cluster": 5
+  },
+  {
+   "id": 142,
+   "nome": "Sumo Sushi Bar",
+   "tipo": "sushi bar",
+   "tipos": [
+    "sushi bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 143,
+   "nome": "Famiglia Petri Ristorante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.1,
+   "qualidade": 0.2192,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 144,
+   "nome": "Restaurante Gasparini",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 145,
+   "nome": "Mansuetto Ristorante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 146,
+   "nome": "Minuano 3",
+   "tipo": "churrascaria",
+   "tipos": [
+    "churrascaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.1,
+   "qualidade": 0.2192,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "15:30",
+   "abre_min": 660,
+   "fecha_min": 930,
+   "cluster": 5
+  },
+  {
+   "id": 147,
+   "nome": "Bangalo Batataria",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 148,
+   "nome": "Aquarela Pizzaria Franca",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 149,
+   "nome": "Pizzaria Pauliceia",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 150,
+   "nome": "Feng",
+   "tipo": "sushi bar",
+   "tipos": [
+    "sushi bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 151,
+   "nome": "Latteria Di Ophelia",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.9,
+   "qualidade": 0.8605,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 152,
+   "nome": "Velasco Pizzas",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 153,
+   "nome": "Cozinha Dona Maria",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 154,
+   "nome": "Chef Salud",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 155,
+   "nome": "Mineiro Sucos e Lanches",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 156,
+   "nome": "Sakura Sushi",
+   "tipo": "sushi bar",
+   "tipos": [
+    "sushi bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.0,
+   "qualidade": 0.0308,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 157,
+   "nome": "Adega Galo Branco",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 158,
+   "nome": "Almada Creperia",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 159,
+   "nome": "Epic Pizza",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 160,
+   "nome": "Jacare E Cidinha",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 161,
+   "nome": "Zaz Coffee & Beer",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 162,
+   "nome": "Restaurante Cozinha Da Fazenda",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 163,
+   "nome": "Doces Binuto",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 164,
+   "nome": "Panificadora Rossato",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 165,
+   "nome": "Tia Maria Comida Caseira",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 166,
+   "nome": "Babbo Franca Pizzaria",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 167,
+   "nome": "Muringa Gelada",
+   "tipo": "churrascaria",
+   "tipos": [
+    "churrascaria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.8,
+   "qualidade": 0.0924,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "15:30",
+   "abre_min": 660,
+   "fecha_min": 930,
+   "cluster": 5
+  },
+  {
+   "id": 168,
+   "nome": "JK Do Paje",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 169,
+   "nome": "Tenda Arabe",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 170,
+   "nome": "Chop Real JK",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 171,
+   "nome": "Dois Tche",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 172,
+   "nome": "Mr Chang",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 173,
+   "nome": "Gran Roque Hamburgueria",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 3
+  },
+  {
+   "id": 174,
+   "nome": "Rotisserie A Siciliana",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 175,
+   "nome": "Los Chapolitos Paletas Mexicanas",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 176,
+   "nome": "A Tasca",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.9,
+   "qualidade": 0.1033,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 177,
+   "nome": "Pizza Holic",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 2.3,
+   "qualidade": 0.0036,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 178,
+   "nome": "Cascata Express Pizzaria",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 3.9,
+   "qualidade": 0.1033,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 179,
+   "nome": "Bitelo Lanches",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 180,
+   "nome": "Le Bolo Bolos Caseiros",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 181,
+   "nome": "Gramado Fast Food",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 182,
+   "nome": "Cia Da Pizza",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 3.0,
+   "qualidade": 0.0308,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 183,
+   "nome": "Restaurante Cio da Terra Grill",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 184,
+   "nome": "Casa Mix Pizzaria E Yakisoba",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 185,
+   "nome": "Churrascaria Beta",
+   "tipo": "churrascaria",
+   "tipos": [
+    "churrascaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.6,
+   "qualidade": 0.0707,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "15:30",
+   "abre_min": 660,
+   "fecha_min": 930,
+   "cluster": 5
+  },
+  {
+   "id": 186,
+   "nome": "Suco Bagaco",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.1,
+   "qualidade": 0.2192,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 187,
+   "nome": "Yoki Sushi",
+   "tipo": "sushi bar",
+   "tipos": [
+    "sushi bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.8,
+   "qualidade": 0.0924,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 188,
+   "nome": "Bella Cozinha Restaurante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 189,
+   "nome": "Rancho da Picanha",
+   "tipo": "churrascaria",
+   "tipos": [
+    "churrascaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "15:30",
+   "abre_min": 660,
+   "fecha_min": 930,
+   "cluster": 5
+  },
+  {
+   "id": 190,
+   "nome": "Fiori Trattoria",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.5,
+   "qualidade": 0.0634,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 191,
+   "nome": "Ponto Do Peixe",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 192,
+   "nome": "Canjao",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 193,
+   "nome": "X-Baskete",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 194,
+   "nome": "Divina Gula Sucos e Lanches",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 195,
+   "nome": "Restaurante Natural Dona Octalina",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 196,
+   "nome": "Black Ship Beer Truck",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 197,
+   "nome": "Villa di Gaia Restaurante",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 3.8,
+   "qualidade": 0.0924,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 198,
+   "nome": "Comida Restaurante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 199,
+   "nome": "Padaria Massa Pura",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.7,
+   "qualidade": 0.0797,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 200,
+   "nome": "Fogazzaria Do Guto",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 201,
+   "nome": "Luizao Lanches",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 202,
+   "nome": "Choripan Franca",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 203,
+   "nome": "Fish Petiscaria",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 204,
+   "nome": "Restaurante Progresso",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 205,
+   "nome": "Adoro Massas",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 206,
+   "nome": "Cantinho Da Canastra Restaurante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 207,
+   "nome": "Mustache Restaurante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.2,
+   "qualidade": 0.2536,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 208,
+   "nome": "Pizzaria Al Castelo",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 209,
+   "nome": "Franca Point",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 210,
+   "nome": "Hugg's",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 2.9,
+   "qualidade": 0.0109,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 3
+  },
+  {
+   "id": 211,
+   "nome": "Amaretto",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 3.4,
+   "qualidade": 0.058,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 212,
+   "nome": "Patio Sette Bar",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 213,
+   "nome": "Pastelaria Santa Cruz",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 214,
+   "nome": "Crepe E Cia",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 215,
+   "nome": "Pizzaria e Chopperia D'Italia",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 216,
+   "nome": "Seu Dito Batataria E Gelateria",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 3.6,
+   "qualidade": 0.0707,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 217,
+   "nome": "Espeto Do Jacare",
+   "tipo": "espetaria",
+   "tipos": [
+    "espetaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 3
+  },
+  {
+   "id": 218,
+   "nome": "Sushi House Franca",
+   "tipo": "sushi bar",
+   "tipos": [
+    "sushi bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.0,
+   "qualidade": 0.0308,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 219,
+   "nome": "Don Diego Hamburgueria",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 3
+  },
+  {
+   "id": 220,
+   "nome": "Marmitaria Mais Por Voce",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 221,
+   "nome": "Restaurante Cozinha Mineira",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 222,
+   "nome": "Canastra Burger",
+   "tipo": "hamburgueria",
+   "tipos": [
+    "hamburgueria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 3
+  },
+  {
+   "id": 223,
+   "nome": "Mr Fit Fast Food Saudavel",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 224,
+   "nome": "Paulinhu's Petiscaria",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 225,
+   "nome": "Restaurante Distrito",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.0,
+   "qualidade": 0.0308,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 226,
+   "nome": "Banana Power",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.8,
+   "qualidade": 0.817,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 227,
+   "nome": "Chopp do Patrao",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 228,
+   "nome": "Restaurante Panela Velha",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 229,
+   "nome": "Billy The Kid Lanches Artesanais",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 230,
+   "nome": "Le Pingue Franca",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 3.3,
+   "qualidade": 0.0525,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 231,
+   "nome": "Akio Sushi Lounge",
+   "tipo": "sushi bar",
+   "tipos": [
+    "sushi bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 232,
+   "nome": "Quintal Fogo Vivo",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 233,
+   "nome": "Encontros Lanches",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 234,
+   "nome": "Cantina Uno Piatto",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 235,
+   "nome": "Gaia & Ribeiro",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 236,
+   "nome": "Chic Dez Lanches",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 237,
+   "nome": "Ponto Do Espeto",
+   "tipo": "espetaria",
+   "tipos": [
+    "espetaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.4,
+   "qualidade": 0.4022,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 3
+  },
+  {
+   "id": 238,
+   "nome": "Padaria Priscila",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.0,
+   "qualidade": 0.0308,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 239,
+   "nome": "Pizzaria e Restaurante Forno De Barro",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 240,
+   "nome": "Frangasso Frango Assado e Rotisseria",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 241,
+   "nome": "Dog's Retro",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 242,
+   "nome": "Parada Obrigatoria",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 243,
+   "nome": "Colher De Pau Bolos E Doces",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 2.0,
+   "qualidade": 0.0,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 244,
+   "nome": "Tavares Refeicoes",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.0,
+   "qualidade": 0.0308,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 245,
+   "nome": "Tavares Refeicoes III",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 246,
+   "nome": "Marcellu's Pizzaria",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 247,
+   "nome": "Nosso Restaurante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 248,
+   "nome": "Panificadora Padoka",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 249,
+   "nome": "Restaurante E Pizzaria Bom Vivant",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 250,
+   "nome": "Bar Do Said Comida Arabe",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 251,
+   "nome": "Ilha Do Acai",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.6,
+   "qualidade": 0.6178,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 252,
+   "nome": "Quentinho Restaurante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.3,
+   "qualidade": 0.0525,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 253,
+   "nome": "Chok Doce",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 254,
+   "nome": "Al Sabor",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 255,
+   "nome": "Espetinho Do Batatinha",
+   "tipo": "espetaria",
+   "tipos": [
+    "espetaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 3
+  },
+  {
+   "id": 256,
+   "nome": "Bar Do Mineiro",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 3.0,
+   "qualidade": 0.0308,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 257,
+   "nome": "Cozinha A Moda Antiga",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 258,
+   "nome": "Kreppe Mania",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.3,
+   "qualidade": 0.3152,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 259,
+   "nome": "Franca Chopp",
+   "tipo": "choperia",
+   "tipos": [
+    "choperia"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.5,
+   "qualidade": 0.5054,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "17:00",
+   "fecha": "01:00",
+   "abre_min": 1020,
+   "fecha_min": 1500,
+   "cluster": 3
+  },
+  {
+   "id": 260,
+   "nome": "Candeeiro Pizza Bar",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 3.0,
+   "qualidade": 0.0308,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 261,
+   "nome": "Restaurante Chiarelo",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.0,
+   "qualidade": 0.0308,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 262,
+   "nome": "Boteco Simprao",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 4.7,
+   "qualidade": 0.7319,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 263,
+   "nome": "Bar Lanchonete Avenida",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 264,
+   "nome": "Cunha Restaurante",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 265,
+   "nome": "Recanto Dos Amigos",
+   "tipo": "bar",
+   "tipos": [
+    "bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 1
+   },
+   "abre": "18:00",
+   "fecha": "01:00",
+   "abre_min": 1080,
+   "fecha_min": 1500,
+   "cluster": 2
+  },
+  {
+   "id": 266,
+   "nome": "Ipanema Sucos & Vitaminas",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 267,
+   "nome": "Lanchonete 09 De Julho",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "barato",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 268,
+   "nome": "Hot Haru Sushi Bar",
+   "tipo": "sushi bar",
+   "tipos": [
+    "sushi bar"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:00",
+   "abre_min": 1080,
+   "fecha_min": 1380,
+   "cluster": 1
+  },
+  {
+   "id": 269,
+   "nome": "Pizzaria Romanela",
+   "tipo": "pizzaria",
+   "tipos": [
+    "pizzaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem"
+   ],
+   "nota": 3.7,
+   "qualidade": 0.0797,
+   "periodos": {
+    "manha": 0,
+    "almoco": 0,
+    "tarde": 0,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "18:00",
+   "fecha": "23:30",
+   "abre_min": 1080,
+   "fecha_min": 1410,
+   "cluster": 3
+  },
+  {
+   "id": 270,
+   "nome": "Tiagos Lanchonhete",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 3.5,
+   "qualidade": 0.0634,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 271,
+   "nome": "Focacci Padaria",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 272,
+   "nome": "Sabor de Minas",
+   "tipo": "churrascaria",
+   "tipos": [
+    "churrascaria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 3.0,
+   "qualidade": 0.0308,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 0,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "15:30",
+   "abre_min": 660,
+   "fecha_min": 930,
+   "cluster": 5
+  },
+  {
+   "id": 273,
+   "nome": "Restaurante Tempero Manero",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  },
+  {
+   "id": 274,
+   "nome": "Padaria Primavera",
+   "tipo": "cafeteria",
+   "tipos": [
+    "cafeteria"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 4.0,
+   "qualidade": 0.1576,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 0,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "20:00",
+   "abre_min": 480,
+   "fecha_min": 1200,
+   "cluster": 4
+  },
+  {
+   "id": 275,
+   "nome": "Gibba Sucos",
+   "tipo": "lanchonete",
+   "tipos": [
+    "lanchonete"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "informal",
+   "publico": [
+    "jovem",
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 1,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "08:00",
+   "fecha": "22:00",
+   "abre_min": 480,
+   "fecha_min": 1320,
+   "cluster": 0
+  },
+  {
+   "id": 276,
+   "nome": "Kizzar Haus",
+   "tipo": "restaurante",
+   "tipos": [
+    "restaurante"
+   ],
+   "faixa_preco": "medio",
+   "ambiente": "formal",
+   "publico": [
+    "adulto"
+   ],
+   "nota": 5.0,
+   "qualidade": 0.9384,
+   "periodos": {
+    "manha": 0,
+    "almoco": 1,
+    "tarde": 1,
+    "noite": 1,
+    "madrugada": 0
+   },
+   "abre": "11:00",
+   "fecha": "22:00",
+   "abre_min": 660,
+   "fecha_min": 1320,
+   "cluster": 6
+  }
+ ],
+ "metadata": {
+  "versao_modelo": "1.0.0",
+  "gerado_em": "2026-11-12T22:02:06+00:00",
+  "n_estabelecimentos": 277,
+  "n_clusters": 7,
+  "tecnica": "filtragem baseada em conteudo (similaridade tipo Gower) + prior de qualidade + diversificacao por cluster",
+  "avaliacao_resumo": {
+   "delta_escolhido": 0.02,
+   "sobreposicao_top10_sensibilidade_pesos": 0.893,
+   "observacao": "Avaliação offline com usuários sintéticos: valida coerência/diversidade/cobertura, NÃO satisfação real. Coletar feedback (cliques, favoritos) para validação online."
+  }
+ },
+ "algoritmo": {
+  "top_k_padrao": 10,
+  "formato_resposta_usuario": {
+   "tipo": "lista de valores de questionario[id=g].opcoes[].valor (omitir = sem preferencia)",
+   "faixa_preco": "lista de valores de questionario[id=g].opcoes[].valor (omitir = sem preferencia)",
+   "ambiente": "lista de valores de questionario[id=g].opcoes[].valor (omitir = sem preferencia)",
+   "publico": "lista de valores de questionario[id=g].opcoes[].valor (omitir = sem preferencia)",
+   "periodo": "lista de valores de questionario[id=g].opcoes[].valor (omitir = sem preferencia)",
+   "importancia_nota": "baixa|media|alta"
+  },
+  "passos": [
+   "1. Para cada grupo g respondido, s_g(item) em [0,1]: tipo = max sobre (u escolhido, t do item) de similaridade.tipo[u][t]; faixa_preco = max_u (1 - |ord(u)-ord(item)| / (n-1)); ambiente = max_u similaridade.ambiente[u][item.ambiente]; publico = |escolhidos ∩ item.publico| / |escolhidos|; periodo = (#escolhidos com item.periodos[p]=1) / |escolhidos|.",
+   "2. ajuste = soma(pesos[g]*s_g)/soma(pesos[g]) apenas sobre grupos respondidos.",
+   "3. score = (1-beta)*ajuste + beta*item.qualidade, com beta = qualidade.beta[importancia_nota]. Sem nenhuma resposta: score = qualidade.",
+   "4. Filtros rigidos: periodo escolhido com s_periodo>0; se 'agora' informado: aberto_agora(item, minuto). Se sobrarem < k itens, completar com os demais marcando fora_do_filtro=true.",
+   "5. Ordenar por (-score, -qualidade, id).",
+   "6. Diversificar: escolher k itens de forma gulosa maximizando score - delta*(quantos ja escolhidos do mesmo cluster); desempate por (qualidade, -id).",
+   "7. Motivos: s_g >= 0.999 => rotulos_motivos[g].exato; tipo com 0.3<=s<1 => parcial; qualidade >= 0.8 => 'Muito bem avaliado'.",
+   "8. Reprodutibilidade numerica (necessaria para portes identicos): somar SEQUENCIALMENTE na ordem tipo, faixa_preco, ambiente, publico, periodo (nao usar sum() do Python>=3.12, que e compensada); doubles IEEE-754; score e compatibilidade = round(x*100, 1) com 'metade para par' sobre o valor exato do double."
+  ],
+  "aberto_agora": "minuto m em [0,1439]: (abre_min <= m < fecha_min) OU (fecha_min > 1440 E abre_min <= m+1440 < fecha_min)",
+  "limitacoes": [
+   "horarios nao distinguem dias da semana",
+   "nota sem numero de avaliacoes",
+   "sem feedback real de usuarios"
+  ]
+ }
+}

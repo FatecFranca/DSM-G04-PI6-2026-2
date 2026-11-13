@@ -52,7 +52,7 @@ class ApiService {
     if (autenticada && !_sessao.autenticada) {
       await _sessao.sair();
       throw const ErroApi(
-        'Sessão expirada. Faça login novamente.',
+        'SessÃƒÂ£o expirada. FaÃƒÂ§a login novamente.',
         status: 401,
       );
     }
@@ -75,14 +75,14 @@ class ApiService {
       );
     } on http.ClientException {
       throw const ErroApi(
-        'Não foi possível conectar. Verifique sua conexão e tente novamente.',
+        'NÃƒÂ£o foi possÃƒÂ­vel conectar. Verifique sua conexÃƒÂ£o e tente novamente.',
       );
     }
     if (resposta.statusCode == 401 && autenticada) {
       // Uma resposta antiga nao pode encerrar uma nova sessao.
       if (_sessao.token == tokenEnviado) await _sessao.sair();
       throw const ErroApi(
-        'Sessão expirada. Faça login novamente.',
+        'SessÃƒÂ£o expirada. FaÃƒÂ§a login novamente.',
         status: 401,
       );
     }
@@ -96,11 +96,11 @@ class ApiService {
         dados = decodificado;
       }
     } on FormatException {
-      throw const ErroApi('O servidor retornou uma resposta inválida.');
+      throw const ErroApi('O servidor retornou uma resposta invÃƒÂ¡lida.');
     }
     if (resposta.statusCode < 200 || resposta.statusCode >= 300) {
       final mensagem = resposta.statusCode >= 500
-          ? 'Não foi possível concluir agora. Tente novamente.'
+          ? 'NÃƒÂ£o foi possÃƒÂ­vel concluir agora. Tente novamente.'
           : (dados['message'] ??
                     (dados['error'] is String ? dados['error'] : null) ??
                     'Confira os dados informados.')
@@ -128,16 +128,18 @@ class ApiService {
 
   List<Map<String, dynamic>> _lista(Map<String, dynamic> resposta) {
     final lista = resposta['data'];
-    if (lista is! List) throw const ErroApi('A lista recebida é inválida.');
+    if (lista is! List) throw const ErroApi('A lista recebida ÃƒÂ© invÃƒÂ¡lida.');
     return lista.map((item) {
-      if (item is! Map) throw const ErroApi('Um registro recebido é inválido.');
+      if (item is! Map) {
+        throw const ErroApi('Um registro recebido ÃƒÂ© invÃƒÂ¡lido.');
+      }
       return Map<String, dynamic>.from(item);
     }).toList();
   }
 
   Map<String, dynamic> _registro(Map<String, dynamic> resposta) {
     if (resposta['data'] is! Map) {
-      throw const ErroApi('O registro recebido é inválido.');
+      throw const ErroApi('O registro recebido ÃƒÂ© invÃƒÂ¡lido.');
     }
     return Map<String, dynamic>.from(resposta['data'] as Map);
   }
@@ -151,15 +153,15 @@ class ApiService {
     );
     final jwt = dados['token'];
     if (jwt is! String) {
-      throw const ErroApi('O servidor não retornou a sessão.');
+      throw const ErroApi('O servidor nÃƒÂ£o retornou a sessÃƒÂ£o.');
     }
     try {
       await _sessao.definirToken(jwt);
     } on FormatException {
-      throw const ErroApi('O servidor retornou uma sessão inválida.');
+      throw const ErroApi('O servidor retornou uma sessÃƒÂ£o invÃƒÂ¡lida.');
     }
     if (!_sessao.autenticada) {
-      throw const ErroApi('A sessão recebida já expirou.');
+      throw const ErroApi('A sessÃƒÂ£o recebida jÃƒÂ¡ expirou.');
     }
     return jwt;
   }
@@ -179,7 +181,7 @@ class ApiService {
     String? senha,
   }) async {
     final id = _sessao.idUsuario;
-    if (id == null) throw const ErroApi('Faça login novamente.', status: 401);
+    if (id == null) throw const ErroApi('FaÃƒÂ§a login novamente.', status: 401);
     await _requisicao(
       'PUT',
       '/usuarios/$id',
@@ -193,13 +195,13 @@ class ApiService {
 
   Future<Map<String, dynamic>> getUsuario() async {
     final id = _sessao.idUsuario;
-    if (id == null) throw const ErroApi('Faça login novamente.', status: 401);
+    if (id == null) throw const ErroApi('FaÃƒÂ§a login novamente.', status: 401);
     return _registro(await _requisicao('GET', '/usuarios/$id'));
   }
 
   Future<Map<String, dynamic>> fetchUserData(String token) async {
     if (token != _sessao.token) {
-      throw const ErroApi('Sessão inválida.', status: 401);
+      throw const ErroApi('SessÃƒÂ£o invÃƒÂ¡lida.', status: 401);
     }
     return getUsuario();
   }
@@ -219,20 +221,6 @@ class ApiService {
       parametros: {'pagina': '$pagina'},
     ),
   );
-  Future<Map<String, dynamic>?> getPreferencias() async {
-    final dados = await _requisicao('GET', '/usuarios/me/preferencias');
-    final registro = dados['data'];
-    if (registro == null) return null;
-    if (registro is! Map || registro['feature_json'] is! Map) {
-      throw const ErroApi('Preferências inválidas.');
-    }
-    return Map<String, dynamic>.from(registro['feature_json'] as Map);
-  }
-
-  Future<void> savePreferencias(Map<String, dynamic> preferencias) async {
-    await _requisicao('PUT', '/usuarios/me/preferencias', corpo: preferencias);
-  }
-
   Future<List<Map<String, dynamic>>> listMinhasAvaliacoes({
     int limit = 100,
   }) async => _lista(
@@ -310,27 +298,28 @@ class ApiService {
       },
     ),
   );
-  Future<List<Map<String, dynamic>>> getIaSugestoes({int limit = 20}) async =>
-      _lista(
-        await _requisicao(
-          'GET',
-          '/recomendacoes/ia-sugestoes',
-          parametros: {'limit': '$limit'},
-        ),
-      );
   Future<List<Map<String, dynamic>>> getSugestoesAutomaticas() async =>
       _lista(await _requisicao('GET', '/recomendacoes/automaticas'));
-  Future<List<Map<String, dynamic>>> getRecomendacoes({
-    int limit = 20,
-    bool forceRefresh = false,
+  Future<List<Map<String, dynamic>>> recomendar({
+    required Map<String, dynamic> respostas,
+    int k = 20,
+    int? agoraMin,
   }) async => _lista(
     await _requisicao(
-      'GET',
+      'POST',
       '/recomendacoes',
-      parametros: {
-        'limit': '$limit',
-        if (forceRefresh) 'force_refresh': 'true',
-      },
+      corpo: {'respostas': respostas, 'agora_min': agoraMin, 'k': k},
     ),
   );
+  Future<List<Map<String, dynamic>>> getQuestionarioRecomendacao() async {
+    final resposta = await _requisicao('GET', '/recomendacoes/modelo');
+    final modelo = resposta['data'];
+    if (modelo is! Map || modelo['questionario'] is! List) {
+      throw const ErroApi('O questionÃƒÂ¡rio de recomendaÃƒÂ§ÃƒÂ£o ÃƒÂ© invÃƒÂ¡lido.');
+    }
+    return (modelo['questionario'] as List)
+        .whereType<Map>()
+        .map((item) => Map<String, dynamic>.from(item))
+        .toList();
+  }
 }

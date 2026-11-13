@@ -32,7 +32,7 @@ class AppBottomNav extends StatelessWidget {
         selectedIcon: Icon(Icons.star),
         label: 'Avaliar',
       ),
-      NavigationDestination(icon: Icon(Icons.tune), label: 'Preferências'),
+      NavigationDestination(icon: Icon(Icons.tune), label: 'Descobrir'),
       NavigationDestination(icon: Icon(Icons.history), label: 'Histórico'),
       NavigationDestination(
         icon: Icon(Icons.person_outline),

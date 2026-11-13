@@ -165,7 +165,7 @@ Senha padrao dos usuarios de seed: `123456`
 
 A listagem de avaliações inclui `id_classificacao`, `total_curtidas`, `curtido` e `proprio` nos comentários. A primeira curtida e os marcos de 50, 100, 150 etc. gravam um evento `comentario.curtido` na outbox, na mesma transação da curtida. O worker existente publica e consome esses eventos e cria notificações somente para o autor; reentregas não duplicam os avisos.
 
-Para instalar em outro ambiente, execute `npm run prisma:generate`, `npm run prisma:migrate` e reinicie a API e o worker. A entrega depende da configuração Pub/Sub e do worker em execução (`npm run worker:dev` ou `npm run worker:start` após o build). Com o worker parado, os eventos permanecem pendentes na outbox.
+Para instalar em outro ambiente, execute `npm run prisma:generate` e `npm run prisma:migrate`, depois inicie a API. Quando `PUBSUB_ATIVO=true`, o próprio `npm run dev` (ou `npm start` após o build) inicia o worker junto com a API. Com `PUBSUB_ATIVO=false`, a API inicia sem worker e os eventos permanecem pendentes na outbox.
 
 Os testes de banco em `src/models/curtidasComentarios.integration.test.ts` usam `DATABASE_URL_TESTE` e verificam concorrência, autoria, contagem, marcos e consumo idempotente. Os dados criados pelo teste são removidos ao final.
 

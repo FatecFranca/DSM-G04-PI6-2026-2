@@ -11,7 +11,8 @@ import classificacoesEstabelecimentosRoutes from "./src/routes/classificacoesEst
 import recomendacoesRoutes from "./src/routes/recomendacoes";
 import interacoesRoutes from "./src/routes/interacoes";
 import notificacoesRoutes from "./src/routes/notificacoes";
-import { lerConfiguracaoMensageria } from "./src/mensageria/configuracao";
+import { lerConfiguracaoMensageria, mensageriaAtiva } from "./src/mensageria/configuracao";
+import { iniciarWorkerMensageria } from "./src/workers/mensageria";
 import { prisma } from "./lib/prisma";
 
 lerConfiguracaoMensageria();
@@ -83,20 +84,62 @@ const parsedHost = hostFromEnv ? new URL(hostFromEnv) : null;
 const port = Number(process.env.PORT ?? parsedHost?.port ?? 3000);
 const host = hostFromEnv ?? `http://localhost:${port}`;
 
-// listen inicia o servidor e o mantem aguardando requisicoes HTTP.
-const servidor = app.listen(port, () => {
-  console.log(`\nSERVIDOR INICIADO COM SUCESSO\nURL  -> ${host}\nDOCS -> ${host}/docs\n`);
-});
-
 let encerrando = false;
-function encerrarApi() {
-  if (encerrando) return;
+let encerrarWorker: (() => Promise<void>) | undefined;
+let servidor: ReturnType<typeof app.listen> | undefined;
+let encerramento: Promise<void> | undefined;
+
+async function encerrarApi() {
+  if (encerramento) return encerramento;
   encerrando = true;
   const prazo = setTimeout(() => process.exit(1), 30000);
   prazo.unref();
-  servidor.close(() => {
-    void prisma.$disconnect().then(() => clearTimeout(prazo)).catch(() => process.exit(1));
-  });
+  encerramento = (async () => {
+    const encerramentos: Promise<unknown>[] = [];
+    if (servidor?.listening) {
+      encerramentos.push(new Promise<void>((resolve, reject) => {
+        servidor!.close((erro) => erro ? reject(erro) : resolve());
+      }));
+    }
+    if (encerrarWorker) encerramentos.push(encerrarWorker());
+    encerramentos.push(prisma.$disconnect());
+    const resultados = await Promise.allSettled(encerramentos);
+    clearTimeout(prazo);
+    const falha = resultados.find((resultado) => resultado.status === "rejected");
+    if (falha?.status === "rejected") throw falha.reason;
+  })();
+  try {
+    await encerramento;
+  } catch (erro) {
+    console.error("Falha ao encerrar a API e o worker:", erro);
+    process.exitCode = 1;
+  }
 }
-process.once("SIGINT", encerrarApi);
-process.once("SIGTERM", encerrarApi);
+process.once("SIGINT", () => void encerrarApi());
+process.once("SIGTERM", () => void encerrarApi());
+
+async function iniciarApi() {
+  try {
+    // O worker é opcional e acompanha o ciclo de vida da API quando o Pub/Sub está ativo.
+    if (mensageriaAtiva()) {
+      encerrarWorker = await iniciarWorkerMensageria((erro) => {
+        console.error("O worker do Pub/Sub falhou; encerrando a API:", erro);
+        void encerrarApi();
+      });
+    }
+    if (encerrando) return;
+
+    servidor = app.listen(port);
+    await new Promise<void>((resolve, reject) => {
+      servidor!.once("listening", resolve);
+      servidor!.once("error", reject);
+    });
+    console.log(`\nSERVIDOR INICIADO COM SUCESSO\nURL  -> ${host}\nDOCS -> ${host}/docs\n`);
+  } catch (erro) {
+    console.error("Falha ao iniciar a API e o worker:", erro);
+    process.exitCode = 1;
+    await encerrarApi();
+  }
+}
+
+void iniciarApi();

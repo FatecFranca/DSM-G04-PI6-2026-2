@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:meu_app/pages/floter_page.dart';
-import 'package:meu_app/components/floter_option_card.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -131,7 +130,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('Fazer primeira avaliação'), findsOneWidget);
+    expect(find.text('Fazer primeira avaliaÃ§Ã£o'), findsOneWidget);
     await tester.pumpWidget(const SizedBox());
     sessao.dispose();
   });
@@ -184,50 +183,24 @@ void main() {
     sessao.dispose();
   });
 
-  testWidgets('preferencias salvas sao restauradas no questionario', (
+  testWidgets('Descobrir carrega perguntas do modelo e envia as respostas', (
     tester,
   ) async {
     final sessao = await sessaoTeste();
-    final api = ApiService(
-      sessao: sessao,
-      cliente: MockClient(
-        (_) async => http.Response(
-          '{"data":{"feature_json":{"categoria":"Pizza"}}}',
-          200,
-        ),
-      ),
-    );
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.dark,
-        home: FloterPage(api: api),
-      ),
-    );
-    await tester.pumpAndSettle();
-    final selecionados = tester
-        .widgetList<FloterOptionCard>(find.byType(FloterOptionCard))
-        .where((card) => card.selected);
-    expect(selecionados.single.label, 'Pizza');
-    await tester.pumpWidget(const SizedBox());
-    sessao.dispose();
-  });
-  testWidgets('questionario salva contrato completo antes de abrir resultados', (
-    tester,
-  ) async {
-    final sessao = await sessaoTeste();
-    Map<String, dynamic>? enviado;
+    Map<String, dynamic>? respostasEnviadas;
     final api = ApiService(
       sessao: sessao,
       cliente: MockClient((req) async {
-        if (req.method == 'PUT') {
-          enviado = jsonDecode(req.body) as Map<String, dynamic>;
-          return http.Response('{"data":{}}', 201);
+        if (req.method == 'GET') {
+          return http.Response(
+            '{"data":{"questionario":[{"id":"tipo","pergunta":"Que tipo de lugar?","tipo_resposta":"multipla","opcoes":[{"valor":"pizzaria","rotulo":"Pizzaria"}]}]}}',
+            200,
+          );
         }
-        return http.Response(
-          '{"data":{"feature_json":{"categoria":"Pizza","sabor":"Salgado","faixa_preco":"Médio","quantidade_pessoas":"2 pessoas","restricao_alimentar":"Nenhuma","modalidade_consumo":"Comer no restaurante"}}}',
-          200,
-          headers: {'content-type': 'application/json; charset=utf-8'},
-        );
+        respostasEnviadas =
+            (jsonDecode(req.body) as Map<String, dynamic>)['respostas']
+                as Map<String, dynamic>;
+        return http.Response('{"data":[]}', 200);
       }),
     );
     final router = GoRouter(
@@ -239,7 +212,12 @@ void main() {
         ),
         GoRoute(
           path: '/floter/resultados',
-          builder: (_, _) => const Scaffold(body: Text('Resultado real')),
+          builder: (_, state) {
+            expect(state.extra, {
+              'tipo': ['pizzaria'],
+            });
+            return const Scaffold(body: Text('Resultado real'));
+          },
         ),
       ],
     );
@@ -247,15 +225,13 @@ void main() {
       MaterialApp.router(theme: AppTheme.dark, routerConfig: router),
     );
     await tester.pumpAndSettle();
-    for (int etapa = 0; etapa < 6; etapa++) {
-      await tester.tap(find.text('Continuar'));
-      await tester.pumpAndSettle();
-    }
-    await tester.tap(find.text('Encontrar sugestões'));
+    expect(find.text('Que tipo de lugar?'), findsOneWidget);
+    await tester.tap(find.text('Pizzaria'));
+    await tester.tap(find.text('Ver recomendações'));
     await tester.pumpAndSettle();
-    expect(enviado?['categoria'], 'Pizza');
-    expect(enviado?['faixa_preco'], 'Médio');
-    expect(enviado?['modalidade_consumo'], 'Comer no restaurante');
+    expect(respostasEnviadas, {
+      'tipo': ['pizzaria'],
+    });
     expect(find.text('Resultado real'), findsOneWidget);
     await tester.pumpWidget(const SizedBox());
     router.dispose();

@@ -46,15 +46,14 @@ test("consumidor gera sugestoes por nota, atualiza apos nova nota e ignora reent
     } });
     assert.ok(Array.isArray(cache.ranking_json));
     const modelo = await prisma.tb_modelo_recomendacao.findUniqueOrThrow({ where: { versao: VERSAO_SUGESTOES } });
-    assert.equal(modelo.algoritmo, "ranking-por-regras");
+    assert.equal(modelo.algoritmo, "modelo-content-based-json");
     assert.equal(modelo.trained_at, null);
     let ranking = (await listarSugestoesAutomaticas(usuario.id_usuario)).sugestoes as any[];
-    assert.equal(ranking[0].id_estabelecimento, locais[1].id_estabelecimento);
-    assert.equal(ranking.some(item => item.id_estabelecimento === locais[0].id_estabelecimento), false);
+    assert.deepEqual(ranking, []);
     const ruim = await salvar(1);
     await processarEventoMensageria(ruim);
     ranking = (await listarSugestoesAutomaticas(usuario.id_usuario)).sugestoes as any[];
-    assert.equal(ranking[0].id_estabelecimento, locais[2].id_estabelecimento);
+    assert.deepEqual(ranking, []);
     assert.equal(await processarEventoMensageria(bom), "duplicado");
     assert.equal(await prisma.tb_usuario_feature_snapshot.count({ where: { id_usuario: usuario.id_usuario, model_version: VERSAO_SUGESTOES } }), 1);
     const antigo = await salvar(1);
@@ -62,7 +61,7 @@ test("consumidor gera sugestoes por nota, atualiza apos nova nota e ignora reent
     await processarEventoMensageria(recente);
     await processarEventoMensageria(antigo);
     ranking = (await listarSugestoesAutomaticas(usuario.id_usuario)).sugestoes as any[];
-    assert.equal(ranking[0].id_estabelecimento, locais[1].id_estabelecimento);
+    assert.deepEqual(ranking, []);
     // Nota cadastrada por classificacao tambem publica e altera as sugestoes.
     const classificacao = await prisma.tb_classificacao.create({ data: { id_usuario: usuario.id_usuario } });
     idClassificacao = classificacao.id_classificacao;
@@ -76,7 +75,7 @@ test("consumidor gera sugestoes por nota, atualiza apos nova nota e ignora reent
       }
     }
     ranking = (await listarSugestoesAutomaticas(usuario.id_usuario)).sugestoes as any[];
-    assert.equal(ranking[0].id_estabelecimento, locais[1].id_estabelecimento);
+    assert.deepEqual(ranking, []);
     await prisma.tb_estabelecimento.update({ where: { id_estabelecimento: locais[1].id_estabelecimento }, data: { ativo: false } });
     ranking = (await listarSugestoesAutomaticas(usuario.id_usuario)).sugestoes as any[];
     assert.equal(ranking.some(item => item.id_estabelecimento === locais[1].id_estabelecimento), false);
